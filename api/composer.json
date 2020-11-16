@@ -1,0 +1,43 @@
+{
+	"name": "coderman17/my-garden",
+	"description": "A webapp to visualise your garden",
+	"minimum-stability": "stable",
+	"type": "project",
+	"keywords": [
+		"garden",
+		"php"
+	],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/coderman17/typed-arrays"
+		}
+	],
+	"homepage": "https://github.com/coderman17/my-garden",
+	"license": "BSD-3-Clause",
+	"support": {
+		"issues": "https://github.com/coderman17/my-garden/issues"
+	},
+	"authors": [
+		{
+			"name": "Dan Mathews"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"MyGarden\\": "src"
+		}
+	},
+	"require-dev": {
+		"behat/behat": "~3.8.0",
+		"phpunit/phpunit": "^9"
+	},
+	"require": {
+		"coderman17/typed-arrays": "0.2.0",
+		"ext-json": "*",
+		"ext-pdo": "*"
+    },
+	"config": {
+		"bin-dir": "bin/"
+	}
+}

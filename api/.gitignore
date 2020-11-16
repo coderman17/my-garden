@@ -1,0 +1,6 @@
+vendor/
+.idea/
+bin/
+php_errors.log
+composer.example.json
+.env.php
