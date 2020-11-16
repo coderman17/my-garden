@@ -1,0 +1,2 @@
+stop mysql blocking port 3306
+taskkill /F /IM mysqld.exe

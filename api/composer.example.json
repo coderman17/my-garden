@@ -1,0 +1,35 @@
+{
+	"name": "coderman17/...",
+	"description": "...",
+	"minimum-stability": "stable",
+	"type": "...",
+	"keywords": [
+		"..."
+	],
+	"homepage": "https://github.com/coderman17/...",
+	"license": "BSD-3-Clause",
+	"support": {
+		"issues": "https://github.com/coderman17/.../issues"
+	},
+	"authors": [
+		{
+			"name": "..."
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"...\\": "src",
+			"Tests\\": "tests"
+		}
+	},
+	"require-dev": {
+		"behat/behat": "~2.5",
+		"phpunit/phpunit": "^9"
+	},
+	"require": {
+		"ext-json": "*"
+	},
+	"config": {
+		"bin-dir": "bin/"
+	}
+}
