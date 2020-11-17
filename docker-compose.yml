@@ -20,19 +20,19 @@ services:
       - app-network
 
   #UI
-#  ui:
-##    build:
-##      context: .
-##      dockerfile: ui/Dockerfile
+  ui:
+    build:
+      context: ui/my-garden
+      dockerfile: Dockerfile
 ##    image: vuejs/cli
-#    container_name: ui
+    container_name: ui
 #    restart: unless-stopped
 #    tty: true
 #    volumes:
 #      - ./ui/:/var/www/my-garden/
 #    working_dir: /var/www
-#    networks:
-#      - app-network
+    networks:
+      - app-network
 
   #Nginx Service
   webserver:
