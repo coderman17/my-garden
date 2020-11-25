@@ -23,7 +23,7 @@ CREATE TABLE plants (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     english_name VARCHAR(80) NOT NULL,
-    latin_name VARCHAR(255) NULL,
+    latin_name VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -33,3 +33,14 @@ CREATE TABLE gardens_plants (
     x_coordinate SMALLINT UNSIGNED NOT NULL,
     y_coordinate SMALLINT UNSIGNED NOT NULL
 );
+
+INSERT INTO users (username, email, password)
+VALUES
+    ('dan', 'dan@email.com', '$2y$10$W4ixd.rF03iRVuECIP1Hu.yVH/eyStgiKgTmOqqEHBI9vuSoYnxvi');
+
+INSERT INTO plants (user_id, english_name, latin_name)
+VALUES
+    (1, 'Nut Tree', 'Latin for Nut'),
+    (1, 'Cherry Tree', 'Latin for Cherry'),
+    (1, 'Holly', 'Latin for Holly'),
+    (1, 'Grass', '');

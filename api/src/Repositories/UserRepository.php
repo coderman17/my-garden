@@ -11,7 +11,7 @@ class UserRepository extends Repository
 {
     public function getUserFromEmailAndPassword(string $email, string $password): ?User
     {
-        $stmt = $this->repositoryCollection->databaseConnection->prepare(
+        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             "SELECT *
             FROM users
             WHERE `email` = :email"

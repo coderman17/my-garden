@@ -6,24 +6,19 @@ namespace MyGarden\Models;
 
 class Plant
 {
-    protected ?int $id;
+    public ?int $id;
 
     protected int $userId;
 
-    protected string $englishName;
+    public string $englishName;
 
-    protected ?string $latinName;
+    public string $latinName;
 
-    public function __construct(?int $id, int $userId, string $englishName, ?string $latinName)
+    public function __construct(?int $id, int $userId, string $englishName, string $latinName)
     {
         $this->id = $id;
         $this->userId = $userId;
         $this->englishName = $englishName;
         $this->latinName = $latinName;
-    }
-
-    public function getEnglishName(): string
-    {
-        return $this->englishName;
     }
 }

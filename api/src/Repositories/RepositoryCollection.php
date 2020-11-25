@@ -13,9 +13,8 @@ class RepositoryCollection
     public PlantRepository $plantRepository;
     public UserRepository $userRepository;
 
-    public function __construct(DatabaseConnection $databaseConnection)
+    public function __construct()
     {
-        $this->databaseConnection = $databaseConnection;
         $this->gardenRepository = new GardenRepository($this);
         $this->plantRepository = new PlantRepository($this);
         $this->userRepository = new UserRepository($this);

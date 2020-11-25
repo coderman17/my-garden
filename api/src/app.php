@@ -4,10 +4,13 @@ declare(strict_types = 1);
 
 namespace MyGarden;
 
+use MyGarden\Controllers\PlantController;
 use MyGarden\Controllers\UserController;
 use MyGarden\Database\DatabaseConnection;
+use MyGarden\Repositories\PlantRepository;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Views\View;
+use MyGarden\Request\Request;
 
 include '.env.php';
 
@@ -18,6 +21,7 @@ class App
 //    protected Redirect $redirect;
 //
 
+    protected Router $router;
 
     protected DatabaseConnection $databaseConnection;
 
@@ -27,14 +31,20 @@ class App
 
     public function __construct()
     {
+        header('content-type: application/json');
+
+//        $x = new RepositoryCollection();
+//        $plantArrayTest = $x->plantRepository->getGardenPlants(1);
+//        echo json_encode($plantArrayTest->getItems());
+//        exit();
+
+
 //        $this->redirect = new Redirect();
 
+        $this->router = new Router();
 
-        $this->databaseConnection = new DatabaseConnection();
 
-        $this->repositoryCollection = new RepositoryCollection($this->databaseConnection);
 
-        $this->userController = new UserController($this->repositoryCollection);
 
 //        $this->cardController = new CardController();
 //
@@ -89,10 +99,17 @@ class App
 
     public function run()
     {
+        $request = new Request();
+
+        $request->buildFromSuperglobals();
+
+        $this->router->handle($request);
+
+        exit();
 
         $this->userController->store('dan', 'dan@email.com', 'password');
 
-        header('content-type: application/json');
+
 
         echo json_encode($this->userController->getUserFromEmailAndPassword('dan@email.com', 'password'));
 

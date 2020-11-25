@@ -7,6 +7,12 @@
 		"garden",
 		"php"
 	],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/coderman17/typed-arrays"
+		}
+	],
 	"homepage": "https://github.com/coderman17/my-garden",
 	"license": "BSD-3-Clause",
 	"support": {
@@ -28,6 +34,7 @@
 		"phpunit/phpunit": "^9"
 	},
 	"require": {
+		"coderman17/typed-arrays": "0.2.0",
 		"ext-json": "*",
 		"ext-pdo": "*"
     },

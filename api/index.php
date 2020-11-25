@@ -10,7 +10,6 @@ function exception_handler(object $exception): void
 
     include 'src/Error/500.php';
 }
-
 set_exception_handler('exception_handler');
 
 $app = new MyGarden\App();
