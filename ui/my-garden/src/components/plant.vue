@@ -7,9 +7,6 @@
 <script>
 export default {
   name: 'plant',
-  // props: {
-  //   englishName: String
-  // }
   props: ['plant']
 }
 </script>
