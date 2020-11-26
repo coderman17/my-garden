@@ -1,13 +1,15 @@
 <template>
-  <div class="plant col-12 col-lg-3">
-    <div v-if="plant.imageLink !== 'add'">
-      <img class="mt-3" v-bind:src=plant.imageLink>
-    </div>
-    <div v-else>
-      <div class='add mt-3 border border-success rounded'>+</div>
-    </div>
-    <h1 class="mt-2 mb-0">{{ plant.englishName }}</h1>
-    <h2 class="font-italic mb-4">{{ plant.latinName }}</h2>
+  <div class="plant col-12 col-lg-4 col-xl-3 col-md-6 col-sm-12">
+    <router-link to="/PlantForm">
+      <div v-if="plant.imageLink !== 'add'">
+        <img class="rounded mt-3" v-bind:src=plant.imageLink>
+      </div>
+      <div v-else>
+        <div class='add mt-3 border border-success rounded'>+</div>
+      </div>
+      <h1 class="mt-2 mb-0">{{ plant.englishName }}</h1>
+      <h2 class="font-italic mb-4">{{ plant.latinName }}</h2>
+    </router-link>
   </div>
 </template>
 
@@ -22,11 +24,13 @@ export default {
 <style scoped>
 .plant {
   min-height: 450px;
+  cursor: pointer;
 }
 .plant img, .plant .add {
   width: 320px;
   height: 400px;
   object-fit: cover;
+  max-width: 100%;
 }
 .add {
   font-size: 200px;
@@ -40,4 +44,9 @@ export default {
   opacity: 80%;
   /*background-color: #28a745;*/
 }
+a:hover {
+  text-decoration: unset;
+  color: unset;
+}
+
 </style>

@@ -1,11 +1,13 @@
 <template>
-  <div class="plants">
+  <div class="plants container-fluid">
 
   <h1 class="mt-5 mb-2">
     Garden Plants:
   </h1>
     <div class="plantsContainer row">
-      <plant :plant="{id:'', englishName:'Add New Plant', latinName: '', imageLink:'add'}"></plant>
+
+<!--        <router-link class="navbar-brand text-white" to="/">My Garden</router-link>-->
+        <plant :plant="{id:'', englishName:'Add New Plant', latinName: '', imageLink:'add'}"></plant>
       <plant v-for="plant in plants" :key="plant.id" v-bind:plant="plant"></plant>
     </div>
   </div>
@@ -48,3 +50,4 @@ export default {
   }
 }
 </script>
+
