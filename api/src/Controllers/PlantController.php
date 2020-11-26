@@ -7,6 +7,7 @@ namespace MyGarden\Controllers;
 use MyGarden\Models\Plant;
 use MyGarden\Models\User;
 use MyGarden\Repositories\RepositoryCollection;
+use MyGarden\Request\Request;
 use MyGarden\TypedArrays\IntToPlantArray;
 
 class PlantController extends Controller
@@ -28,36 +29,56 @@ class PlantController extends Controller
         return $this->repositoryCollection->plantRepository->getUserPlants($userId);
     }
 
-    public function get(int $plantId): Plant
+    public function get(Request $request): Plant
     {
+        $plantId = $request->params['id'];
+
+        $plantId = $request->validateInteger($plantId);
+
         //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
 
         return $this->repositoryCollection->plantRepository->getUserPlant($userId, $plantId);
     }
 
-    public function delete(int $plantId): void
+    public function delete(Request $request): void
     {
         //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
+
+        $plantId = $request->params['id'];
+
+        $plantId = $request->validateInteger($plantId);
 
         $this->repositoryCollection->plantRepository->deleteUserPlant($userId, $plantId);
     }
 
-    public function store(string $englishName, string $latinName): Plant
+    public function store(Request $request): Plant
     {
         //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
+
+        $englishName = $request->params['englishName'];
+
+        $latinName = $request->params['latinName'];
 
         $plant = new Plant(null, $userId, $englishName, $latinName);
 
         return $this->repositoryCollection->plantRepository->saveUserPlant($userId, $plant);
     }
 
-    public function update(int $plantId, string $englishName, string $latinName): Plant
+    public function update(Request $request): Plant
     {
         //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
+
+        $plantId = $request->params['id'];
+
+        $plantId = $request->validateInteger($plantId);
+
+        $englishName = $request->params['englishName'];
+
+        $latinName = $request->params['latinName'];
 
         $plant = new Plant($plantId, $userId, $englishName, $latinName);
 

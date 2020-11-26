@@ -33,54 +33,52 @@ class Router
     {
         header('Content-Type: application/json');
 
+        //TODO this is deeply unsafe and needs to be done properly
+        header("Access-Control-Allow-Origin: *");
+
         $matches = [];
 
         $response = null;
 
-        //works with: http://localhost/api/plant?id=17
-        $routes['GET']['api']['plant'] = [
+        $routes['GET']['plant'] = [
             'method' => function() use ($request){
-//          This can be moved to controller, just pass request to controller and let it validate the params:
-//          $id = $this->validateInteger($matches[2]);
-
-//          only using GET here for proof of concept, GET should be saved away on Request and router shouldn't know
-                return $this->plantController->get(intval($_GET['id']));
+                return $this->plantController->get($request);
             },
             'code' => 200
         ];
 
-        $routes['GET']['api']['plants'] = [
+        $routes['GET']['plants'] = [
             'method' => function() use ($request){
                 return $this->plantController->getAll()->getItems();
             },
             'code' => 200
         ];
 
-        $routes['DELETE']['api']['plant'] = [
-            'method' => function() use ($request, &$matches){
-                $this->plantController->delete(intval($matches[2]));
+        $routes['DELETE']['plant'] = [
+            'method' => function() use ($request){
+                $this->plantController->delete($request);
                 return null;
             },
             'code' => 204
         ];
 
-        $routes['PUT']['api']['plant'] = [
-            'method' => function() use ($request, &$matches){
-                return $this->plantController->update(intval($matches[2]), $request->body['englishName'], $request->body['latinName']);
+        $routes['PUT']['plant'] = [
+            'method' => function() use ($request){
+                return $this->plantController->update($request);
             },
             'code' => 200
         ];
 
-        $routes['POST']['api']['plant'] = [
+        $routes['POST']['plant'] = [
             'method' => function() use ($request){
-                return $this->plantController->store($request->body['englishName'], $request->body['latinName']);
+                return $this->plantController->store($request);
             },
             'code' => 201
         ];
 
-        preg_match_all('/(?<=\/)([^\/?]+)(\d+)*/', $request->uri, $matches);
+        preg_match_all('/(?<=api\/)([^\/?]+)(\d+)*/', $request->uri, $matches);
 
-        $routes = $routes[$request->requestMethod];
+        $routes = $routes[$request->method];
 
         $matches = $matches[0];
 
@@ -108,12 +106,5 @@ class Router
         echo json_encode($response);
     }
 
-    protected function validateInteger(string $string): int
-    {
-        if (preg_match('/[^0-9]+/', $string)){
-            throw new \Exception('Could not determine an integer in the uri');
-        }
 
-        return intval($string);
-    }
 }

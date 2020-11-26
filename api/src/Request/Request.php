@@ -8,38 +8,45 @@ use TypedArrays\StringToValueArrays\StringToStringArray;
 
 class Request
 {
-    public string $requestMethod;
+    public string $method;
 
-    public StringToStringArray $body;
+    public StringToStringArray $params;
 
     public string $uri;
 
     public function buildFromSuperglobals(): void
     {
-        $this->requestMethod = $_SERVER['REQUEST_METHOD'];
-
-        if ($this->requestMethod === 'POST'){
-            $this->fillBodyFromPost();
-        } elseif ($this->requestMethod === 'PUT'){
-            $this->fillBodyFromPut();
-        }
+        $this->method = $_SERVER['REQUEST_METHOD'];
 
         $this->uri = $_SERVER['REQUEST_URI'];
+
+        $this->params = new StringToStringArray();
+
+        if ($this->method === 'POST'){
+            $this->addPostParams();
+        } elseif ($this->method === 'PUT'){
+            $this->addPutParams();
+        }
+
+        $this->addGetParams();
     }
 
-    protected function fillBodyFromPost(): void
+    protected function addGetParams(): void
     {
-        $this->body = new StringToStringArray();
-
-        foreach ($_POST as $k => $v){
-            $this->body->setItem($k, $v);
+        foreach ($_GET as $k => $v){
+            $this->params->setItem($k, $v);
         }
     }
 
-    protected function fillBodyFromPut(): void
+    protected function addPostParams(): void
     {
-        $this->body = new StringToStringArray();
+        foreach ($_POST as $k => $v){
+            $this->params->setItem($k, $v);
+        }
+    }
 
+    protected function addPutParams(): void
+    {
         $input = file_get_contents("php://input");
 
         preg_match_all('/(?<=name=\")[^\"]+/', $input, $keys);
@@ -47,7 +54,16 @@ class Request
         preg_match_all('/(?<=\"\r\n\r\n)[^\r]+/', $input, $values);
 
         for ($i = 0; $i < count($keys[0]); $i++){
-            $this->body->setItem($keys[0][$i], $values[0][$i]);
+            $this->params->setItem($keys[0][$i], $values[0][$i]);
         }
+    }
+
+    public function validateInteger(string $string): int
+    {
+        if (preg_match('/[^0-9]+/', $string)){
+            throw new \Exception('Could not determine an integer in the uri');
+        }
+
+        return intval($string);
     }
 }
