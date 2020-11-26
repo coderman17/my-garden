@@ -32,7 +32,8 @@ class PlantRepository extends Repository
                 $row->id,
                 $row->user_id,
                 $row->english_name,
-                $row->latin_name
+                $row->latin_name,
+                $row->image_link
             );
             $intToPlantArray->pushItem($plant);
         }
@@ -44,8 +45,8 @@ class PlantRepository extends Repository
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             "INSERT INTO `plants`
-            (`user_id`, `english_name`, `latin_name`)
-            VALUES (:user_id, :english_name, :latin_name);"
+            (`user_id`, `english_name`, `latin_name`, `image_link`)
+            VALUES (:user_id, :english_name, :latin_name, :image_link);"
         );
 
         if (!$stmt){
@@ -56,6 +57,7 @@ class PlantRepository extends Repository
             'user_id' => $userId,
             'english_name' => $plant->englishName,
             'latin_name' => $plant->latinName,
+            'image_link' => $plant->imageLink,
         ]);
 
         $id = $this->repositoryCollection->databaseConnection->dbh->lastInsertId();
@@ -70,7 +72,8 @@ class PlantRepository extends Repository
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             "UPDATE `plants`
             SET `english_name` = :english_name,
-            `latin_name` = :latin_name
+            `latin_name` = :latin_name,
+            `image_link` = :image_link
             WHERE `id` = :id
             AND `user_id` = :user_id;"
         );
@@ -84,6 +87,7 @@ class PlantRepository extends Repository
             'user_id' => $userId,
             'english_name' => $plant->englishName,
             'latin_name' => $plant->latinName,
+            'image_link' => $plant->imageLink,
         ]);
 
         return $plant;
@@ -117,7 +121,8 @@ class PlantRepository extends Repository
             $row->id,
             $row->user_id,
             $row->english_name,
-            $row->latin_name
+            $row->latin_name,
+            $row->image_link
         );
 
         return $plant;

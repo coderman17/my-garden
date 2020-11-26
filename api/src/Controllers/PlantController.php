@@ -62,7 +62,9 @@ class PlantController extends Controller
 
         $latinName = $request->params['latinName'];
 
-        $plant = new Plant(null, $userId, $englishName, $latinName);
+        $imageLink = $request->params['imageLink'];
+
+        $plant = new Plant(null, $userId, $englishName, $latinName, $imageLink);
 
         return $this->repositoryCollection->plantRepository->saveUserPlant($userId, $plant);
     }
@@ -80,7 +82,9 @@ class PlantController extends Controller
 
         $latinName = $request->params['latinName'];
 
-        $plant = new Plant($plantId, $userId, $englishName, $latinName);
+        $imageLink = $request->params['imageLink'];
+
+        $plant = new Plant($plantId, $userId, $englishName, $latinName, $imageLink);
 
         return $this->repositoryCollection->plantRepository->updateUserPlant($userId, $plant);
     }
