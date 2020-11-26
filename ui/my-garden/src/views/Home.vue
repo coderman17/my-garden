@@ -1,50 +1,32 @@
 <template>
   <div class="home">
-    <navbar></navbar>
-    <ul>
-      <li v-for="plant in plants" :key="plant.id">
-        <plant v-bind:plant="plant"></plant>
-      </li>
-    </ul>
+<!--    <div class="plantsContainer row">-->
+<!--        <plant v-for="plant in plants" :key="plant.id" v-bind:plant="plant"></plant>-->
+<!--    </div>-->
+
+
+<!--    <img class="logo col-12 col-md-6 mt-4" src="@/assets/garden-planning.png">-->
+    <img class="logo col-5 col-md-2" src="@/assets/leaf transparent.png">
+<!--    <img class="logo col-10 col-md-4 mt-2" src="@/assets/logo.png">-->
+      <h1 class="title mt-4">My Garden</h1>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import navbar from '@/components/navbar.vue'
-import plant from '@/components/plant.vue'
 
 export default {
-  name: 'Home',
-  data() {
-    return {
-      plants: []
-    }
-  },
-  components: {
-    navbar,
-    plant
-  },
-  mounted() {
-    this.responseAvailable = false;
-    fetch("http://localhost/api/plants/", {
-      "method": "GET",
-    })
-    .then(response => {
-      if(response.ok){
-        return response.json()
-      } else{
-        alert("Server returned " + response.status + " : " + response.statusText);
-      }
-    })
-    .then(response => {
-      console.log(response)
-      this.plants = response;
-      this.responseAvailable = true;
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }
+  name: 'Home'
 }
 </script>
+
+<style scoped>
+.title {
+  font-family: PMingLiU-ExtB;
+  font-weight: bold;
+  letter-spacing: 1.25px;
+  color: #303030;
+}
+.home {
+  padding-top: 150px;
+}
+</style>
