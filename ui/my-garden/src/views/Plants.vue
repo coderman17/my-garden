@@ -29,7 +29,7 @@ export default {
   },
   mounted() {
     this.responseAvailable = false;
-    fetch("http://localhost/api/plants/", {
+    fetch("http://localhost/api/plants", {
       "method": "GET",
     })
     .then(response => {
