@@ -22,39 +22,16 @@ class Request
 
         $this->params = new StringToStringArray();
 
-        if ($this->method === 'POST'){
-            $this->addPostParams();
-        } elseif ($this->method === 'PUT'){
-            $this->addPutParams();
+        if ($this->method === 'POST' || $this->method === 'PUT') {
+            $inputJSON = file_get_contents('php://input');
+
+            foreach (json_decode($inputJSON, true) as $k => $v) {
+                $this->params->setItem($k, $v);
+            };
         }
 
-        $this->addGetParams();
-    }
-
-    protected function addGetParams(): void
-    {
         foreach ($_GET as $k => $v){
             $this->params->setItem($k, $v);
-        }
-    }
-
-    protected function addPostParams(): void
-    {
-        foreach ($_POST as $k => $v){
-            $this->params->setItem($k, $v);
-        }
-    }
-
-    protected function addPutParams(): void
-    {
-        $input = file_get_contents("php://input");
-
-        preg_match_all('/(?<=name=\")[^\"]+/', $input, $keys);
-
-        preg_match_all('/(?<=\"\r\n\r\n)[^\r]+/', $input, $values);
-
-        for ($i = 0; $i < count($keys[0]); $i++){
-            $this->params->setItem($keys[0][$i], $values[0][$i]);
         }
     }
 
