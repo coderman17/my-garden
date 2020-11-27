@@ -4,7 +4,9 @@
     <div class="plantsContainer row justify-content-center">
       <plant v-bind:plant="plant"></plant>
     </div>
-    <router-link to="/PlantForm">
+<!--    <router-link to="/PlantForm">-->
+    <router-link :to="{name: 'PlantForm', params: {plant: plant}}">
+<!--      <floatingActionButton @click="this.$router.push({name:'PlantForm', params:{plant}});">-->
       <floatingActionButton>
         <img src="@/assets/pencil transparent2.png">
       </floatingActionButton>
@@ -20,6 +22,7 @@ import heading from '@/components/heading.vue'
 
 export default {
   name: 'Plants',
+  id: '',
   data() {
     return {
       plant: ''

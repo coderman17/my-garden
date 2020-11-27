@@ -24,6 +24,7 @@ const routes = [
   {
     path: '/PlantForm',
     name: 'PlantForm',
+    props: true,
     component: () => import(/* webpackChunkName: "about" */ '../views/PlantForm.vue')
   },
   {

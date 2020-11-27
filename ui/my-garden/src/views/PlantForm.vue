@@ -22,7 +22,6 @@
 
 <script>
 // @ is an alias to /src
-// import plant from '@/components/plant.vue'
 import router from '@/router'
 import heading from '@/components/heading.vue'
 
@@ -32,17 +31,29 @@ export default {
     return {
       englishName: '',
       latinName: '',
-      imageLink: ''
+      imageLink: '',
+      method: 'POST',
+      apiUrl: 'http://localhost/api/plant'
     }
   },
+  props: ['plant'],
   components: {
       heading
+  },
+  mounted() {
+    if(this.plant !== undefined){
+      this.method = 'PUT'
+      this.apiUrl = this.apiUrl + '?id=' + this.plant.id
+      this.englishName = this.plant.englishName
+      this.latinName = this.plant.latinName
+      this.imageLink = this.plant.imageLink
+    }
   },
   methods: {
     processForm(){
       this.responseAvailable = false;
       this.requestOptions = {
-        method: "POST",
+        method: this.method,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -52,7 +63,7 @@ export default {
           'imageLink': this.imageLink
         })
       };
-      fetch("http://localhost/api/plant",this.requestOptions)
+      fetch(this.apiUrl,this.requestOptions)
           .then(response => {
             if(response.ok){
               router.push('Plants');
@@ -63,8 +74,6 @@ export default {
           })
           .then(response => {
             console.log(response.json())
-            // this.plants = response;
-            // this.responseAvailable = true;
           })
           .catch(err => {
             console.log(err);
