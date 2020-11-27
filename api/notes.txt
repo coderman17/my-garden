@@ -1,2 +1,5 @@
 stop mysql blocking port 3306
 taskkill /F /IM mysqld.exe
+
+cd C:\"Program Files (x86)"\Google\Chrome\Application
+chrome.exe --disable-web-security --user-data-dir="C:/ChromeDevSession"

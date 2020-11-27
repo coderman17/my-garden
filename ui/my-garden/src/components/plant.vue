@@ -1,6 +1,6 @@
 <template>
   <div class="plant col-12 col-lg-4 col-xl-3 col-md-6 col-sm-12">
-    <router-link to="/PlantForm">
+    <router-link :to="{name: 'ShowPlant', params: {id:plant.id}}">
       <div v-if="plant.imageLink !== 'add'">
         <div v-if="this.brokenImage === false">
           <img class="rounded mt-3" v-bind:src=plant.imageLink ref="img" @error="imageLoadError">
@@ -30,8 +30,6 @@ export default {
   methods: {
     imageLoadError() {
       this.brokenImage = true
-      // console.log(this.$refs["img"] = 'cat')
-      // console.log('Image failed to load');
     }
   }
 }
