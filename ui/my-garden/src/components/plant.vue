@@ -2,7 +2,12 @@
   <div class="plant col-12 col-lg-4 col-xl-3 col-md-6 col-sm-12">
     <router-link to="/PlantForm">
       <div v-if="plant.imageLink !== 'add'">
-        <img class="rounded mt-3" v-bind:src=plant.imageLink>
+        <div v-if="this.brokenImage === false">
+          <img class="rounded mt-3" v-bind:src=plant.imageLink ref="img" @error="imageLoadError">
+        </div>
+        <div v-else>
+          <div class='brokenImage mt-3 border border-success rounded'>Broken image link</div>
+        </div>
       </div>
       <div v-else>
         <div class='add mt-3 border border-success rounded'>+</div>
@@ -16,7 +21,19 @@
 <script>
 export default {
   name: 'plant',
-  props: ['plant']
+  props: ['plant'],
+  data() {
+    return {
+      brokenImage : false
+    }
+  },
+  methods: {
+    imageLoadError() {
+      this.brokenImage = true
+      // console.log(this.$refs["img"] = 'cat')
+      // console.log('Image failed to load');
+    }
+  }
 }
 </script>
 
@@ -25,20 +42,26 @@ export default {
 .plant {
   min-height: 450px;
   cursor: pointer;
+  color: #006d00;
 }
-.plant img, .plant .add {
+.plant img, .plant .add, .plant .brokenImage {
   width: 320px;
   height: 400px;
   object-fit: cover;
   max-width: 100%;
+  /*max-width: 320px;*/
 }
-.add {
+.add, .brokenImage {
   font-size: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #28a745;
+  /*color: #006d00;*/
   margin: auto;
+}
+.brokenImage {
+  font-size: 30px;
+  color: grey;
 }
 .plant:hover {
   opacity: 80%;
@@ -46,6 +69,9 @@ export default {
 }
 a:hover {
   text-decoration: unset;
+  color: unset;
+}
+a {
   color: unset;
 }
 
