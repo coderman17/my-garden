@@ -1,9 +1,6 @@
 <template>
   <div class="plants container-fluid">
-
-  <h1 class="mt-5 mb-2">
-    Create Plant:
-  </h1>
+    <heading>Create Plant:</heading>
     <div class="plantsContainer row justify-content-center">
       <div v-if="imageLink === ''">
         <div class='add mt-4 border border-success rounded'>preview</div>
@@ -27,6 +24,7 @@
 // @ is an alias to /src
 // import plant from '@/components/plant.vue'
 import router from '@/router'
+import heading from '@/components/heading.vue'
 
 export default {
   name: 'PlantForm',
@@ -34,8 +32,11 @@ export default {
     return {
       englishName: '',
       latinName: '',
-      imageLink: '',
+      imageLink: ''
     }
+  },
+  components: {
+      heading
   },
   methods: {
     processForm(){

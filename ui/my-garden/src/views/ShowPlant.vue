@@ -1,30 +1,34 @@
 <template>
   <div class="plants container-fluid">
-
-  <h1 class="mt-5 mb-2">
-    Plant Details:
-  </h1>
+    <heading>Plant Details:</heading>
     <div class="plantsContainer row justify-content-center">
-
-      <plant v-for="plant in plants" :key="plant.id" v-bind:plant="plant"></plant>
+      <plant v-bind:plant="plant"></plant>
     </div>
+    <router-link to="/PlantForm">
+      <floatingActionButton>
+        <img src="@/assets/pencil transparent2.png">
+      </floatingActionButton>
+    </router-link>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import plant from '@/components/plant.vue'
-// import router from '@/router'
+import floatingActionButton from '@/components/floatingActionButton.vue'
+import heading from '@/components/heading.vue'
 
 export default {
   name: 'Plants',
   data() {
     return {
-      plants: []
+      plant: ''
     }
   },
   components: {
-    plant
+    plant,
+    floatingActionButton,
+    heading
   },
   mounted() {
     this.responseAvailable = false;
@@ -39,8 +43,7 @@ export default {
       }
     })
     .then(response => {
-      console.log(response)
-      this.plants = [response];
+      this.plant = response;
       this.responseAvailable = true;
     })
     .catch(err => {
@@ -49,4 +52,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.plants {
+  margin-bottom: 100px;
+}
+</style>
+
 

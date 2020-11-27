@@ -5,17 +5,21 @@
     Garden Plants:
   </h1>
     <div class="plantsContainer row">
-
-<!--        <router-link class="navbar-brand text-white" to="/">My Garden</router-link>-->
-        <plant :plant="{id:'', englishName:'Add New Plant', latinName: '', imageLink:'add'}"></plant>
       <plant v-for="plant in plants" :key="plant.id" v-bind:plant="plant"></plant>
     </div>
+    <router-link to="/PlantForm">
+      <floatingActionButton>
+        <img src="@/assets/plus.png">
+      </floatingActionButton>
+    </router-link>
   </div>
+
 </template>
 
 <script>
 // @ is an alias to /src
-import plant from '@/components/plant.vue'
+import plant from '@/components/plant.vue';
+import floatingActionButton from "@/components/floatingActionButton.vue";
 
 export default {
   name: 'Plants',
@@ -25,6 +29,7 @@ export default {
     }
   },
   components: {
+    floatingActionButton,
     plant
   },
   mounted() {
@@ -51,3 +56,8 @@ export default {
 }
 </script>
 
+<style scoped>
+.plants {
+  margin-bottom: 100px;
+}
+</style>
