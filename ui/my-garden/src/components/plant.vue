@@ -38,7 +38,7 @@ export default {
   color: #006d00;
 }
 .plant:hover {
-  opacity: 80%;
+  opacity: 0.8;
   /*background-color: #28a745;*/
 }
 a:hover {
