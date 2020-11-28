@@ -20,11 +20,6 @@ import router from "@/router";
 export default {
   name: 'Plants',
   id: '',
-  data() {
-    return {
-      plant: ''
-    }
-  },
   components: {
     plant,
     heading
@@ -37,25 +32,28 @@ export default {
       router.push('/Plants');
     }
   },
+  props: ['plant'],
   mounted() {
-    this.responseAvailable = false;
-    fetch("http://localhost/api/plant?id=" + this.$route.params.id, {
-      "method": "GET",
-    })
-    .then(response => {
-      if(response.ok){
-        return response.json()
-      } else{
-        alert("Server returned " + response.status + " : " + response.statusText);
-      }
-    })
-    .then(response => {
-      this.plant = response;
-      this.responseAvailable = true;
-    })
-    .catch(err => {
-      console.log(err);
-    });
+    if (this.plant === undefined) {
+      this.responseAvailable = false;
+      fetch("http://localhost/api/plant?id=" + this.$route.params.id, {
+        "method": "GET",
+      })
+      .then(response => {
+        if(response.ok){
+          return response.json()
+        } else{
+          alert("Server returned " + response.status + " : " + response.statusText);
+        }
+      })
+      .then(response => {
+        this.plant = response;
+        this.responseAvailable = true;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    }
   }
 }
 </script>

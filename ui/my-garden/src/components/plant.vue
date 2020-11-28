@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="{name: 'ShowPlant', params: {id: plant.id}}">
+    <router-link :to="{name: 'ShowPlant', params: {id: plant.id, plant: plant}}">
       <plantImage :imageLink=plant.imageLink></plantImage>
       <h1 class="mt-2 mb-0">{{ plant.englishName }}</h1>
       <h2 class="font-italic mb-4">{{ plant.latinName }}</h2>
