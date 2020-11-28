@@ -5,7 +5,7 @@
     Garden Plants:
   </h1>
     <div class="plantsContainer row">
-      <plant v-for="plant in plants" :key="plant.id" v-bind:plant="plant"></plant>
+      <plant class="plant col-12 col-lg-4 col-xl-3 col-md-6 col-sm-12" v-for="plant in plants" :key="plant.id" v-bind:plant="plant"></plant>
     </div>
     <router-link to="/PlantForm">
       <floatingActionButton>

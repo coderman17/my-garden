@@ -2,23 +2,20 @@
   <div class="plants container-fluid">
     <heading>Plant Details:</heading>
     <div class="plantsContainer row justify-content-center">
-      <plant v-bind:plant="plant"></plant>
+      <plant class="col-12" v-bind:plant="plant"></plant>
+      <button v-on:click=this.delete class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4 mr-5 btn btn-danger">Delete</button>
+      <router-link class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4" :to="{name: 'PlantForm', params: {plant: plant}}">
+        <button type="submit" class="btn btn-primary" style="width:100%;">Edit</button>
+      </router-link>
     </div>
-<!--    <router-link to="/PlantForm">-->
-    <router-link :to="{name: 'PlantForm', params: {plant: plant}}">
-<!--      <floatingActionButton @click="this.$router.push({name:'PlantForm', params:{plant}});">-->
-      <floatingActionButton>
-        <img src="@/assets/pencil transparent2.png">
-      </floatingActionButton>
-    </router-link>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import plant from '@/components/plant.vue'
-import floatingActionButton from '@/components/floatingActionButton.vue'
 import heading from '@/components/heading.vue'
+import router from "@/router";
 
 export default {
   name: 'Plants',
@@ -30,8 +27,15 @@ export default {
   },
   components: {
     plant,
-    floatingActionButton,
     heading
+  },
+  methods: {
+    delete() {
+      fetch("http://localhost/api/plant?id=" + this.$route.params.id, {
+        "method": "DELETE",
+      });
+      router.push('/Plants');
+    }
   },
   mounted() {
     this.responseAvailable = false;

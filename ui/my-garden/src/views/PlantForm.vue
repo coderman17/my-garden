@@ -2,15 +2,10 @@
   <div class="plants container-fluid">
     <heading>Create Plant:</heading>
     <div class="plantsContainer row justify-content-center">
-      <div v-if="imageLink === ''">
-        <div class='add mt-4 border border-success rounded'>preview</div>
-      </div>
-      <div v-else>
-        <img class="rounded mt-4" @error="imageLoadError" :src=imageLink>
-      </div>
-      <form class="col-12" @submit.prevent="processForm" method="get">
+      <plantImage ref="plantImage" :imageLink=this.imageLink></plantImage>
+      <form class="col-12 mb-4" @submit.prevent="processForm" method="get">
         <div class="form-group">
-          <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="imageLink" aria-describedby="imageLink" placeholder="Link to picture" v-model="imageLink">
+          <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="imageLink" aria-describedby="imageLink" placeholder="Link to picture" v-model="imageLink">
           <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="englishName" aria-describedby="englishName" placeholder="English Name" v-model="englishName">
           <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="latinName" aria-describedby="latinName" placeholder="Latin Name" v-model="latinName">
           <button type="submit" class="mt-4 btn btn-primary">Submit</button>
@@ -24,6 +19,7 @@
 // @ is an alias to /src
 import router from '@/router'
 import heading from '@/components/heading.vue'
+import plantImage from "@/components/plantImage";
 
 export default {
   name: 'PlantForm',
@@ -38,7 +34,8 @@ export default {
   },
   props: ['plant'],
   components: {
-      heading
+    plantImage,
+    heading
   },
   mounted() {
     if(this.plant !== undefined){
@@ -50,6 +47,9 @@ export default {
     }
   },
   methods: {
+    recheckImage() {
+      this.$refs.plantImage.recheck();
+    },
     processForm(){
       this.responseAvailable = false;
       this.requestOptions = {
