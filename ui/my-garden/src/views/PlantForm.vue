@@ -1,6 +1,6 @@
 <template>
   <div class="plants container-fluid">
-    <heading>Create Plant:</heading>
+    <heading>{{headingText}}</heading>
     <div class="plantsContainer row justify-content-center">
       <plantImage ref="plantImage" :imageLink=this.imageLink></plantImage>
       <form class="col-12 mb-4" @submit.prevent="processForm" method="get">
@@ -25,6 +25,7 @@ export default {
   name: 'PlantForm',
   data() {
     return {
+      headingText: 'Create Plant:',
       englishName: '',
       latinName: '',
       imageLink: '',
@@ -39,6 +40,7 @@ export default {
   },
   mounted() {
     if(this.plant !== undefined){
+      this.headingText = 'Edit Plant:'
       this.method = 'PUT'
       this.apiUrl = this.apiUrl + '?id=' + this.plant.id
       this.englishName = this.plant.englishName
