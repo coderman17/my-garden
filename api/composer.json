@@ -25,12 +25,11 @@
 	],
 	"autoload": {
 		"psr-4": {
-			"MyGarden\\": "src",
-			"Tests\\": "tests"
+			"MyGarden\\": "src"
 		}
 	},
 	"require-dev": {
-		"behat/behat": "~2.5",
+		"behat/behat": "~3.8.0",
 		"phpunit/phpunit": "^9"
 	},
 	"require": {

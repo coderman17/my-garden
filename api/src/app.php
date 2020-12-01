@@ -101,9 +101,13 @@ class App
     {
         $request = new Request();
 
+//        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
+
         $request->buildFromSuperglobals();
 
         $this->router->handle($request);
+
+//        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
 
         exit();
 

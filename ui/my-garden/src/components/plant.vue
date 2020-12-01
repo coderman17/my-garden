@@ -37,10 +37,10 @@ export default {
   cursor: pointer;
   color: #006d00;
 }
-.plant:hover {
-  opacity: 0.8;
-  /*background-color: #28a745;*/
-}
+//TODO figure out an opacity solution which works without weirdness when deployed
+/*.plant:hover {*/
+/*  opacity: 0.8;*/
+/*}*/
 a:hover {
   text-decoration: unset;
   color: unset;
