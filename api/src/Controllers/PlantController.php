@@ -58,6 +58,22 @@ class PlantController extends Controller
         //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
 
+        $request->validateExistsWithType([
+            'englishName' => [
+                'type' => 'string',
+                'maxChar' => 80,
+                'minChar' => 1
+            ],
+            'latinName' => [
+                'type' => 'string',
+                'maxChar' => 255,
+            ],
+            'imageLink' => [
+                'type' => 'string',
+                'maxChar' => 500,
+            ],
+        ]);
+
         $englishName = $request->params['englishName'];
 
         $latinName = $request->params['latinName'];

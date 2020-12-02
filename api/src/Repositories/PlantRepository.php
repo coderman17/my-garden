@@ -6,6 +6,7 @@ namespace MyGarden\Repositories;
 
 use MyGarden\Models\Plant;
 use MyGarden\TypedArrays\IntToPlantArray;
+use PHPUnit\Util\Exception;
 
 class PlantRepository extends Repository
 {
@@ -53,12 +54,19 @@ class PlantRepository extends Repository
             throw new \Exception('Could not prepare database statement');
         }
 
-        $stmt->execute([
-            'user_id' => $userId,
-            'english_name' => $plant->englishName,
-            'latin_name' => $plant->latinName,
-            'image_link' => $plant->imageLink,
-        ]);
+        $stmt->execute(
+            [
+                'user_id' => $userId,
+                'english_name' => $plant->englishName,
+                'latin_name' => $plant->latinName,
+                'image_link' => $plant->imageLink,
+            ]
+        );
+
+
+        if($stmt->rowCount() !== 1){
+            throw new \Exception('Expected 1 row to be counted');
+        }
 
         $id = $this->repositoryCollection->databaseConnection->dbh->lastInsertId();
 

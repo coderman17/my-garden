@@ -7,6 +7,7 @@ namespace MyGarden;
 use MyGarden\Controllers\PlantController;
 use MyGarden\Controllers\UserController;
 use MyGarden\Database\DatabaseConnection;
+use MyGarden\Exceptions\MissingParameter;
 use MyGarden\Repositories\PlantRepository;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Views\View;

@@ -10,8 +10,23 @@ function exception_handler(object $exception): void
 
     header('Content-Type: application/json');
 
-    http_response_code(500);
+    $code = ($exception->getCode() === 0) ? 500 : $exception->getCode();
+
+    $message = $exception->publicMessage ?? 'Internal Server Error';
+
+    http_response_code($code);
+
+    $error = [];
+
+    $error['error'] = [
+        'code' => $code,
+        'message' => $message
+    ];
+
+    echo json_encode($error);
 }
+
+error_reporting(0);
 
 set_exception_handler('exception_handler');
 
