@@ -57,18 +57,18 @@ class Request
 
             if(
                 $v['type'] === 'string' &&
-                isset($v['maxChar']) &&
-                strlen($this->params[$k]) > $v['maxChar']
+                isset($v['maxMbChar']) &&
+                mb_strlen($this->params[$k]) > $v['maxMbChar']
             ){
-                throw new OverMaxChars($k, $v['maxChar']);
+                throw new OverMaxChars($k, $v['maxMbChar']);
             }
 
             if(
                 $v['type'] === 'string' &&
-                isset($v['minChar']) &&
-                strlen($this->params[$k]) < $v['minChar']
+                isset($v['minMbChar']) &&
+                mb_strlen($this->params[$k]) < $v['minMbChar']
             ){
-                throw new UnderMinChars($k, $v['minChar']);
+                throw new UnderMinChars($k, $v['minMbChar']);
             }
         }
 

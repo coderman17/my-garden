@@ -61,16 +61,16 @@ class PlantController extends Controller
         $request->validateExistsWithType([
             'englishName' => [
                 'type' => 'string',
-                'maxChar' => 80,
+                'maxMbChar' => 80,
                 'minChar' => 1
             ],
             'latinName' => [
                 'type' => 'string',
-                'maxChar' => 255,
+                'maxMbChar' => 255,
             ],
             'imageLink' => [
                 'type' => 'string',
-                'maxChar' => 500,
+                'maxMbChar' => 500,
             ],
         ]);
 
