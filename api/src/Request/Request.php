@@ -7,6 +7,7 @@ namespace MyGarden\Request;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\MissingParameter;
 use MyGarden\Exceptions\OverMaxChars;
+use MyGarden\Exceptions\WrongTypeParameter;
 
 class Request
 {
@@ -52,7 +53,7 @@ class Request
             }
 
             if(gettype($this->params[$k]) !== $v['type']){
-                throw new OverMaxChars($k, $v['type']);
+                throw new WrongTypeParameter($k, $v['type']);
             }
 
             if(
