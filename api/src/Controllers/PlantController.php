@@ -58,11 +58,12 @@ class PlantController extends Controller
         //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
 
+        //todo validation should be called with this array from Plant model
         $request->validateExistsWithType([
             'englishName' => [
                 'type' => 'string',
                 'maxMbChar' => 80,
-                'minChar' => 1
+                'minMbChar' => 1
             ],
             'latinName' => [
                 'type' => 'string',
