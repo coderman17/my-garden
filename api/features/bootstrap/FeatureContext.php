@@ -2,7 +2,6 @@
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -58,6 +57,20 @@ class FeatureContext implements Context
     }
 
     /**
+     *  @When I upsert to the root of the payload the key of :key with a string value of :length characters
+     */
+    public function iUpsertToTheRootOfThePayloadTheKeyOfWithAStringValueOfCharacters($key, $length)
+    {
+        $string = str_repeat('a', $length);
+        $pyStringNode = new PyStringNode([
+            0 => "{",
+            1 => '        "' . $key . '": "' . $string . '"',
+            2 => "}"
+        ], 0);
+        $this->iUpsertToTheRootOfThePayload($pyStringNode);
+    }
+
+    /**
      * @When I call :method :url
      */
     public function iCall(string $method, string $url): void
@@ -84,8 +97,8 @@ class FeatureContext implements Context
     public function theResponseShouldHaveAStatusOf($status)
     {
         Assert::assertSame(
+            $status,
             $this->responseHeaders[0],
-            $status
         );
     }
 }
