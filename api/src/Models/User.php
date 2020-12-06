@@ -21,18 +21,23 @@ class User extends Model
 
     public function __construct(?int $id, string $username, string $email, string $password)
     {
-        $hashedPassword = Helper::hash($password);
-
-        $this->validate([
-            ['id', $id > 0 && $id < 4294967295 || $id === null],
-            ['username', 0 < strlen($username) && strlen($username) < 30],
-            ['email', 0 < strlen($email) && strlen($email) < 80 && preg_match("/.+@.+\..+/", $email)],
-            ['password', 0 < strlen($hashedPassword) && strlen($hashedPassword) < 255]
-        ]);
+        if ($id !== null) {
+            $this->validateParamIntRange('id', $id, 0, Model::UNSIGNED_INT_MAX);
+        }
 
         $this->id = $id;
+
+        $this->validateParamStringLength('username', $username, 1, 30);
+
         $this->username = $username;
+
+        //TODO validate email format
+        $this->validateParamStringLength('email', $email, 6, 80);
+
         $this->email = $email;
+
+        $hashedPassword = Helper::hash($password);
+
         $this->password = $hashedPassword;
     }
 
