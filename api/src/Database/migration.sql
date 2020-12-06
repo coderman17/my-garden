@@ -12,7 +12,7 @@ CREATE TABLE users (
 
 CREATE TABLE gardens (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
     name VARCHAR(80) NOT NULL,
     width SMALLINT UNSIGNED NOT NULL,
     height SMALLINT UNSIGNED NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE gardens (
 
 CREATE TABLE plants (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
     english_name VARCHAR(80) NOT NULL,
     latin_name VARCHAR(255) NOT NULL,
     image_link VARCHAR(500) NOT NULL,
@@ -29,8 +29,8 @@ CREATE TABLE plants (
 );
 
 CREATE TABLE gardens_plants (
-    garden_id INT NOT NULL,
-    plant_id INT NOT NULL,
+    garden_id INT UNSIGNED NOT NULL,
+    plant_id INT UNSIGNED NOT NULL,
     x_coordinate SMALLINT UNSIGNED NOT NULL,
     y_coordinate SMALLINT UNSIGNED NOT NULL
 );
