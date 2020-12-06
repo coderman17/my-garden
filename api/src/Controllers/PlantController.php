@@ -100,15 +100,4 @@ class PlantController extends Controller
 
         return $this->repositoryCollection->plantRepository->updateUserPlant($userId, $plant);
     }
-
-    public function getUserFromEmailAndPassword(string $email, string $password): User
-    {
-        $user = $this->repositoryCollection->userRepository->getUserFromEmailAndPassword($email, $password);
-
-        if ($user === false){
-            throw new \Exception("The email and password combination didn't match our records");
-        }
-
-        return $user;
-    }
 }
