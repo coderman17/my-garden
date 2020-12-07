@@ -13,6 +13,12 @@ class Router
 {
     protected array $routes;
 
+    protected RepositoryCollection $repositoryCollection;
+
+    protected JsonView $view;
+
+    protected PlantController $plantController;
+
     public function __construct(RepositoryCollection $repositoryCollection)
     {
         $this->repositoryCollection = $repositoryCollection;
@@ -31,51 +37,50 @@ class Router
 
         $response = null;
 
-        $routes['GET']['plant'] = [
+        $this->routes['GET']['plant'] = [
             'method' => function() use ($request){
-                return $this->plantController->get($request);
+                $this->plantController->get($request);
             }
         ];
 
-        $routes['GET']['plants'] = [
+        $this->routes['GET']['plants'] = [
             'method' => function() use ($request){
                 $this->plantController->getAll();
             }
         ];
 
-        $routes['DELETE']['plant'] = [
+        $this->routes['DELETE']['plant'] = [
             'method' => function() use ($request){
                 $this->plantController->delete($request);
-                return null;
             }
         ];
 
-        $routes['PUT']['plant'] = [
+        $this->routes['PUT']['plant'] = [
             'method' => function() use ($request){
-                return $this->plantController->update($request);
+                $this->plantController->update($request);
             }
         ];
 
-        $routes['POST']['plant'] = [
+        $this->routes['POST']['plant'] = [
             'method' => function() use ($request){
-                return $this->plantController->store($request);
+                $this->plantController->store($request);
             }
         ];
 
         preg_match_all('/(?<=api\/)([^\/?]+)(\d+)*/', $request->uri, $matches);
 
-        $routes = $routes[$request->method];
+        $this->routes = $this->routes[$request->method];
 
         $matches = $matches[0];
 
         for($i = 0; $i < count($matches); $i++){
 
-            if (isset($routes[$matches[$i]])) {
-                $routes = $routes[$matches[$i]];
+            if (isset($this->routes[$matches[$i]])) {
+                $this->routes = $this->routes[$matches[$i]];
             }
 
-            if (isset($routes['method'])) {
-                $routes['method']();
+            if (isset($this->routes['method'])) {
+                $this->routes['method']();
                 return;
             }
         }

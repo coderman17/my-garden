@@ -8,7 +8,7 @@ class MissingParameter extends \Exception
 {
     public string $publicMessage;
 
-    public function __construct($parameter, \Exception $previous = null) {
+    public function __construct(string $parameter, \Exception $previous = null) {
         $this->publicMessage = "Parameter '" . $parameter . "' is required";
 
         $code = 400;

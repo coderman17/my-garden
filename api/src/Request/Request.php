@@ -26,7 +26,7 @@ class Request
 
             foreach (json_decode($inputJSON, true) as $k => $v) {
                 $this->params[$k] = $v;
-            };
+            }
         }
 
         foreach ($_GET as $k => $v){

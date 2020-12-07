@@ -124,15 +124,13 @@ class PlantRepository extends Repository
             throw new \Exception('Could find a plant of that id belonging to the user');
         }
 
-        $plant = new Plant(
+        return new Plant(
             $row->id,
             $row->user_id,
             $row->english_name,
             $row->latin_name,
             $row->image_link
         );
-
-        return $plant;
     }
 
     public function deleteUserPlant(int $userId, int $plantId): void

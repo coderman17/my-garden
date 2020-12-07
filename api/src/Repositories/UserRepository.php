@@ -38,18 +38,4 @@ class UserRepository extends Repository
             $row->password
         );
     }
-
-    public function storeUser(User $user): void
-    {
-        $stmt = $this->repositoryCollection->databaseConnection->prepare(
-            "INSERT INTO users (username, email, password)
-            VALUES (:username, :email, :password)"
-        );
-
-        $stmt->execute([
-            'username' => $user->getUsername(),
-            'email' => $user->getEmail(),
-            'password' => $user->getPassword()
-        ]);
-    }
 }

@@ -16,15 +16,15 @@ class PlantController extends Controller
 
         $plantArray = $this->repositoryCollection->plantRepository->getUserPlants($userId);
 
-        $response = new Response(
+        $this->response = new Response(
             200,
             $plantArray->getItems()
         );
 
-        $this->view->display($response);
+        $this->view->display($this->response);
     }
 
-    public function get(Request $request): Plant
+    public function get(Request $request): void
     {
         $userId = $this->user->getId();
 
@@ -34,12 +34,12 @@ class PlantController extends Controller
 
         $plant = $this->repositoryCollection->plantRepository->getUserPlant($userId, $plantId);
 
-        $response = new Response(
+        $this->response = new Response(
             200,
             $plant
         );
 
-        $this->view->display($response);
+        $this->view->display($this->response);
     }
 
     public function delete(Request $request): void
@@ -52,15 +52,15 @@ class PlantController extends Controller
 
         $this->repositoryCollection->plantRepository->deleteUserPlant($userId, $plantId);
 
-        $response = new Response(
+        $this->response = new Response(
             204,
             ''
         );
 
-        $this->view->display($response);
+        $this->view->display($this->response);
     }
 
-    public function store(Request $request): Plant
+    public function store(Request $request): void
     {
         $userId = $this->user->getId();
 
@@ -86,15 +86,15 @@ class PlantController extends Controller
 
         $plant = $this->repositoryCollection->plantRepository->saveUserPlant($userId, $plant);
 
-        $response = new Response(
+        $this->response = new Response(
             201,
             $plant
         );
 
-        $this->view->display($response);
+        $this->view->display($this->response);
     }
 
-    public function update(Request $request): Plant
+    public function update(Request $request): void
     {
         $userId = $this->user->getId();
 
@@ -112,11 +112,11 @@ class PlantController extends Controller
 
         $plant = $this->repositoryCollection->plantRepository->updateUserPlant($userId, $plant);
 
-        $response = new Response(
+        $this->response = new Response(
             200,
             $plant
         );
 
-        $this->view->display($response);
+        $this->view->display($this->response);
     }
 }

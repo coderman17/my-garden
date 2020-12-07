@@ -8,7 +8,7 @@ class WrongTypeParameter extends \Exception
 {
     public string $publicMessage;
 
-    public function __construct($parameter, $expectedType, $code = 0, \Exception $previous = null) {
+    public function __construct(string $parameter, string $expectedType, \Exception $previous = null) {
         $this->publicMessage = "Parameter '" . $parameter . "' should be of type " . $expectedType;
 
         $code = 400;

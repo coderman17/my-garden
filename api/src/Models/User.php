@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace MyGarden\Models;
 
 use MyGarden\Helpers\Helper;
-use MyGarden\Repositories\GardenRepository;
 
 class User extends Model
 {
@@ -16,8 +15,6 @@ class User extends Model
     protected string $email;
 
     protected string $password;
-
-    public string $test = "this is just a test";
 
     public function __construct(?int $id, string $username, string $email, string $password)
     {
