@@ -4,12 +4,21 @@ declare(strict_types = 1);
 
 namespace MyGarden\Controllers;
 
+use MyGarden\Exceptions\MissingParameter;
+use MyGarden\Exceptions\NotFound;
+use MyGarden\Exceptions\OutOfRangeInt;
+use MyGarden\Exceptions\OverMaxChars;
+use MyGarden\Exceptions\UnderMinChars;
+use MyGarden\Exceptions\WrongTypeParameter;
 use MyGarden\Models\Plant;
 use MyGarden\Request\Request;
 use MyGarden\Response\Response;
 
 class PlantController extends Controller
 {
+    /**
+     * @throws \Exception
+     */
     public function getAll(): void
     {
         $userId = $this->user->getId();
@@ -24,6 +33,14 @@ class PlantController extends Controller
         $this->view->display($this->response);
     }
 
+    /**
+     * @param Request $request
+     * @throws NotFound
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws \Exception
+     */
     public function get(Request $request): void
     {
         $userId = $this->user->getId();
@@ -42,6 +59,11 @@ class PlantController extends Controller
         $this->view->display($this->response);
     }
 
+    /**
+     * @param Request $request
+     * @throws NotFound
+     * @throws \Exception
+     */
     public function delete(Request $request): void
     {
         $userId = $this->user->getId();
@@ -60,6 +82,15 @@ class PlantController extends Controller
         $this->view->display($this->response);
     }
 
+    /**
+     * @param Request $request
+     * @throws MissingParameter
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws WrongTypeParameter
+     * @throws \Exception
+     */
     public function store(Request $request): void
     {
         $userId = $this->user->getId();
@@ -94,6 +125,10 @@ class PlantController extends Controller
         $this->view->display($this->response);
     }
 
+    /**
+     * @param Request $request
+     * @throws \Exception
+     */
     public function update(Request $request): void
     {
         $userId = $this->user->getId();

@@ -4,6 +4,10 @@ declare(strict_types = 1);
 
 namespace MyGarden\Models;
 
+use MyGarden\Exceptions\OutOfRangeInt;
+use MyGarden\Exceptions\OverMaxChars;
+use MyGarden\Exceptions\UnderMinChars;
+
 class Plant extends Model
 {
     public ?int $id;
@@ -16,6 +20,16 @@ class Plant extends Model
 
     public string $imageLink;
 
+    /**
+     * @param int|null $id
+     * @param int $userId
+     * @param string $englishName
+     * @param string $latinName
+     * @param string $imageLink
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     */
     public function __construct(?int $id, int $userId, string $englishName, string $latinName, string $imageLink)
     {
         if ($id !== null) {

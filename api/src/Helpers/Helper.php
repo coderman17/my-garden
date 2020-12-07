@@ -6,6 +6,11 @@ namespace MyGarden\Helpers;
 
 class Helper
 {
+    /**
+     * @param string $password
+     * @return string
+     * @throws \Exception
+     */
     static public function hash(string $password): string
     {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);

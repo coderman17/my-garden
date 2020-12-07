@@ -45,7 +45,7 @@ Scenario Outline: Create a plant with a value of incorrect type
 	| imageLink		| 50	|
 
 Scenario Outline: Create a plant with strings of boundary correct/incorrect length
-	When I upsert to the root of the payload the key of '<key>' with a string value of '<length>' characters
+	When I upsert to the root of the payload, a string of key '<key>' and length '<length>'
 	And I call 'POST' 'http://localhost/api/plant'
 	Then the response should have a status of '<status>'
 

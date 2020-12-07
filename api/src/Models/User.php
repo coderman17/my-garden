@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace MyGarden\Models;
 
+use MyGarden\Exceptions\OutOfRangeInt;
+use MyGarden\Exceptions\OverMaxChars;
+use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Helpers\Helper;
 
 class User extends Model
@@ -16,6 +19,16 @@ class User extends Model
 
     protected string $password;
 
+    /**
+     * @param int|null $id
+     * @param string $username
+     * @param string $email
+     * @param string $password
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws \Exception
+     */
     public function __construct(?int $id, string $username, string $email, string $password)
     {
         if ($id !== null) {
@@ -60,10 +73,4 @@ class User extends Model
     {
         return $this->password;
     }
-
-
-//    public function getGarden(): Garden
-//    {
-//        return $this->gardenRepository->getUserGardenWithPlants($this->id);
-//    }
 }

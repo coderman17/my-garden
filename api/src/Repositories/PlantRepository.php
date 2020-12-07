@@ -5,11 +5,23 @@ declare(strict_types = 1);
 namespace MyGarden\Repositories;
 
 use MyGarden\Exceptions\NotFound;
+use MyGarden\Exceptions\OutOfRangeInt;
+use MyGarden\Exceptions\OverMaxChars;
+use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Models\Plant;
 use MyGarden\TypedArrays\IntToPlantArray;
 
 class PlantRepository extends Repository
 {
+
+    /**
+     * @param int $userId
+     * @return IntToPlantArray
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws \Exception
+     */
     public function getUserPlants(int $userId): IntToPlantArray
     {
         $intToPlantArray = new IntToPlantArray();
@@ -42,6 +54,12 @@ class PlantRepository extends Repository
         return $intToPlantArray;
     }
 
+    /**
+     * @param int $userId
+     * @param Plant $plant
+     * @return Plant
+     * @throws \Exception
+     */
     public function saveUserPlant(int $userId, Plant $plant): Plant
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
@@ -75,6 +93,12 @@ class PlantRepository extends Repository
         return $plant;
     }
 
+    /**
+     * @param int $userId
+     * @param Plant $plant
+     * @return Plant
+     * @throws \Exception
+     */
     public function updateUserPlant(int $userId, Plant $plant): Plant
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
@@ -101,6 +125,16 @@ class PlantRepository extends Repository
         return $plant;
     }
 
+    /**
+     * @param int $userId
+     * @param int $plantId
+     * @return Plant
+     * @throws NotFound
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws \Exception
+     */
     public function getUserPlant(int $userId, int $plantId): Plant
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
@@ -134,6 +168,12 @@ class PlantRepository extends Repository
         );
     }
 
+    /**
+     * @param int $userId
+     * @param int $plantId
+     * @throws NotFound
+     * @throws \Exception
+     */
     public function deleteUserPlant(int $userId, int $plantId): void
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(

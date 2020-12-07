@@ -8,7 +8,7 @@ $variables = [
 	'APP_DOMAIN' => "localhost",
     'DB_PORT' => '3306',
     'DB_HOST' => 'mysql',
-    'DB_NAME' => 'mygarden',
+    'DB_NAME' => 'my_garden',
     'DB_USERNAME' => 'root',
     'DB_PASSWORD' => 'password',
 ];

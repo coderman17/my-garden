@@ -36,6 +36,11 @@ class Request
         $this->uri = $_SERVER['REQUEST_URI'];
     }
 
+    /**
+     * @param string $string
+     * @return int
+     * @throws \Exception
+     */
     public function validateInteger(string $string): int
     {
         if (preg_match('/[^0-9]+/', $string)){
@@ -45,6 +50,13 @@ class Request
         return intval($string);
     }
 
+    /**
+     * @param array $array
+     * @throws MissingParameter
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws WrongTypeParameter
+     */
     public function validateExistsWithType(array $array): void
     {
         foreach ($array as $k => $v){

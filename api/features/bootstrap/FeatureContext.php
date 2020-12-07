@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection PhpUnused */
+
+declare(strict_types = 1);
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -11,7 +13,7 @@ class FeatureContext implements Context
 {
     protected string $responseBody;
 
-    protected $responseHeaders;
+    protected array $responseHeaders;
 
     protected array $savedParams;
 
@@ -19,6 +21,8 @@ class FeatureContext implements Context
 
     /**
      * @Given I have a valid payload:
+     *
+     * @param PyStringNode $string
      */
     public function iHaveAValidPayload(PyStringNode $string): void
     {
@@ -38,16 +42,22 @@ class FeatureContext implements Context
 
     /**
      * @When I remove :element from the root of the payload
+     *
+     * @param string $element
      */
-    public function iRemoveElementFromTheRootOfThePayload($element)
+    public function iRemoveElementFromTheRootOfThePayload(string $element)
     {
         $x = json_decode($this->payloadBody);
+
         unset($x->$element);
+
         $this->payloadBody = json_encode($x);
     }
 
     /**
      * @When I upsert to the root of the payload:
+     *
+     * @param PyStringNode $string
      */
     public function iUpsertToTheRootOfThePayload(PyStringNode $string)
     {
@@ -55,25 +65,34 @@ class FeatureContext implements Context
             json_decode($this->payloadBody, TRUE),
             json_decode($string->getRaw(), TRUE)
         );
+
         $this->payloadBody = json_encode($newPayload);
     }
 
     /**
-     *  @When I upsert to the root of the payload the key of :key with a string value of :length characters
+     * @When I upsert to the root of the payload, a string of key :key and length :length
+     *
+     * @param mixed $key
+     * @param int $length
      */
-    public function iUpsertToTheRootOfThePayloadTheKeyOfWithAStringValueOfCharacters($key, $length)
+    public function iUpsertToTheRootOfThePayloadAStringOfKeyAndLength($key, int $length)
     {
         $string = str_repeat('a', $length);
+
         $pyStringNode = new PyStringNode([
             0 => "{",
             1 => '        "' . $key . '": "' . $string . '"',
             2 => "}"
         ], 0);
+
         $this->iUpsertToTheRootOfThePayload($pyStringNode);
     }
 
     /**
      * @When I call :method :url
+     *
+     * @param string $method
+     * @param string $url
      */
     public function iCall(string $method, string $url): void
     {
@@ -84,17 +103,24 @@ class FeatureContext implements Context
                 'content' => $this->payloadBody
             ]
         ];
+
         $context  = stream_context_create($options);
+
         try {
             $this->responseBody = file_get_contents($url, false, $context);
+
         } catch (Throwable $e){
             $this->responseBody = '';
+
         }
+
         $this->responseHeaders = $http_response_header;
     }
 
     /**
      * @When I save :param from the response
+     *
+     * @param mixed $param
      */
     public function iSaveFromTheResponse($param)
     {
@@ -106,6 +132,10 @@ class FeatureContext implements Context
 
     /**
      * @When I call :method :url appending the saved :param
+     *
+     * @param string $method
+     * @param string $url
+     * @param string $param
      */
     public function iCallAppendingTheSaved(string $method, string $url, string $param): void
     {
@@ -114,8 +144,10 @@ class FeatureContext implements Context
 
     /**
      * @Then the response should have a status of :status
+     *
+     * @param string $status
      */
-    public function theResponseShouldHaveAStatusOf($status)
+    public function theResponseShouldHaveAStatusOf(string $status)
     {
         Assert::assertSame(
             $status,

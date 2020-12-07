@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 
 require 'vendor/autoload.php';
+require '.env.php';
 
 function exception_handler(object $exception): void
 {

@@ -8,6 +8,9 @@ Class DatabaseConnection
 {
     public \PDO $dbh;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
         try {

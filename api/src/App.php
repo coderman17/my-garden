@@ -8,8 +8,6 @@ use MyGarden\Database\DatabaseConnection;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
 
-include '.env.php';
-
 class App
 {
     protected DatabaseConnection $databaseConnection;
@@ -20,6 +18,11 @@ class App
 
     protected Router $router;
 
+    /**
+     * @throws Exceptions\OutOfRangeInt
+     * @throws Exceptions\OverMaxChars
+     * @throws Exceptions\UnderMinChars
+     */
     public function __construct()
     {
         $this->databaseConnection = new DatabaseConnection();

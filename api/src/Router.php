@@ -19,6 +19,12 @@ class Router
 
     protected PlantController $plantController;
 
+    /**
+     * @param RepositoryCollection $repositoryCollection
+     * @throws Exceptions\OutOfRangeInt
+     * @throws Exceptions\OverMaxChars
+     * @throws Exceptions\UnderMinChars
+     */
     public function __construct(RepositoryCollection $repositoryCollection)
     {
         $this->repositoryCollection = $repositoryCollection;

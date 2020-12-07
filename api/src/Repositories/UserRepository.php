@@ -4,11 +4,23 @@ declare(strict_types = 1);
 
 namespace MyGarden\Repositories;
 
+use MyGarden\Exceptions\OutOfRangeInt;
+use MyGarden\Exceptions\OverMaxChars;
+use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Helpers\Helper;
 use MyGarden\Models\User;
 
 class UserRepository extends Repository
 {
+    /**
+     * @param string $email
+     * @param string $password
+     * @return User|null
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws \Exception
+     */
     public function getUserFromEmailAndPassword(string $email, string $password): ?User
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(

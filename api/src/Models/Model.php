@@ -14,6 +14,14 @@ abstract class Model
 
     //This is here because models should be able to guarantee their own integrity without reliance on the proper use of
     // validation from the controller or elsewhere
+    /**
+     * @param string $paramName
+     * @param string $paramValue
+     * @param int|null $minMbChar
+     * @param int|null $maxMbChar
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     */
     public function validateParamStringLength(string $paramName, string $paramValue, ?int $minMbChar = null, ?int $maxMbChar = null): void
     {
         if(
@@ -31,6 +39,13 @@ abstract class Model
         }
     }
 
+    /**
+     * @param string $paramName
+     * @param int $paramValue
+     * @param int|null $min
+     * @param int|null $max
+     * @throws OutOfRangeInt
+     */
     public function validateParamIntRange(string $paramName, int $paramValue, ?int $min = null, ?int $max = null): void
     {
         if(

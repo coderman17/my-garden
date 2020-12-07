@@ -1,6 +1,8 @@
-CREATE database mygarden;
+-- noinspection SpellCheckingInspectionForFile
 
-USE mygarden;
+CREATE database my_garden;
+
+USE my_garden;
 
 CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
