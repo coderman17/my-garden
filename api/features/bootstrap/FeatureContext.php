@@ -13,6 +13,8 @@ class FeatureContext implements Context
 
     protected $responseHeaders;
 
+    protected array $savedParams;
+
     protected string $payloadBody;
 
     /**
@@ -89,6 +91,25 @@ class FeatureContext implements Context
             $this->responseBody = '';
         }
         $this->responseHeaders = $http_response_header;
+    }
+
+    /**
+     * @When I save :param from the response
+     */
+    public function iSaveFromTheResponse($param)
+    {
+        $bodyArray = json_decode($this->responseBody, true);
+
+        $this->savedParams[$param] = $bodyArray[$param];
+    }
+
+
+    /**
+     * @When I call :method :url appending the saved :param
+     */
+    public function iCallAppendingTheSaved(string $method, string $url, string $param): void
+    {
+        $this->iCall($method, $url . $this->savedParams[$param]);
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace MyGarden\Repositories;
 
+use MyGarden\Exceptions\NotFound;
 use MyGarden\Models\Plant;
 use MyGarden\TypedArrays\IntToPlantArray;
 
@@ -121,7 +122,7 @@ class PlantRepository extends Repository
         $row = $stmt->fetch(\PDO::FETCH_OBJ);
 
         if(!$row){
-            throw new \Exception('Could find a plant of that id belonging to the user');
+            throw new NotFound();
         }
 
         return new Plant(
@@ -152,7 +153,7 @@ class PlantRepository extends Repository
         ]);
 
         if($stmt->rowCount() !== 1){
-            throw new \Exception('Could not delete a plant of that id belonging to the user');
+            throw new NotFound();
         }
     }
 }
