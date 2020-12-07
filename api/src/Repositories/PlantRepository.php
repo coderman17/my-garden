@@ -6,7 +6,6 @@ namespace MyGarden\Repositories;
 
 use MyGarden\Models\Plant;
 use MyGarden\TypedArrays\IntToPlantArray;
-use PHPUnit\Util\Exception;
 
 class PlantRepository extends Repository
 {

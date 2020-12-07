@@ -13,15 +13,13 @@ class Request
 {
     public string $method;
 
-    public array $params;
+    public array $params = [];
 
     public string $uri;
 
-    public function buildFromSuperglobals(): void
+    public function __construct()
     {
         $this->method = $_SERVER['REQUEST_METHOD'];
-
-        $this->uri = $_SERVER['REQUEST_URI'];
 
         if ($this->method === 'POST' || $this->method === 'PUT') {
             $inputJSON = file_get_contents('php://input');
@@ -34,6 +32,8 @@ class Request
         foreach ($_GET as $k => $v){
             $this->params[$k] = $v;
         }
+
+        $this->uri = $_SERVER['REQUEST_URI'];
     }
 
     public function validateInteger(string $string): int

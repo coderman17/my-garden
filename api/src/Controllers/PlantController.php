@@ -5,45 +5,45 @@ declare(strict_types = 1);
 namespace MyGarden\Controllers;
 
 use MyGarden\Models\Plant;
-use MyGarden\Models\User;
-use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
-use MyGarden\TypedArrays\IntToPlantArray;
+use MyGarden\Response\Response;
 
 class PlantController extends Controller
 {
-    public User $user;
-
-    public function __construct(RepositoryCollection $repositoryCollection, User $user)
+    public function getAll(): void
     {
-        parent::__construct($repositoryCollection);
-
-        $this->user = $user;
-    }
-
-    public function getAll(): IntToPlantArray
-    {
-        //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
 
-        return $this->repositoryCollection->plantRepository->getUserPlants($userId);
+        $plantArray = $this->repositoryCollection->plantRepository->getUserPlants($userId);
+
+        $response = new Response(
+            200,
+            $plantArray->getItems()
+        );
+
+        $this->view->display($response);
     }
 
     public function get(Request $request): Plant
     {
+        $userId = $this->user->getId();
+
         $plantId = $request->params['id'];
 
         $plantId = $request->validateInteger($plantId);
 
-        //TODO get user from a check of who is logged in
-        $userId = $this->user->getId();
+        $plant = $this->repositoryCollection->plantRepository->getUserPlant($userId, $plantId);
 
-        return $this->repositoryCollection->plantRepository->getUserPlant($userId, $plantId);
+        $response = new Response(
+            200,
+            $plant
+        );
+
+        $this->view->display($response);
     }
 
     public function delete(Request $request): void
     {
-        //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
 
         $plantId = $request->params['id'];
@@ -51,11 +51,17 @@ class PlantController extends Controller
         $plantId = $request->validateInteger($plantId);
 
         $this->repositoryCollection->plantRepository->deleteUserPlant($userId, $plantId);
+
+        $response = new Response(
+            204,
+            ''
+        );
+
+        $this->view->display($response);
     }
 
     public function store(Request $request): Plant
     {
-        //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
 
         $request->validateExistsWithType([
@@ -78,12 +84,18 @@ class PlantController extends Controller
 
         $plant = new Plant(null, $userId, $englishName, $latinName, $imageLink);
 
-        return $this->repositoryCollection->plantRepository->saveUserPlant($userId, $plant);
+        $plant = $this->repositoryCollection->plantRepository->saveUserPlant($userId, $plant);
+
+        $response = new Response(
+            201,
+            $plant
+        );
+
+        $this->view->display($response);
     }
 
     public function update(Request $request): Plant
     {
-        //TODO get user from a check of who is logged in
         $userId = $this->user->getId();
 
         $plantId = $request->params['id'];
@@ -98,6 +110,13 @@ class PlantController extends Controller
 
         $plant = new Plant($plantId, $userId, $englishName, $latinName, $imageLink);
 
-        return $this->repositoryCollection->plantRepository->updateUserPlant($userId, $plant);
+        $plant = $this->repositoryCollection->plantRepository->updateUserPlant($userId, $plant);
+
+        $response = new Response(
+            200,
+            $plant
+        );
+
+        $this->view->display($response);
     }
 }

@@ -5,34 +5,25 @@ declare(strict_types = 1);
 namespace MyGarden;
 
 use MyGarden\Controllers\PlantController;
-use MyGarden\Controllers\UserController;
-use MyGarden\Database\DatabaseConnection;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
+use MyGarden\Views\JsonView;
 
 class Router
 {
     protected array $routes;
 
-    public function __construct()
+    public function __construct(RepositoryCollection $repositoryCollection)
     {
-        $this->databaseConnection = new DatabaseConnection();
+        $this->repositoryCollection = $repositoryCollection;
 
-        $this->repositoryCollection = new RepositoryCollection();
+        $this->view = new JsonView();
 
-        $this->repositoryCollection->databaseConnection = $this->databaseConnection;
-
-        $this->userController = new UserController($this->repositoryCollection);
-
-        $this->user = $this->userController->getUserFromEmailAndPassword('dan@email.com', 'password');
-
-        $this->plantController = new PlantController($this->repositoryCollection, $this->user);
+        $this->plantController = new PlantController($this->repositoryCollection, $this->view);
     }
 
-    public function handle(Request $request)
+    public function handle(Request $request): void
     {
-        header('Content-Type: application/json');
-
         //TODO this is deeply unsafe and needs to be done properly
         header("Access-Control-Allow-Origin: *");
 
@@ -43,37 +34,32 @@ class Router
         $routes['GET']['plant'] = [
             'method' => function() use ($request){
                 return $this->plantController->get($request);
-            },
-            'code' => 200
+            }
         ];
 
         $routes['GET']['plants'] = [
             'method' => function() use ($request){
-                return $this->plantController->getAll()->getItems();
-            },
-            'code' => 200
+                $this->plantController->getAll();
+            }
         ];
 
         $routes['DELETE']['plant'] = [
             'method' => function() use ($request){
                 $this->plantController->delete($request);
                 return null;
-            },
-            'code' => 204
+            }
         ];
 
         $routes['PUT']['plant'] = [
             'method' => function() use ($request){
                 return $this->plantController->update($request);
-            },
-            'code' => 200
+            }
         ];
 
         $routes['POST']['plant'] = [
             'method' => function() use ($request){
                 return $this->plantController->store($request);
-            },
-            'code' => 201
+            }
         ];
 
         preg_match_all('/(?<=api\/)([^\/?]+)(\d+)*/', $request->uri, $matches);
@@ -82,8 +68,6 @@ class Router
 
         $matches = $matches[0];
 
-        $found = false;
-
         for($i = 0; $i < count($matches); $i++){
 
             if (isset($routes[$matches[$i]])) {
@@ -91,20 +75,15 @@ class Router
             }
 
             if (isset($routes['method'])) {
-                $response = $routes['method']();
-                http_response_code($routes['code']);
-                $found = true;
-                break;
+                $routes['method']();
+                return;
             }
         }
 
-        if (!$found){
-            $response = 'Unrecognised request';
-            http_response_code(404);
-        }
+        //TODO make an exception for 404
+        $response = 'Unrecognised request';
+        http_response_code(404);
 
-        echo json_encode($response);
+        echo json_encode(["error" => $response]);
     }
-
-
 }

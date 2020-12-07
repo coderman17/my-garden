@@ -23,9 +23,4 @@ Class DatabaseConnection
 
         $this->dbh->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
     }
-
-//    public function prepare(string $stmt)
-//    {
-//        return $this->dbh->prepare($stmt);
-//    }
 }
