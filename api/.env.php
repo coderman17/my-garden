@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden;
 
@@ -14,5 +14,5 @@ $variables = [
 ];
 
 foreach ($variables as $key => $value) {
-	putenv("$key=$value");
+    putenv("$key=$value");
 }
