@@ -3,8 +3,8 @@ A webapp to visualise your garden
 ## Installing
 - `git clone https://github.com/coderman17/my-garden.git`
 - From api directory: `composer install`
-- From ui\my-garden directory: `npm install`
-- Copy `api\.env.example.php` to `api\.env.php` and alter the password if you wish to change it (you'll need to take additional steps to change it on the mysql container)
+- From ui/my-garden directory: `npm install`
+- Copy `api/.env.example.php` to `api/.env.php` and alter the password if you wish to change it (you'll need to take additional steps to change it on the mysql container)
 ## Running
 - run docker containers: `docker-compose up -d`
 - sh into mysql container: `docker exec -ti mysql sh`
