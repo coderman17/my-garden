@@ -61,6 +61,7 @@ services:
 #      - /ProgramData/MySQL/MYSQL Server 8.0/Data:/var/lib/mysql
 #      Instead, the line below is needed to place the migration file
       - ./api/src/Database/migration.sql:/etc/mysql/scripts/migration.sql
+      - ./api/src/Database/migrate.sh:/etc/mysql/scripts/migrate.sh
 #      docker exec -ti mysql sh
 #      mysql -h "localhost" -u "root" -p"password" < /etc/mysql/scripts/migration.sql
     tty: true

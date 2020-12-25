@@ -11,9 +11,7 @@ before_script:
   - npm install
   - cd ../../
   - docker-compose up -d
-  - docker exec -ti mysql sh
-  - mysql -h "localhost" -u "root" -p"password" < /etc/mysql/scripts/migration.sql
-  - exit
+  - docker exec mysql /etc/mysql/scripts/migrate.sh
 
 script:
   - cd api
