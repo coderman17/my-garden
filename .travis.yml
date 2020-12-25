@@ -7,4 +7,5 @@ php:
 before_script: composer install
 
 script:
-  - vendor/bin/phpunit tests --c
+  - cd api
+  - bin/behat
