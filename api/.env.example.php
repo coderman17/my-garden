@@ -7,10 +7,10 @@ namespace MyGarden;
 $variables = [
     'APP_DOMAIN' => "localhost",
     'DB_PORT' => '3306',
-    'DB_HOST' => '127.0.0.1',
+    'DB_HOST' => 'mysql',
     'DB_NAME' => 'my_garden',
     'DB_USERNAME' => 'root',
-    'DB_PASSWORD' => '...',
+    'DB_PASSWORD' => 'password',
 ];
 
 foreach ($variables as $key => $value) {
