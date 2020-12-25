@@ -12,7 +12,7 @@ before_script:
   - cd ../../
   - docker-compose up -d
   - sleep 10
-  - docker exec mysql /etc/mysql/scripts/migrate.sh
+  - docker exec -u root mysql /etc/mysql/scripts/migrate.sh
 
 script:
   - cd api
