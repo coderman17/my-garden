@@ -5,8 +5,10 @@ php:
   - 7.4.11
 
 before_script:
-  - api/composer install
-  - ui/my-garden/npm install
+  - cd api
+  - composer install
+  - cd ../ui/my-garden
+  - npm install
 
 script:
   - cd api
