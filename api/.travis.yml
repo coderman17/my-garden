@@ -1,0 +1,10 @@
+language: php
+os: linux
+dist: xenial
+php:
+  - 7.4.11
+
+before_script: composer install
+
+script:
+  - api/bin/behat
