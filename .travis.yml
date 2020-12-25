@@ -11,6 +11,7 @@ before_script:
   - npm install
   - cd ../../
   - docker-compose up -d
+  - sleep 10
   - docker exec mysql /etc/mysql/scripts/migrate.sh
 
 script:
