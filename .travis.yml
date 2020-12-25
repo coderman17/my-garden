@@ -11,5 +11,5 @@ before_script:
   - npm install
 
 script:
-  - cd api
+  - cd ../../api
   - bin/behat
