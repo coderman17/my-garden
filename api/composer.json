@@ -35,7 +35,7 @@
 		"vimeo/psalm": "^4.3"
 	},
 	"require": {
-		"coderman17/typed-arrays": "0.2.0",
+		"coderman17/typed-arrays": "0.3.0",
 		"ext-json": "*",
 		"ext-pdo": "*"
     },

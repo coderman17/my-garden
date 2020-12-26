@@ -4,24 +4,29 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fde32ac00e9852b6dd3e229ec3033da1",
+    "content-hash": "e5c8ba97d27b0bbbd584f9ff438b06ae",
     "packages": [
         {
             "name": "coderman17/typed-arrays",
-            "version": "0.2.0",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/coderman17/typed-arrays.git",
-                "reference": "a25cbe05d8be4179e98e2bb2bc91b56bc2d98732"
+                "reference": "a9da5554444700388d420dd3314e97bf6ef85a2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/coderman17/typed-arrays/zipball/a25cbe05d8be4179e98e2bb2bc91b56bc2d98732",
-                "reference": "a25cbe05d8be4179e98e2bb2bc91b56bc2d98732",
+                "url": "https://api.github.com/repos/coderman17/typed-arrays/zipball/a9da5554444700388d420dd3314e97bf6ef85a2d",
+                "reference": "a9da5554444700388d420dd3314e97bf6ef85a2d",
                 "shasum": ""
             },
+            "require": {
+                "php": ">=7.4.11"
+            },
             "require-dev": {
-                "phpunit/phpunit": "^9"
+                "phpstan/phpstan": "^0.12.63",
+                "phpunit/phpunit": "^9",
+                "vimeo/psalm": "^4.3"
             },
             "type": "library",
             "autoload": {
@@ -38,21 +43,19 @@
                     "name": "Dan Mathews"
                 }
             ],
-            "description": "A library using PHP's scalar type declarations to control types within arrays",
+            "description": "A PHP library to control types within arrays",
             "homepage": "https://github.com/coderman17/typed-arrays",
             "keywords": [
                 "array",
                 "declarations",
                 "php",
-                "scalar",
-                "type",
                 "typed"
             ],
             "support": {
                 "issues": "https://github.com/coderman17/typed-arrays/issues",
-                "source": "https://github.com/coderman17/typed-arrays/tree/0.2.0"
+                "source": "https://github.com/coderman17/typed-arrays/tree/0.3.0"
             },
-            "time": "2020-11-23T23:00:29+00:00"
+            "time": "2020-12-23T01:47:53+00:00"
         }
     ],
     "packages-dev": [

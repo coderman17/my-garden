@@ -19,9 +19,7 @@ class App
     protected Router $router;
 
     /**
-     * @throws Exceptions\OutOfRangeInt
-     * @throws Exceptions\OverMaxChars
-     * @throws Exceptions\UnderMinChars
+     * @throws \Exception
      */
     public function __construct()
     {

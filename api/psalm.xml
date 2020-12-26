@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!--suppress XmlDefaultAttributeValue -->
 <psalm
     errorLevel="4"
     resolveFromConfigFile="true"

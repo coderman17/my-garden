@@ -24,9 +24,7 @@ class Router
 
     /**
      * @param RepositoryCollection $repositoryCollection
-     * @throws Exceptions\OutOfRangeInt
-     * @throws Exceptions\OverMaxChars
-     * @throws Exceptions\UnderMinChars
+     * @throws \Exception
      */
     public function __construct(RepositoryCollection $repositoryCollection)
     {

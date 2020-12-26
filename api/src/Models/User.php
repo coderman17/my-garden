@@ -54,7 +54,7 @@ class User extends Model
     /**
      * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
