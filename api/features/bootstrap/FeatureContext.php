@@ -13,8 +13,14 @@ class FeatureContext implements Context
 {
     protected string $responseBody;
 
+    /**
+     * @var array<mixed, mixed>
+     */
     protected array $responseHeaders;
 
+    /**
+     * @var array<string, mixed>
+     */
     protected array $savedParams;
 
     protected string $payloadBody;
@@ -45,11 +51,17 @@ class FeatureContext implements Context
      *
      * @param string $element
      */
-    public function iRemoveElementFromTheRootOfThePayload(string $element)
+    public function iRemoveElementFromTheRootOfThePayload(string $element): void
     {
         $x = json_decode($this->payloadBody);
 
         unset($x->$element);
+
+        $body = json_encode($x);
+
+        Assert::assertNotFalse(
+            $body
+        );
 
         $this->payloadBody = json_encode($x);
     }
@@ -59,7 +71,7 @@ class FeatureContext implements Context
      *
      * @param PyStringNode $string
      */
-    public function iUpsertToTheRootOfThePayload(PyStringNode $string)
+    public function iUpsertToTheRootOfThePayload(PyStringNode $string): void
     {
         $newPayload = array_merge(
             json_decode($this->payloadBody, TRUE),
@@ -75,7 +87,7 @@ class FeatureContext implements Context
      * @param mixed $key
      * @param int $length
      */
-    public function iUpsertToTheRootOfThePayloadAStringOfKeyAndLength($key, int $length)
+    public function iUpsertToTheRootOfThePayloadAStringOfKeyAndLength($key, int $length): void
     {
         $string = str_repeat('a', $length);
 
@@ -114,6 +126,7 @@ class FeatureContext implements Context
 
         }
 
+        /** @phpstan-ignore-next-line too magical for stan I think*/
         $this->responseHeaders = $http_response_header;
     }
 
@@ -122,7 +135,7 @@ class FeatureContext implements Context
      *
      * @param mixed $param
      */
-    public function iSaveFromTheResponse($param)
+    public function iSaveFromTheResponse($param): void
     {
         $bodyArray = json_decode($this->responseBody, true);
 
@@ -147,7 +160,7 @@ class FeatureContext implements Context
      *
      * @param string $status
      */
-    public function theResponseShouldHaveAStatusOf(string $status)
+    public function theResponseShouldHaveAStatusOf(string $status): void
     {
         Assert::assertSame(
             $status,

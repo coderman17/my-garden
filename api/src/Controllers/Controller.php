@@ -41,12 +41,12 @@ abstract class Controller
     //This is a placeholder until I review auth systems properly
 
     /**
-     * @return User
+     * @return null|User
      * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      */
-    protected function getUserFromCredentials(): User
+    protected function getUserFromCredentials(): ?User
     {
         return $this->repositoryCollection->userRepository->getUserFromEmailAndPassword('dan@email.com', 'password');
     }

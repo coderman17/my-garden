@@ -36,7 +36,7 @@ class App
         $this->router = new Router($this->repositoryCollection);
     }
 
-    public function run()
+    public function run(): void
     {
 //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
 

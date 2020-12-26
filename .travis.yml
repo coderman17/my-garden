@@ -4,11 +4,13 @@ dist: xenial
 php:
   - 7.4.11
 
-before_script:
+install:
   - cd api
   - composer install
   - cd ../ui/my-garden
   - npm install
+
+before_script:
   - cd ../../
   - docker-compose up -d
   - sleep 10
@@ -17,4 +19,6 @@ before_script:
 
 script:
   - cd api
+  - bin/phpstan analyse tests src
+  - bin/psalm
   - bin/behat

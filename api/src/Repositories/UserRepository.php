@@ -24,12 +24,12 @@ class UserRepository extends Repository
     public function getUserFromEmailAndPassword(string $email, string $password): ?User
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            "SELECT *
+            'SELECT *
             FROM users
-            WHERE `email` = :email"
+            WHERE `email` = :email'
         );
 
-        if (!$stmt){
+        if (!$stmt instanceOf \PDOStatement){
             throw new \Exception('Could not prepare database statement');
         }
 
@@ -39,7 +39,7 @@ class UserRepository extends Repository
 
         $row = $stmt->fetch(\PDO::FETCH_OBJ);
 
-        if (!$row || !Helper::verifyHash($password, $row->password)){
+        if ($row === false || Helper::verifyHash($password, $row->password) === false){
             return null;
         }
 

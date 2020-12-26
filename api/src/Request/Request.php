@@ -13,6 +13,9 @@ class Request
 {
     public string $method;
 
+    /**
+     * @var array<string, mixed>
+     */
     public array $params = [];
 
     public string $uri;
@@ -51,7 +54,7 @@ class Request
     }
 
     /**
-     * @param array $array
+     * @param array<string, mixed> $array
      * @throws MissingParameter
      * @throws OverMaxChars
      * @throws UnderMinChars
