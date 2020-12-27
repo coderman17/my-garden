@@ -13,7 +13,7 @@ Background: A valid request body
 	}
 	"""
 
-Scenario: Delete a plant which exists
+Scenario: Delete a garden which exists
 	Given I call 'POST' 'http://localhost/api/garden'
 	And I save 'id' from the response
 	And I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
