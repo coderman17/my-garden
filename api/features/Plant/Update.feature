@@ -3,8 +3,8 @@ As a user
 I need to update plants
 So that I can manage my collection
 
-Background: A valid payload
-	Given I have a valid payload:
+Background: A valid request body
+	Given I have a request body:
 	"""
 	{
 		"englishName": "test",
@@ -20,7 +20,7 @@ Scenario: Update a plant which exists
 	And I save 'id' from the response
 	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
 	And the response should have a status of 'HTTP/1.1 200 OK'
-	When I upsert to the root of the payload:
+	When I have a request body:
 	"""
 	{
 		"englishName": "updated",
@@ -30,6 +30,6 @@ Scenario: Update a plant which exists
 	"""
 	When I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
 	Then the response should have a status of 'HTTP/1.1 200 OK'
-	When I expect the payload in the response with the saved 'id'
+	When I expect the request body as the response body with the saved 'id'
 	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
 	Then the response body should be as expected

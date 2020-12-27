@@ -3,8 +3,8 @@ As a user
 I need to delete plants
 So that I can manage my collection
 
-Background: A valid payload
-	Given I have a valid payload:
+Background: A valid request body
+	Given I have a request body:
 	"""
 	{
 		"englishName": "test",

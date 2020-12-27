@@ -3,8 +3,8 @@ As a user
 I need to create plants
 So that I can add to my collection
 
-Background: A valid payload
-	Given I have a valid payload:
+Background: A valid request body
+	Given I have a request body:
 	"""
 	{
 		"englishName": "test",
@@ -13,12 +13,12 @@ Background: A valid payload
 	}
 	"""
 
-Scenario: Create a plant with a valid payload
+Scenario: Create a plant with a valid request body
 	When I call 'POST' 'http://localhost/api/plant'
 	Then the response should have a status of 'HTTP/1.1 201 Created'
 
 Scenario Outline: Create a plant without a parameter
-	When I remove '<parameter>' from the root of the payload
+	When I remove '<parameter>' from the root of the request body
 	And I call 'POST' 'http://localhost/api/plant'
 	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
 
@@ -29,7 +29,7 @@ Scenario Outline: Create a plant without a parameter
 	| imageLink		|
 
 Scenario Outline: Create a plant with a value of incorrect type
-	When I upsert to the root of the payload:
+	When I upsert to the root of the request body:
 	"""
 	{
 		"<parameter>": <value>
@@ -45,7 +45,7 @@ Scenario Outline: Create a plant with a value of incorrect type
 	| imageLink		| 50	|
 
 Scenario Outline: Create a plant with strings of boundary correct/incorrect length
-	When I upsert to the root of the payload, a string of key '<key>' and length '<length>'
+	When I upsert to the root of the request body, a string of key '<key>' and length '<length>'
 	And I call 'POST' 'http://localhost/api/plant'
 	Then the response should have a status of '<status>'
 
