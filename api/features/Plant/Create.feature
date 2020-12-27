@@ -15,12 +15,12 @@ Background: A valid request body
 
 Scenario: Create a plant with a valid request body
 	When I call 'POST' 'http://localhost/api/plant'
-	Then the response should have a status of 'HTTP/1.1 201 Created'
+	Then the response has a status of 'HTTP/1.1 201 Created'
 
 Scenario Outline: Create a plant without a parameter
-	When I remove '<parameter>' from the root of the request body
-	And I call 'POST' 'http://localhost/api/plant'
-	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
+	Given I remove '<parameter>' from the root of the request body
+	When I call 'POST' 'http://localhost/api/plant'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
 	| parameter		|
@@ -29,14 +29,14 @@ Scenario Outline: Create a plant without a parameter
 	| imageLink		|
 
 Scenario Outline: Create a plant with a value of incorrect type
-	When I upsert to the root of the request body:
+	Given I upsert to the root of the request body:
 	"""
 	{
 		"<parameter>": <value>
 	}
 	"""
-	And I call 'POST' 'http://localhost/api/plant'
-	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' 'http://localhost/api/plant'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
 	| parameter		| value	|
@@ -45,9 +45,9 @@ Scenario Outline: Create a plant with a value of incorrect type
 	| imageLink		| 50	|
 
 Scenario Outline: Create a plant with strings of boundary correct/incorrect length
-	When I upsert to the root of the request body, a string of key '<key>' and length '<length>'
-	And I call 'POST' 'http://localhost/api/plant'
-	Then the response should have a status of '<status>'
+	Given I upsert to the root of the request body, a string of key '<key>' and length '<length>'
+	When I call 'POST' 'http://localhost/api/plant'
+	Then the response has a status of '<status>'
 
 	Examples:
 		| key			| length	| status					|

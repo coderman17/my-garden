@@ -15,53 +15,50 @@ Background: A valid request body
 
 Scenario: Update a plant which exists
 	Given I call 'POST' 'http://localhost/api/plant'
-	And I save 'id' from the response
-	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
-	And the response should have a status of 'HTTP/1.1 200 OK'
-	When I have a request body:
-	"""
-	{
-		"englishName": "updated",
-		"latinName": "updated in latin",
-		"imageLink": "updated..."
-	}
-	"""
-	And I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
-	Then the response should have a status of 'HTTP/1.1 200 OK'
-	When I expect the same as the request body but with the saved 'id'
-	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
+		And I save 'id' from the response
+		And I have a request body:
+		"""
+		{
+			"englishName": "updated",
+			"latinName": "updated in latin",
+			"imageLink": "updated..."
+		}
+		"""
+		And I expect the same as the request body but with the saved 'id'
+	When I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
+	Then the response has a status of 'HTTP/1.1 200 OK'
+		And the response body should be as expected
+	When I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
 	Then the response body should be as expected
 
 Scenario: Update a plant which doesn't exist
 	Given I call 'GET' 'http://localhost/api/plant?id=439583'
-	And the response should have a status of 'HTTP/1.1 404 Not Found'
-	When I have a request body:
-	"""
-	{
-		"englishName": "updated",
-		"latinName": "updated in latin",
-		"imageLink": "updated..."
-	}
-	"""
+		And the response has a status of 'HTTP/1.1 404 Not Found'
+		And I have a request body:
+		"""
+		{
+			"englishName": "updated",
+			"latinName": "updated in latin",
+			"imageLink": "updated..."
+		}
+		"""
 	When I call 'PUT' 'http://localhost/api/plant?id=439583'
-	Then the response should have a status of 'HTTP/1.1 404 Not Found'
+	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
 Scenario Outline: Update a plant without a parameter
 	Given I call 'POST' 'http://localhost/api/plant'
-	And I save 'id' from the response
-	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
-	And the response should have a status of 'HTTP/1.1 200 OK'
-	When I have a request body:
-	"""
-	{
-		"englishName": "updated",
-		"latinName": "updated in latin",
-		"imageLink": "updated..."
-	}
-	"""
-	And I remove '<parameter>' from the root of the request body
-	And I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
-	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
+		And I save 'id' from the response
+		And I have a request body:
+		"""
+		{
+			"englishName": "updated",
+			"latinName": "updated in latin",
+			"imageLink": "updated..."
+		}
+		"""
+		And I remove '<parameter>' from the root of the request body
+	When I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
 		| parameter		|
@@ -71,25 +68,23 @@ Scenario Outline: Update a plant without a parameter
 
 Scenario Outline: Create a plant with a value of incorrect type
 	Given I call 'POST' 'http://localhost/api/plant'
-	And I save 'id' from the response
-	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
-	And the response should have a status of 'HTTP/1.1 200 OK'
-	When I have a request body:
-	"""
-	{
-		"englishName": "updated",
-		"latinName": "updated in latin",
-		"imageLink": "updated..."
-	}
-	"""
-	And I upsert to the root of the request body:
-	"""
-	{
-		"<parameter>": <value>
-	}
-	"""
-	And I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
-	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
+		And I save 'id' from the response
+		And I have a request body:
+		"""
+		{
+			"englishName": "updated",
+			"latinName": "updated in latin",
+			"imageLink": "updated..."
+		}
+		"""
+		And I upsert to the root of the request body:
+		"""
+		{
+			"<parameter>": <value>
+		}
+		"""
+	When I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
 		| parameter		| value	|
@@ -99,20 +94,18 @@ Scenario Outline: Create a plant with a value of incorrect type
 
 Scenario Outline: Create a plant with strings of boundary correct/incorrect length
 	Given I call 'POST' 'http://localhost/api/plant'
-	And I save 'id' from the response
-	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
-	And the response should have a status of 'HTTP/1.1 200 OK'
-	When I have a request body:
-	"""
-	{
-		"englishName": "updated",
-		"latinName": "updated in latin",
-		"imageLink": "updated..."
-	}
-	"""
-	And I upsert to the root of the request body, a string of key '<key>' and length '<length>'
-	And I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
-	Then the response should have a status of '<status>'
+		And I save 'id' from the response
+		And I have a request body:
+		"""
+		{
+			"englishName": "updated",
+			"latinName": "updated in latin",
+			"imageLink": "updated..."
+		}
+		"""
+		And I upsert to the root of the request body, a string of key '<key>' and length '<length>'
+	When I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
+	Then the response has a status of '<status>'
 
 	Examples:
 		| key			| length	| status					|

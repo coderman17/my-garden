@@ -147,11 +147,11 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then the response should have a status of :status
+     * @Then the response has a status of :status
      *
      * @param string $status
      */
-    public function theResponseShouldHaveAStatusOf(string $status): void
+    public function theResponseHasAStatusOf(string $status): void
     {
         Assert::assertSame(
             $status,
