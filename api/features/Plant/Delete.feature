@@ -14,11 +14,11 @@ Background: A valid payload
 	"""
 
 Scenario: Delete a plant which exists
-	When I call 'POST' 'http://localhost/api/plant'
+	Given I call 'POST' 'http://localhost/api/plant'
 	And I save 'id' from the response
 	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
 	And the response should have a status of 'HTTP/1.1 200 OK'
-	And I call 'DELETE' 'http://localhost/api/plant?id=' appending the saved 'id'
+	When I call 'DELETE' 'http://localhost/api/plant?id=' appending the saved 'id'
 	Then the response should have a status of 'HTTP/1.1 204 No Content'
 	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
 	And the response should have a status of 'HTTP/1.1 404 Not Found'

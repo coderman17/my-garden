@@ -25,6 +25,8 @@ class FeatureContext implements Context
 
     protected string $payloadBody;
 
+    protected string $expectedResponseBody;
+
     /**
      * @Given I have a valid payload:
      *
@@ -63,7 +65,7 @@ class FeatureContext implements Context
             $body
         );
 
-        $this->payloadBody = json_encode($x);
+        $this->payloadBody = $body;
     }
 
     /**
@@ -73,12 +75,20 @@ class FeatureContext implements Context
      */
     public function iUpsertToTheRootOfThePayload(PyStringNode $string): void
     {
+        $this->payloadBody = $this->mergeEncodedPayloads(
+            $this->payloadBody,
+            $string->getRaw()
+        );
+    }
+
+    protected function mergeEncodedPayloads(string $one, string $two): string
+    {
         $newPayload = array_merge(
-            json_decode($this->payloadBody, TRUE),
-            json_decode($string->getRaw(), TRUE)
+            json_decode($one, TRUE),
+            json_decode($two, TRUE)
         );
 
-        $this->payloadBody = json_encode($newPayload);
+        return json_encode($newPayload);
     }
 
     /**
@@ -91,13 +101,10 @@ class FeatureContext implements Context
     {
         $string = str_repeat('a', $length);
 
-        $pyStringNode = new PyStringNode([
-            0 => "{",
-            1 => '        "' . $key . '": "' . $string . '"',
-            2 => "}"
-        ], 0);
-
-        $this->iUpsertToTheRootOfThePayload($pyStringNode);
+        $this->payloadBody = $this->mergeEncodedPayloads(
+            $this->payloadBody,
+            '{"' . $key . '": "' . $string . '"}'
+        );
     }
 
     /**
@@ -167,4 +174,35 @@ class FeatureContext implements Context
             $this->responseHeaders[0],
         );
     }
+
+    /**
+     * @When I expect the payload in the response with the saved :param
+     */
+    public function iExpectThePayloadInTheResponseWithTheSaved(string $param): void
+    {
+        $expected = json_decode($this->responseBody);
+
+        $expected->$param = $this->savedParams[$param];
+
+        $expected = json_encode($expected);
+
+        Assert::assertNotFalse(
+            $expected
+        );
+
+        $this->expectedResponseBody = $expected;
+    }
+
+    /**
+     * @Then the response body should be as expected
+     */
+    public function theResponseBodyShouldBeAsExpected()
+    {
+        Assert::assertEquals(
+            json_decode($this->expectedResponseBody),
+            json_decode($this->responseBody)
+        );
+    }
+
+
 }
