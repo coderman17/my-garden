@@ -19,9 +19,7 @@ class App
     protected Router $router;
 
     /**
-     * @throws Exceptions\OutOfRangeInt
-     * @throws Exceptions\OverMaxChars
-     * @throws Exceptions\UnderMinChars
+     * @throws \Exception
      */
     public function __construct()
     {
@@ -36,7 +34,7 @@ class App
         $this->router = new Router($this->repositoryCollection);
     }
 
-    public function run()
+    public function run(): void
     {
 //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
 

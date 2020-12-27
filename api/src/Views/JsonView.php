@@ -8,7 +8,7 @@ use MyGarden\Response\Response;
 
 class JsonView implements IView
 {
-	public function display(Response $response): void
+    public function display(Response $response): void
     {
         header('content-type: application/json');
 

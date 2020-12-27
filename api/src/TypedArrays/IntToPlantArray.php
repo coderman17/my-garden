@@ -5,9 +5,13 @@ declare(strict_types = 1);
 
 namespace MyGarden\TypedArrays;
 
+use MyGarden\Models\Plant;
 use TypedArrays\IntToValueArrays\IntToClassArray;
 
 class IntToPlantArray extends IntToClassArray
 {
-    public string $className = 'MyGarden\Models\Plant';
+    protected function getClassName(): string
+    {
+        return Plant::class;
+    }
 }

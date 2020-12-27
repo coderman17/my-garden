@@ -8,5 +8,5 @@ use MyGarden\Response\Response;
 
 interface IView
 {
-	public function display(Response $response): void;
+    public function display(Response $response): void;
 }

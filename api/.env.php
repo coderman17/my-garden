@@ -14,5 +14,5 @@ $variables = [
 ];
 
 foreach ($variables as $key => $value) {
-	putenv("$key=$value");
+    putenv("$key=$value");
 }

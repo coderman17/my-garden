@@ -37,7 +37,7 @@ export default {
   cursor: pointer;
   color: #006d00;
 }
-//TODO figure out an opacity solution which works without weirdness when deployed
+/* TODO figure out an opacity solution which works without weirdness when deployed */
 /*.plant:hover {*/
 /*  opacity: 0.8;*/
 /*}*/

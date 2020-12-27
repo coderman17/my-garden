@@ -1,0 +1,24 @@
+language: php
+os: linux
+dist: xenial
+php:
+  - 7.4.11
+
+install:
+  - cd api
+  - composer install
+  - cd ../ui/my-garden
+  - npm install
+
+before_script:
+  - cd ../../
+  - docker-compose up -d
+  - sleep 10
+  - docker exec -u root mysql chmod 777 /etc/mysql/scripts/migrate.sh
+  - docker exec -u root mysql /etc/mysql/scripts/migrate.sh
+
+script:
+  - cd api
+  - bin/phpstan analyse features src
+  - bin/psalm
+  - bin/behat

@@ -27,12 +27,12 @@ class PlantRepository extends Repository
         $intToPlantArray = new IntToPlantArray();
 
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            "SELECT *
+            'SELECT *
             FROM `plants`
-            WHERE `user_id` = :user_id;"
+            WHERE `user_id` = :user_id;'
         );
 
-        if (!$stmt){
+        if (!$stmt instanceOf \PDOStatement){
             throw new \Exception('Could not prepare database statement');
         }
 
@@ -63,12 +63,12 @@ class PlantRepository extends Repository
     public function saveUserPlant(int $userId, Plant $plant): Plant
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            "INSERT INTO `plants`
+            'INSERT INTO `plants`
             (`user_id`, `english_name`, `latin_name`, `image_link`)
-            VALUES (:user_id, :english_name, :latin_name, :image_link);"
+            VALUES (:user_id, :english_name, :latin_name, :image_link);'
         );
 
-        if (!$stmt){
+        if (!$stmt instanceOf \PDOStatement){
             throw new \Exception('Could not prepare database statement');
         }
 
@@ -102,15 +102,15 @@ class PlantRepository extends Repository
     public function updateUserPlant(int $userId, Plant $plant): Plant
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            "UPDATE `plants`
+            'UPDATE `plants`
             SET `english_name` = :english_name,
             `latin_name` = :latin_name,
             `image_link` = :image_link
             WHERE `id` = :id
-            AND `user_id` = :user_id;"
+            AND `user_id` = :user_id;'
         );
 
-        if (!$stmt){
+        if (!$stmt instanceOf \PDOStatement){
             throw new \Exception('Could not prepare database statement');
         }
 
@@ -138,13 +138,13 @@ class PlantRepository extends Repository
     public function getUserPlant(int $userId, int $plantId): Plant
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            "SELECT *
+            'SELECT *
             FROM `plants`
             WHERE `user_id` = :user_id
-            AND `id` = :id;"
+            AND `id` = :id;'
         );
 
-        if (!$stmt){
+        if (!$stmt instanceOf \PDOStatement){
             throw new \Exception('Could not prepare database statement');
         }
 
@@ -177,13 +177,13 @@ class PlantRepository extends Repository
     public function deleteUserPlant(int $userId, int $plantId): void
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            "DELETE
+            'DELETE
             FROM `plants`
             WHERE `user_id` = :user_id
-            AND `id` = :id;"
+            AND `id` = :id;'
         );
 
-        if (!$stmt){
+        if (!$stmt instanceOf \PDOStatement){
             throw new \Exception('Could not prepare database statement');
         }
 

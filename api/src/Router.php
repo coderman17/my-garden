@@ -11,6 +11,9 @@ use MyGarden\Views\JsonView;
 
 class Router
 {
+    /**
+     * @var array<string, array>
+     */
     protected array $routes;
 
     protected RepositoryCollection $repositoryCollection;
@@ -21,9 +24,7 @@ class Router
 
     /**
      * @param RepositoryCollection $repositoryCollection
-     * @throws Exceptions\OutOfRangeInt
-     * @throws Exceptions\OverMaxChars
-     * @throws Exceptions\UnderMinChars
+     * @throws \Exception
      */
     public function __construct(RepositoryCollection $repositoryCollection)
     {
@@ -37,7 +38,7 @@ class Router
     public function handle(Request $request): void
     {
         //TODO this is deeply unsafe and needs to be done properly
-        header("Access-Control-Allow-Origin: *");
+        header('Access-Control-Allow-Origin: *');
 
         $matches = [];
 
@@ -50,7 +51,7 @@ class Router
         ];
 
         $this->routes['GET']['plants'] = [
-            'method' => function() use ($request){
+            'method' => function(){
                 $this->plantController->getAll();
             }
         ];
@@ -95,6 +96,6 @@ class Router
         $response = 'Unrecognised request';
         http_response_code(404);
 
-        echo json_encode(["error" => $response]);
+        echo json_encode(['error' => $response]);
     }
 }
