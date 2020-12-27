@@ -3,6 +3,16 @@ As a user
 I need to delete my garden
 So that I can start again from scratch
 
+Background: A valid request body
+	Given I have a request body:
+	"""
+	{
+		"name": "test",
+		"x_dimension": 8,
+		"y_dimension": 8
+	}
+	"""
+
 Scenario: Delete a plant which exists
 	Given I call 'POST' 'http://localhost/api/garden'
 	And I save 'id' from the response
