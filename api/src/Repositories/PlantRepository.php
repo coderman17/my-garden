@@ -122,6 +122,10 @@ class PlantRepository extends Repository
             'image_link' => $plant->imageLink,
         ]);
 
+        if($stmt->rowCount() !== 1){
+            throw new NotFound();
+        }
+
         return $plant;
     }
 
