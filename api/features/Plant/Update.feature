@@ -61,10 +61,10 @@ Scenario Outline: Update a plant without a parameter
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
-		| parameter		|
+		| parameter	|
 		| englishName	|
-		| latinName		|
-		| imageLink		|
+		| latinName	|
+		| imageLink	|
 
 Scenario Outline: Create a plant with a value of incorrect type
 	Given I call 'POST' 'http://localhost/api/plant'
@@ -87,10 +87,10 @@ Scenario Outline: Create a plant with a value of incorrect type
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
-		| parameter		| value	|
+		| parameter	| value	|
 		| englishName	| 50	|
-		| latinName		| 50	|
-		| imageLink		| 50	|
+		| latinName	| 50	|
+		| imageLink	| 50	|
 
 Scenario Outline: Create a plant with strings of boundary correct/incorrect length
 	Given I call 'POST' 'http://localhost/api/plant'
@@ -108,12 +108,12 @@ Scenario Outline: Create a plant with strings of boundary correct/incorrect leng
 	Then the response has a status of '<status>'
 
 	Examples:
-		| key			| length	| status					|
-		| englishName	| 0			| HTTP/1.1 400 Bad Request	|
-		| englishName	| 1			| HTTP/1.1 200 OK			|
-		| englishName	| 80		| HTTP/1.1 200 OK			|
+		| key		| length	| status			|
+		| englishName	| 0		| HTTP/1.1 400 Bad Request	|
+		| englishName	| 1		| HTTP/1.1 200 OK		|
+		| englishName	| 80		| HTTP/1.1 200 OK		|
 		| englishName	| 81		| HTTP/1.1 400 Bad Request	|
-		| latinName		| 255		| HTTP/1.1 200 OK			|
-		| latinName		| 256		| HTTP/1.1 400 Bad Request	|
-		| imageLink		| 500		| HTTP/1.1 200 OK			|
-		| imageLink		| 501		| HTTP/1.1 400 Bad Request	|
+		| latinName	| 255		| HTTP/1.1 200 OK		|
+		| latinName	| 256		| HTTP/1.1 400 Bad Request	|
+		| imageLink	| 500		| HTTP/1.1 200 OK		|
+		| imageLink	| 501		| HTTP/1.1 400 Bad Request	|
