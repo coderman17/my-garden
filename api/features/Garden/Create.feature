@@ -19,7 +19,7 @@ Scenario: Create a garden with a valid request body
 
 Scenario Outline: Create a garden without a parameter
 	When I remove '<parameter>' from the root of the request body
-	And I call 'POST' 'http://localhost/api/plant'
+	And I call 'POST' 'http://localhost/api/garden'
 	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
