@@ -28,7 +28,7 @@ Scenario: Update a plant which exists
 	"""
 	And I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
 	Then the response should have a status of 'HTTP/1.1 200 OK'
-	When I expect the request body as the response body with the saved 'id'
+	When I expect the same as the request body but with the saved 'id'
 	And I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
 	Then the response body should be as expected
 

@@ -11,7 +11,10 @@ use PHPUnit\Framework\Assert;
  */
 class FeatureContext implements Context
 {
-    protected \stdClass $actualResponseBody;
+    /**
+     * @var array<\stdClass>|\stdClass
+     */
+    protected $actualResponseBody;
 
     /**
      * @var array<mixed, mixed>
@@ -157,11 +160,11 @@ class FeatureContext implements Context
     }
 
     /**
-     * @When I expect the request body as the response body with the saved :param
+     * @When I expect the same as the request body but with the saved :param
      *
      * @param string $param
      */
-    public function iExpectTheRequestBodyAsTheResponseBodyWithTheSaved(string $param): void
+    public function iExpectTheSameAsTheRequestBodyButWithTheSaved(string $param): void
     {
         $this->expectedResponseBody = clone $this->requestBody;
 
@@ -174,6 +177,17 @@ class FeatureContext implements Context
     public function theResponseBodyShouldBeAsExpected(): void
     {
         Assert::assertEquals(
+            $this->expectedResponseBody,
+            $this->actualResponseBody
+        );
+    }
+
+    /**
+     * @Then the response body should contain what is expected
+     */
+    public function theResponseBodyShouldContainWhatIsExpected(): void
+    {
+        Assert::assertContainsEquals(
             $this->expectedResponseBody,
             $this->actualResponseBody
         );
