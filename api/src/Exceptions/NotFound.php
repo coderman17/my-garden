@@ -9,7 +9,7 @@ class NotFound extends \Exception
     public string $publicMessage;
 
     public function __construct(\Exception $previous = null) {
-        $this->publicMessage = 'The requested resource was not found, or you are not authorized to view it';
+        $this->publicMessage = 'The requested resource was not found, or you are not authorized to access it';
 
         $code = 404;
 
