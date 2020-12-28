@@ -20,6 +20,8 @@ class Router
 
     protected JsonView $view;
 
+    protected Request $request;
+
     protected PlantController $plantController;
 
     /**
@@ -33,6 +35,8 @@ class Router
         $this->view = new JsonView();
 
         $this->plantController = new PlantController($this->repositoryCollection, $this->view);
+
+        $this->populateRoutes();
     }
 
     public function handle(Request $request): void
@@ -43,36 +47,6 @@ class Router
         $matches = [];
 
         $response = null;
-
-        $this->routes['GET']['plant'] = [
-            'method' => function() use ($request){
-                $this->plantController->get($request);
-            }
-        ];
-
-        $this->routes['GET']['plants'] = [
-            'method' => function(){
-                $this->plantController->getAll();
-            }
-        ];
-
-        $this->routes['DELETE']['plant'] = [
-            'method' => function() use ($request){
-                $this->plantController->delete($request);
-            }
-        ];
-
-        $this->routes['PUT']['plant'] = [
-            'method' => function() use ($request){
-                $this->plantController->update($request);
-            }
-        ];
-
-        $this->routes['POST']['plant'] = [
-            'method' => function() use ($request){
-                $this->plantController->store($request);
-            }
-        ];
 
         preg_match_all('/(?<=api\/)([^\/?]+)(\d+)*/', $request->uri, $matches);
 
@@ -97,5 +71,38 @@ class Router
         http_response_code(404);
 
         echo json_encode(['error' => $response]);
+    }
+
+    protected function populateRoutes(): void
+    {
+        $this->routes['GET']['plant'] = [
+            'method' => function(){
+                $this->plantController->get($this->request);
+            }
+        ];
+
+        $this->routes['GET']['plants'] = [
+            'method' => function(){
+                $this->plantController->getAll();
+            }
+        ];
+
+        $this->routes['DELETE']['plant'] = [
+            'method' => function(){
+                $this->plantController->delete($this->request);
+            }
+        ];
+
+        $this->routes['PUT']['plant'] = [
+            'method' => function(){
+                $this->plantController->update($this->request);
+            }
+        ];
+
+        $this->routes['POST']['plant'] = [
+            'method' => function(){
+                $this->plantController->store($this->request);
+            }
+        ];
     }
 }
