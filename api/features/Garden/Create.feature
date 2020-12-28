@@ -8,8 +8,8 @@ Background: A valid request body
 	"""
 	{
 		"name": "test",
-		"x_dimension": 8,
-		"y_dimension": 8
+		"dimensionX": 8,
+		"dimensionY": 8
 	}
 	"""
 
@@ -25,8 +25,8 @@ Scenario Outline: Create a garden without a parameter
 	Examples:
 	| parameter		|
 	| name			|
-	| x_dimension	|
-	| y_dimension	|
+	| dimensionX	|
+	| dimensionY	|
 
 Scenario Outline: Create a garden with a value of incorrect type
 	When I upsert to the root of the request body:
@@ -41,8 +41,8 @@ Scenario Outline: Create a garden with a value of incorrect type
 	Examples:
 	| parameter		| value	|
 	| name			| 50	|
-	| x_dimension	| "a"	|
-	| y_dimension	| "a"	|
+	| dimensionX	| "a"	|
+	| dimensionY	| "a"	|
 
 Scenario Outline: Create a garden with strings of boundary correct/incorrect length
 	When I upsert to the root of the request body, a string of key '<key>' and length '<length>'
@@ -63,11 +63,11 @@ Scenario Outline: Create a garden with integers of boundary correct/incorrect le
 
 	Examples:
 		| key			| value		| status					|
-		| x_dimension	| 0			| HTTP/1.1 400 Bad Request	|
-		| x_dimension	| 1			| HTTP/1.1 201 Created		|
-		| x_dimension	| 10		| HTTP/1.1 201 Created		|
-		| x_dimension	| 11		| HTTP/1.1 400 Bad Request	|
-		| y_dimension	| 0			| HTTP/1.1 400 Bad Request	|
-		| y_dimension	| 1			| HTTP/1.1 201 Created		|
-		| y_dimension	| 10		| HTTP/1.1 201 Created		|
-		| y_dimension	| 11		| HTTP/1.1 400 Bad Request	|
+		| dimensionX	| 0			| HTTP/1.1 400 Bad Request	|
+		| dimensionX	| 1			| HTTP/1.1 201 Created		|
+		| dimensionX	| 10		| HTTP/1.1 201 Created		|
+		| dimensionX	| 11		| HTTP/1.1 400 Bad Request	|
+		| dimensionY	| 0			| HTTP/1.1 400 Bad Request	|
+		| dimensionY	| 1			| HTTP/1.1 201 Created		|
+		| dimensionY	| 10		| HTTP/1.1 201 Created		|
+		| dimensionY	| 11		| HTTP/1.1 400 Bad Request	|

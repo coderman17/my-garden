@@ -13,11 +13,11 @@ CREATE TABLE users (
 );
 
 CREATE TABLE gardens (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id CHAR(13) NOT NULL,
     user_id INT UNSIGNED NOT NULL,
     name VARCHAR(80) NOT NULL,
-    x_dimension TINYINT UNSIGNED NOT NULL,
-    y_dimension TINYINT UNSIGNED NOT NULL,
+    dimension_x TINYINT UNSIGNED NOT NULL,
+    dimension_y TINYINT UNSIGNED NOT NULL,
     PRIMARY KEY (id)
 );
 

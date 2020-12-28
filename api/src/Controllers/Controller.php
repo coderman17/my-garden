@@ -6,8 +6,8 @@ namespace MyGarden\Controllers;
 
 use MyGarden\Models\User;
 use MyGarden\Repositories\RepositoryCollection;
-use MyGarden\Response\Response;
-use MyGarden\Views\IView;
+use MyGarden\Responses\ResponseInterface;
+use MyGarden\Views\ViewInterface;
 
 abstract class Controller
 {
@@ -15,16 +15,16 @@ abstract class Controller
 
     protected RepositoryCollection $repositoryCollection;
 
-    protected Response $response;
+    protected ResponseInterface $response;
 
-    protected IView $view;
+    protected ViewInterface $view;
 
     /**
      * @param RepositoryCollection $repositoryCollection
-     * @param IView $view
+     * @param ViewInterface $view
      * @throws \Exception
      */
-    public function __construct(RepositoryCollection $repositoryCollection, IView $view)
+    public function __construct(RepositoryCollection $repositoryCollection, ViewInterface $view)
     {
         $this->repositoryCollection = $repositoryCollection;
 

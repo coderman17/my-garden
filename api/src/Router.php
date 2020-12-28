@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace MyGarden;
 
+use MyGarden\Controllers\GardenController;
 use MyGarden\Controllers\PlantController;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
@@ -24,6 +25,8 @@ class Router
 
     protected PlantController $plantController;
 
+    protected GardenController $gardenController;
+
     /**
      * @param RepositoryCollection $repositoryCollection
      * @throws \Exception
@@ -36,11 +39,15 @@ class Router
 
         $this->plantController = new PlantController($this->repositoryCollection, $this->view);
 
-        $this->populateRoutes();
+        $this->gardenController = new GardenController($this->repositoryCollection, $this->view);
     }
 
     public function handle(Request $request): void
     {
+        $this->request = $request;
+
+        $this->populateRoutes();
+
         //TODO this is deeply unsafe and needs to be done properly
         header('Access-Control-Allow-Origin: *');
 
@@ -102,6 +109,12 @@ class Router
         $this->routes['POST']['plant'] = [
             'method' => function(){
                 $this->plantController->store($this->request);
+            }
+        ];
+
+        $this->routes['POST']['garden'] = [
+            'method' => function(){
+                $this->gardenController->store($this->request);
             }
         ];
     }

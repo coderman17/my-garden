@@ -8,8 +8,8 @@ Background: A valid request body
 	"""
 	{
 		"name": "test",
-		"x_dimension": 8,
-		"y_dimension": 8
+		"dimensionX": 8,
+		"dimensionY": 8
 	}
 	"""
 

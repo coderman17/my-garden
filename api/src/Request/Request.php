@@ -33,10 +33,21 @@ class Request
         }
 
         foreach ($_GET as $k => $v){
+            $v = $this->identifyInteger($v);
+
             $this->params[$k] = $v;
         }
 
         $this->uri = $_SERVER['REQUEST_URI'];
+    }
+
+    protected function identifyInteger(string $value)
+    {
+        if (preg_match('/^[1-9][0-9]+$|^[0-9]$/', $value)){
+            return intval($value);
+        }
+
+        return $value;
     }
 
     /**
@@ -56,8 +67,6 @@ class Request
     /**
      * @param array<string, mixed> $array
      * @throws MissingParameter
-     * @throws OverMaxChars
-     * @throws UnderMinChars
      * @throws WrongTypeParameter
      */
     public function validateExistsWithType(array $array): void
@@ -69,22 +78,6 @@ class Request
 
             if(gettype($this->params[$k]) !== $v['type']){
                 throw new WrongTypeParameter($k, $v['type']);
-            }
-
-            if(
-                $v['type'] === 'string' &&
-                isset($v['maxMbChar']) &&
-                mb_strlen($this->params[$k]) > $v['maxMbChar']
-            ){
-                throw new OverMaxChars($k, $v['maxMbChar']);
-            }
-
-            if(
-                $v['type'] === 'string' &&
-                isset($v['minMbChar']) &&
-                mb_strlen($this->params[$k]) < $v['minMbChar']
-            ){
-                throw new UnderMinChars($k, $v['minMbChar']);
             }
         }
 

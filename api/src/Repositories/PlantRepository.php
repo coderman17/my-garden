@@ -82,7 +82,7 @@ class PlantRepository extends Repository
         );
 
         if($stmt->rowCount() !== 1){
-            throw new \Exception('More than one database row was affected');
+            throw new \Exception('An unexpected number of database rows were affected');
         }
 
         $id = $this->repositoryCollection->databaseConnection->dbh->lastInsertId();
@@ -97,9 +97,11 @@ class PlantRepository extends Repository
      * @param Plant $plant
      * @return Plant
      * @throws \Exception
+     * @throws NotFound
      */
     public function updateUserPlant(int $userId, Plant $plant): Plant
     {
+        //TODO how to not throw error if update sent which matches the stored Plant?
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'UPDATE `plants`
             SET `english_name` = :english_name,
@@ -110,7 +112,7 @@ class PlantRepository extends Repository
         );
 
         if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement');
+            throw new \Exception('Could not prepare database statement: ' . $this->repositoryCollection->databaseConnection->dbh->errorInfo()[2]);
         }
 
         $stmt->execute([

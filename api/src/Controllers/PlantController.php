@@ -11,11 +11,20 @@ use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
 use MyGarden\Models\Plant;
+use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
-use MyGarden\Response\Response;
+use MyGarden\Responses\PlantResponse;
+use MyGarden\Views\ViewInterface;
 
 class PlantController extends Controller
 {
+    public function __construct(RepositoryCollection $repositoryCollection, ViewInterface $view)
+    {
+        parent::__construct($repositoryCollection, $view);
+
+        $this->response = new PlantResponse();
+    }
+
     /**
      * @throws \Exception
      */
@@ -25,10 +34,9 @@ class PlantController extends Controller
 
         $plantArray = $this->repositoryCollection->plantRepository->getUserPlants($userId);
 
-        $this->response = new Response(
-            200,
-            $plantArray->getItems()
-        );
+        $this->response->setCode(200);
+
+        $this->response->setCollectionResponse($plantArray);
 
         $this->view->display($this->response);
     }
@@ -47,14 +55,11 @@ class PlantController extends Controller
 
         $plantId = $request->params['id'];
 
-        $plantId = $request->validateInteger($plantId);
-
         $plant = $this->repositoryCollection->plantRepository->getUserPlant($userId, $plantId);
 
-        $this->response = new Response(
-            200,
-            $plant
-        );
+        $this->response->setCode(200);
+
+        $this->response->setSingleResponse($plant);
 
         $this->view->display($this->response);
     }
@@ -70,14 +75,9 @@ class PlantController extends Controller
 
         $plantId = $request->params['id'];
 
-        $plantId = $request->validateInteger($plantId);
-
         $this->repositoryCollection->plantRepository->deleteUserPlant($userId, $plantId);
 
-        $this->response = new Response(
-            204,
-            ''
-        );
+        $this->response->setCode(204);
 
         $this->view->display($this->response);
     }
@@ -117,10 +117,9 @@ class PlantController extends Controller
 
         $plant = $this->repositoryCollection->plantRepository->saveUserPlant($userId, $plant);
 
-        $this->response = new Response(
-            201,
-            $plant
-        );
+        $this->response->setCode(201);
+
+        $this->response->setSingleResponse($plant);
 
         $this->view->display($this->response);
     }
@@ -133,12 +132,10 @@ class PlantController extends Controller
     {
         $userId = $this->user->getId();
 
-        $plantId = $request->params['id'];
-
-        //TODO put this in validateExistsWithType() OR RENAME
-        $plantId = $request->validateInteger($plantId);
-
         $request->validateExistsWithType([
+            'id' => [
+                'type' => 'integer',
+            ],
              'englishName' => [
                  'type' => 'string',
              ],
@@ -150,6 +147,8 @@ class PlantController extends Controller
              ],
         ]);
 
+        $plantId = $request->params['id'];
+
         $englishName = $request->params['englishName'];
 
         $latinName = $request->params['latinName'];
@@ -160,10 +159,9 @@ class PlantController extends Controller
 
         $plant = $this->repositoryCollection->plantRepository->updateUserPlant($userId, $plant);
 
-        $this->response = new Response(
-            200,
-            $plant
-        );
+        $this->response->setCode(200);
+
+        $this->response->setSingleResponse($plant);
 
         $this->view->display($this->response);
     }

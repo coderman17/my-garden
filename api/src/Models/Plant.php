@@ -10,10 +10,12 @@ use MyGarden\Exceptions\UnderMinChars;
 
 class Plant extends Model
 {
+    //TODO make id uuid
     public ?int $id;
 
     protected int $userId;
 
+    //TODO make all protected with setters which validate
     public string $englishName;
 
     public string $latinName;
@@ -53,5 +55,25 @@ class Plant extends Model
         $this->validateParamStringLength('imageLink', $imageLink, null, 500);
 
         $this->imageLink = $imageLink;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getEnglishName(): string
+    {
+        return $this->englishName;
+    }
+
+    public function getLatinName(): string
+    {
+        return $this->latinName;
+    }
+
+    public function getImageLink(): string
+    {
+        return $this->imageLink;
     }
 }

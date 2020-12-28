@@ -8,8 +8,8 @@ Background: A valid request body
 	"""
 	{
 		"name": "test",
-		"x_dimension": 8,
-		"y_dimension": 8
+		"dimensionX": 8,
+		"dimensionY": 8
 	}
 	"""
 
@@ -22,8 +22,8 @@ Scenario: Update a garden which exists
 	"""
 	{
 		"name": "updated test",
-		"x_dimension": 1,
-		"y_dimension": 1
+		"dimensionX": 1,
+		"dimensionY": 1
 	}
 	"""
 	And I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
@@ -39,8 +39,8 @@ Scenario: Update a garden which doesn't exist
 	"""
 	{
 		"name": "updated test",
-		"x_dimension": 1,
-		"y_dimension": 1
+		"dimensionX": 1,
+		"dimensionY": 1
 	}
 	"""
 	When I call 'PUT' 'http://localhost/api/garden?id=439583'
@@ -55,8 +55,8 @@ Scenario Outline: Update a garden without a parameter
 	"""
 	{
 		"name": "updated test",
-		"x_dimension": 1,
-		"y_dimension": 1
+		"dimensionX": 1,
+		"dimensionY": 1
 	}
 	"""
 	And I remove '<parameter>' from the root of the request body
@@ -66,8 +66,8 @@ Scenario Outline: Update a garden without a parameter
 	Examples:
 		| parameter		|
 		| name			|
-		| x_dimension	|
-		| y_dimension	|
+		| dimensionX	|
+		| dimensionY	|
 
 Scenario Outline: Update a garden with a value of incorrect type
 	Given I call 'POST' 'http://localhost/api/garden'
@@ -78,8 +78,8 @@ Scenario Outline: Update a garden with a value of incorrect type
 	"""
 	{
 		"name": "updated test",
-		"x_dimension": 1,
-		"y_dimension": 1
+		"dimensionX": 1,
+		"dimensionY": 1
 	}
 	"""
 	And I upsert to the root of the request body:
@@ -94,8 +94,8 @@ Scenario Outline: Update a garden with a value of incorrect type
 	Examples:
 		| parameter		| value	|
 		| name			| 50	|
-		| x_dimension	| "a"	|
-		| y_dimension	| "a"	|
+		| dimensionX	| "a"	|
+		| dimensionY	| "a"	|
 
 Scenario Outline: Update a garden with strings of boundary correct/incorrect length
 	Given I call 'POST' 'http://localhost/api/garden'
@@ -106,8 +106,8 @@ Scenario Outline: Update a garden with strings of boundary correct/incorrect len
 	"""
 	{
 		"name": "updated test",
-		"x_dimension": 1,
-		"y_dimension": 1
+		"dimensionX": 1,
+		"dimensionY": 1
 	}
 	"""
 	And I upsert to the root of the request body, a string of key '<key>' and length '<length>'
@@ -130,8 +130,8 @@ Scenario Outline: Update a garden with integers of boundary correct/incorrect le
 	"""
 	{
 		"name": "updated test",
-		"x_dimension": 1,
-		"y_dimension": 1
+		"dimensionX": 1,
+		"dimensionY": 1
 	}
 	"""
 	When I upsert to the root of the request body, an integer of key '<key>' and value '<value>'
@@ -140,11 +140,11 @@ Scenario Outline: Update a garden with integers of boundary correct/incorrect le
 
 	Examples:
 		| key			| value		| status					|
-		| x_dimension	| 0			| HTTP/1.1 400 Bad Request	|
-		| x_dimension	| 1			| HTTP/1.1 201 Created		|
-		| x_dimension	| 10		| HTTP/1.1 201 Created		|
-		| x_dimension	| 11		| HTTP/1.1 400 Bad Request	|
-		| y_dimension	| 0			| HTTP/1.1 400 Bad Request	|
-		| y_dimension	| 1			| HTTP/1.1 201 Created		|
-		| y_dimension	| 10		| HTTP/1.1 201 Created		|
-		| y_dimension	| 11		| HTTP/1.1 400 Bad Request	|
+		| dimensionX	| 0			| HTTP/1.1 400 Bad Request	|
+		| dimensionX	| 1			| HTTP/1.1 201 Created		|
+		| dimensionX	| 10		| HTTP/1.1 201 Created		|
+		| dimensionX	| 11		| HTTP/1.1 400 Bad Request	|
+		| dimensionY	| 0			| HTTP/1.1 400 Bad Request	|
+		| dimensionY	| 1			| HTTP/1.1 201 Created		|
+		| dimensionY	| 10		| HTTP/1.1 201 Created		|
+		| dimensionY	| 11		| HTTP/1.1 400 Bad Request	|
