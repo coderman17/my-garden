@@ -15,12 +15,12 @@ Background: A valid request body
 
 Scenario: Create a garden with a valid request body
 	When I call 'POST' 'http://localhost/api/garden'
-	Then the response should have a status of 'HTTP/1.1 201 Created'
+	Then the response has a status of 'HTTP/1.1 201 Created'
 
 Scenario Outline: Create a garden without a parameter
 	When I remove '<parameter>' from the root of the request body
 	And I call 'POST' 'http://localhost/api/garden'
-	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
 	| parameter		|
@@ -36,7 +36,7 @@ Scenario Outline: Create a garden with a value of incorrect type
 	}
 	"""
 	And I call 'POST' 'http://localhost/api/garden'
-	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
 	| parameter		| value	|
@@ -47,7 +47,7 @@ Scenario Outline: Create a garden with a value of incorrect type
 Scenario Outline: Create a garden with strings of boundary correct/incorrect length
 	When I upsert to the root of the request body, a string of key '<key>' and length '<length>'
 	And I call 'POST' 'http://localhost/api/garden'
-	Then the response should have a status of '<status>'
+	Then the response has a status of '<status>'
 
 	Examples:
 		| key			| length	| status					|
@@ -59,7 +59,7 @@ Scenario Outline: Create a garden with strings of boundary correct/incorrect len
 Scenario Outline: Create a garden with integers of boundary correct/incorrect length
 	When I upsert to the root of the request body, an integer of key '<key>' and value '<value>'
 	And I call 'POST' 'http://localhost/api/garden'
-	Then the response should have a status of '<status>'
+	Then the response has a status of '<status>'
 
 	Examples:
 		| key			| value		| status					|

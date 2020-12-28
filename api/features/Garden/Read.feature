@@ -15,7 +15,7 @@ Background: A valid request body
 
 Scenario: Get a garden which doesn't exist
 	Given I call 'GET' 'http://localhost/api/garden?id=439583'
-	Then the response should have a status of 'HTTP/1.1 404 Not Found'
+	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
 Scenario: Get a garden which exists
 	Given I call 'POST' 'http://localhost/api/garden'

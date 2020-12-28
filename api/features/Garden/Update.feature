@@ -17,7 +17,7 @@ Scenario: Update a garden which exists
 	Given I call 'POST' 'http://localhost/api/garden'
 	And I save 'id' from the response
 	And I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
-	And the response should have a status of 'HTTP/1.1 200 OK'
+	And the response has a status of 'HTTP/1.1 200 OK'
 	When I have a request body:
 	"""
 	{
@@ -27,14 +27,14 @@ Scenario: Update a garden which exists
 	}
 	"""
 	And I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response should have a status of 'HTTP/1.1 200 OK'
+	Then the response has a status of 'HTTP/1.1 200 OK'
 	When I expect the same as the request body but with the saved 'id'
 	And I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected
 
 Scenario: Update a garden which doesn't exist
 	Given I call 'GET' 'http://localhost/api/garden?id=439583'
-	And the response should have a status of 'HTTP/1.1 404 Not Found'
+	And the response has a status of 'HTTP/1.1 404 Not Found'
 	When I have a request body:
 	"""
 	{
@@ -44,13 +44,13 @@ Scenario: Update a garden which doesn't exist
 	}
 	"""
 	When I call 'PUT' 'http://localhost/api/garden?id=439583'
-	Then the response should have a status of 'HTTP/1.1 404 Not Found'
+	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
 Scenario Outline: Update a garden without a parameter
 	Given I call 'POST' 'http://localhost/api/garden'
 	And I save 'id' from the response
 	And I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
-	And the response should have a status of 'HTTP/1.1 200 OK'
+	And the response has a status of 'HTTP/1.1 200 OK'
 	When I have a request body:
 	"""
 	{
@@ -61,7 +61,7 @@ Scenario Outline: Update a garden without a parameter
 	"""
 	And I remove '<parameter>' from the root of the request body
 	And I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
 		| parameter		|
@@ -73,7 +73,7 @@ Scenario Outline: Update a garden with a value of incorrect type
 	Given I call 'POST' 'http://localhost/api/garden'
 	And I save 'id' from the response
 	And I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
-	And the response should have a status of 'HTTP/1.1 200 OK'
+	And the response has a status of 'HTTP/1.1 200 OK'
 	When I have a request body:
 	"""
 	{
@@ -89,7 +89,7 @@ Scenario Outline: Update a garden with a value of incorrect type
 	}
 	"""
 	And I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response should have a status of 'HTTP/1.1 400 Bad Request'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
 		| parameter		| value	|
@@ -101,7 +101,7 @@ Scenario Outline: Update a garden with strings of boundary correct/incorrect len
 	Given I call 'POST' 'http://localhost/api/garden'
 	And I save 'id' from the response
 	And I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
-	And the response should have a status of 'HTTP/1.1 200 OK'
+	And the response has a status of 'HTTP/1.1 200 OK'
 	When I have a request body:
 	"""
 	{
@@ -112,7 +112,7 @@ Scenario Outline: Update a garden with strings of boundary correct/incorrect len
 	"""
 	And I upsert to the root of the request body, a string of key '<key>' and length '<length>'
 	And I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response should have a status of '<status>'
+	Then the response has a status of '<status>'
 
 	Examples:
 		| key			| length	| status					|
@@ -125,7 +125,7 @@ Scenario Outline: Update a garden with integers of boundary correct/incorrect le
 	Given I call 'POST' 'http://localhost/api/garden'
 	And I save 'id' from the response
 	And I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
-	And the response should have a status of 'HTTP/1.1 200 OK'
+	And the response has a status of 'HTTP/1.1 200 OK'
 	When I have a request body:
 	"""
 	{
@@ -136,7 +136,7 @@ Scenario Outline: Update a garden with integers of boundary correct/incorrect le
 	"""
 	When I upsert to the root of the request body, an integer of key '<key>' and value '<value>'
 	And I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response should have a status of '<status>'
+	Then the response has a status of '<status>'
 
 	Examples:
 		| key			| value		| status					|
