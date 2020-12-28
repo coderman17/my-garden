@@ -4,9 +4,7 @@ declare(strict_types = 1);
 
 namespace MyGarden\Request;
 
-use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\MissingParameter;
-use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\WrongTypeParameter;
 
 class Request
@@ -41,6 +39,10 @@ class Request
         $this->uri = $_SERVER['REQUEST_URI'];
     }
 
+    /**
+     * @param string $value
+     * @return int|string
+     */
     protected function identifyInteger(string $value)
     {
         if (preg_match('/^[1-9][0-9]+$|^[0-9]$/', $value)){
@@ -48,20 +50,6 @@ class Request
         }
 
         return $value;
-    }
-
-    /**
-     * @param string $string
-     * @return int
-     * @throws \Exception
-     */
-    public function validateInteger(string $string): int
-    {
-        if (preg_match('/[^0-9]+/', $string)){
-            throw new \Exception('Could not determine an integer in the uri');
-        }
-
-        return intval($string);
     }
 
     /**

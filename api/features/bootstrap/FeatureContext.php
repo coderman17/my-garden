@@ -195,6 +195,9 @@ class FeatureContext implements Context
 
     /**
      * @When I upsert to the root of the request body, an integer of key :key and value :value
+     *
+     * @param string $key
+     * @param int $value
      */
     public function iUpsertToTheRootOfTheRequestBodyAnIntegerOfKeyAndValue(string $key, int $value): void
     {

@@ -21,12 +21,15 @@ abstract class Controller
 
     /**
      * @param RepositoryCollection $repositoryCollection
+     * @param ResponseInterface $response
      * @param ViewInterface $view
      * @throws \Exception
      */
-    public function __construct(RepositoryCollection $repositoryCollection, ViewInterface $view)
+    public function __construct(RepositoryCollection $repositoryCollection, ResponseInterface $response, ViewInterface $view)
     {
         $this->repositoryCollection = $repositoryCollection;
+
+        $this->response = $response;
 
         $this->user = $this->getUserFromCredentials();
 

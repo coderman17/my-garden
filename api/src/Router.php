@@ -6,8 +6,11 @@ namespace MyGarden;
 
 use MyGarden\Controllers\GardenController;
 use MyGarden\Controllers\PlantController;
+use MyGarden\JsonMappers\GardenMapper;
+use MyGarden\JsonMappers\PlantMapper;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
+use MyGarden\Responses\JsonResponse;
 use MyGarden\Views\JsonView;
 
 class Router
@@ -37,9 +40,17 @@ class Router
 
         $this->view = new JsonView();
 
-        $this->plantController = new PlantController($this->repositoryCollection, $this->view);
+        $plantMapper = new PlantMapper();
 
-        $this->gardenController = new GardenController($this->repositoryCollection, $this->view);
+        $plantResponse = new JsonResponse($plantMapper);
+
+        $this->plantController = new PlantController($this->repositoryCollection, $plantResponse, $this->view);
+
+        $gardenMapper = new GardenMapper();
+
+        $gardenResponse = new JsonResponse($gardenMapper);
+
+        $this->gardenController = new GardenController($this->repositoryCollection, $gardenResponse, $this->view);
     }
 
     public function handle(Request $request): void

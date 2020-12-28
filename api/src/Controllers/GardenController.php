@@ -17,12 +17,6 @@ use MyGarden\Views\ViewInterface;
 
 class GardenController extends Controller
 {
-    public function __construct(RepositoryCollection $repositoryCollection, ViewInterface $view)
-    {
-        parent::__construct($repositoryCollection, $view);
-
-        $this->response = new GardenResponse();
-    }
 
     /**
      * @throws \Exception
@@ -127,7 +121,7 @@ class GardenController extends Controller
 
         $this->response->setCode(201);
 
-        $this->response->setSingleResponse($garden);
+        $this->response->setBodySingleResource($garden);
 
         $this->view->display($this->response);
     }

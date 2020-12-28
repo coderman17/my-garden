@@ -12,9 +12,9 @@ class GardenResponse implements ResponseInterface
     protected int $code;
 
     /**
-     * @var mixed
+     * @var array<string, int|string>|array<array<string, int|string>>
      */
-    protected $body;
+    protected array $body = [];
 
     public function getCode(): int
     {
@@ -24,7 +24,7 @@ class GardenResponse implements ResponseInterface
     /**
      * @inheritDoc
      */
-    public function getBody()
+    public function getBody(): array
     {
         return $this->body;
     }
@@ -34,14 +34,14 @@ class GardenResponse implements ResponseInterface
         $this->code = $code;
     }
 
-    public function setSingleResponse(Garden $garden): void
+    public function setBodySingleResource(Garden $garden): void
     {
         $this->body = $this->mapJson($garden);
     }
 
-    public function setCollectionResponse(IntToGardenArray $intToGardenArray): void
+    public function setBodyCollectionResource(IntToGardenArray $array): void
     {
-        foreach ($intToGardenArray as $garden){
+        foreach ($array as $garden){
             array_push(
                 $this->body,
                 $this->mapJson($garden)
@@ -49,6 +49,10 @@ class GardenResponse implements ResponseInterface
         }
     }
 
+    /**
+     * @param Garden $garden
+     * @return array<string, int|string>
+     */
     protected function mapJson(Garden $garden): array
     {
         return [

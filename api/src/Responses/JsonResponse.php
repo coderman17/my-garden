@@ -4,10 +4,11 @@ declare(strict_types = 1);
 
 namespace MyGarden\Responses;
 
-use MyGarden\Models\Plant;
-use MyGarden\TypedArrays\IntToPlantArray;
+use JsonMapper;
+use MyGarden\Models\Model;
+use TypedArrays\IntToValueArrays\IntToClassArray;
 
-class PlantResponse implements ResponseInterface
+class JsonResponse implements ResponseInterface
 {
     protected int $code;
 
@@ -15,6 +16,13 @@ class PlantResponse implements ResponseInterface
      * @var array<string, int|string>|array<array<string, int|string>>
      */
     protected array $body = [];
+
+    protected JsonMapper $jsonMapper;
+
+    public function __construct(JsonMapper $jsonMapper)
+    {
+        $this->jsonMapper = $jsonMapper;
+    }
 
     public function getCode(): int
     {
@@ -34,12 +42,12 @@ class PlantResponse implements ResponseInterface
         $this->code = $code;
     }
 
-    public function setBodySingleResource(Plant $plant): void
+    public function setBodySingleResource(Model $model): void
     {
-        $this->body = $this->mapJson($plant);
+        $this->body = $this->mapJson($model);
     }
 
-    public function setBodyCollectionResource(IntToPlantArray $array): void
+    public function setBodyCollectionResource(IntToClassArray $array): void
     {
         foreach ($array as $plant){
             array_push(
@@ -50,16 +58,11 @@ class PlantResponse implements ResponseInterface
     }
 
     /**
-     * @param Plant $plant
+     * @param Model $model
      * @return array<string, int|string>
      */
-    protected function mapJson(Plant $plant): array
+    protected function mapJson(Model $model): array
     {
-        return [
-            'id' => $plant->getId(),
-            'englishName' => $plant->getEnglishName(),
-            'latinName' => $plant->getLatinName(),
-            'imageLink' => $plant->getImageLink(),
-        ];
+        return $this->jsonMapper->mapJson($model);
     }
 }

@@ -10,21 +10,17 @@ use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
+use MyGarden\JsonMappers\PlantMapper;
 use MyGarden\Models\Plant;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
+use MyGarden\Responses\JsonResponse;
 use MyGarden\Responses\PlantResponse;
+use MyGarden\Responses\ResponseInterface;
 use MyGarden\Views\ViewInterface;
 
 class PlantController extends Controller
 {
-    public function __construct(RepositoryCollection $repositoryCollection, ViewInterface $view)
-    {
-        parent::__construct($repositoryCollection, $view);
-
-        $this->response = new PlantResponse();
-    }
-
     /**
      * @throws \Exception
      */
@@ -36,7 +32,7 @@ class PlantController extends Controller
 
         $this->response->setCode(200);
 
-        $this->response->setCollectionResponse($plantArray);
+        $this->response->setBodyCollectionResource($plantArray);
 
         $this->view->display($this->response);
     }
@@ -59,7 +55,7 @@ class PlantController extends Controller
 
         $this->response->setCode(200);
 
-        $this->response->setSingleResponse($plant);
+        $this->response->setBodySingleResource($plant);
 
         $this->view->display($this->response);
     }
@@ -119,7 +115,7 @@ class PlantController extends Controller
 
         $this->response->setCode(201);
 
-        $this->response->setSingleResponse($plant);
+        $this->response->setBodySingleResource($plant);
 
         $this->view->display($this->response);
     }
@@ -161,7 +157,7 @@ class PlantController extends Controller
 
         $this->response->setCode(200);
 
-        $this->response->setSingleResponse($plant);
+        $this->response->setBodySingleResource($plant);
 
         $this->view->display($this->response);
     }
