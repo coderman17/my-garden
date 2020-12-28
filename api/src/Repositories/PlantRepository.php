@@ -81,9 +81,8 @@ class PlantRepository extends Repository
             ]
         );
 
-
         if($stmt->rowCount() !== 1){
-            throw new \Exception('Expected 1 row to be counted');
+            throw new \Exception('More than one database row was affected');
         }
 
         $id = $this->repositoryCollection->databaseConnection->dbh->lastInsertId();
@@ -121,6 +120,14 @@ class PlantRepository extends Repository
             'latin_name' => $plant->latinName,
             'image_link' => $plant->imageLink,
         ]);
+
+        if($stmt->rowCount() < 1){
+            throw new NotFound();
+        }
+
+        if($stmt->rowCount() > 1){
+            throw new \Exception('More than one database row was affected');
+        }
 
         return $plant;
     }
@@ -192,8 +199,12 @@ class PlantRepository extends Repository
            'id' => $plantId
         ]);
 
-        if($stmt->rowCount() !== 1){
+        if($stmt->rowCount() < 1){
             throw new NotFound();
+        }
+
+        if($stmt->rowCount() > 1){
+            throw new \Exception('More than one database row was affected');
         }
     }
 }

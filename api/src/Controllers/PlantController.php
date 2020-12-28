@@ -135,7 +135,20 @@ class PlantController extends Controller
 
         $plantId = $request->params['id'];
 
+        //TODO put this in validateExistsWithType() OR RENAME
         $plantId = $request->validateInteger($plantId);
+
+        $request->validateExistsWithType([
+             'englishName' => [
+                 'type' => 'string',
+             ],
+             'latinName' => [
+                 'type' => 'string',
+             ],
+             'imageLink' => [
+                 'type' => 'string',
+             ],
+        ]);
 
         $englishName = $request->params['englishName'];
 

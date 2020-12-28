@@ -11,7 +11,10 @@ use PHPUnit\Framework\Assert;
  */
 class FeatureContext implements Context
 {
-    protected string $responseBody;
+    /**
+     * @var array<\stdClass>|\stdClass
+     */
+    protected $actualResponseBody;
 
     /**
      * @var array<mixed, mixed>
@@ -23,16 +26,20 @@ class FeatureContext implements Context
      */
     protected array $savedParams;
 
-    protected string $payloadBody;
+    protected string $generatedParameter;
+
+    protected \stdClass $requestBody;
+
+    protected \stdClass $expectedResponseBody;
 
     /**
-     * @Given I have a valid payload:
+     * @Given I have a request body:
      *
      * @param PyStringNode $string
      */
-    public function iHaveAValidPayload(PyStringNode $string): void
+    public function iHaveARequestBody(PyStringNode $string): void
     {
-        $this->payloadBody = $string->getRaw();
+        $this->requestBody = json_decode($string->getRaw());
     }
 
     /**
@@ -47,57 +54,42 @@ class FeatureContext implements Context
     }
 
     /**
-     * @When I remove :element from the root of the payload
+     * @When I remove :element from the root of the request body
      *
      * @param string $element
      */
-    public function iRemoveElementFromTheRootOfThePayload(string $element): void
+    public function iRemoveElementFromTheRootOfTheRequestBody(string $element): void
     {
-        $x = json_decode($this->payloadBody);
-
-        unset($x->$element);
-
-        $body = json_encode($x);
-
-        Assert::assertNotFalse(
-            $body
-        );
-
-        $this->payloadBody = json_encode($x);
+        unset($this->requestBody->$element);
     }
 
     /**
-     * @When I upsert to the root of the payload:
+     * @When I upsert to the root of the request body:
      *
      * @param PyStringNode $string
      */
-    public function iUpsertToTheRootOfThePayload(PyStringNode $string): void
+    public function iUpsertToTheRootOfTheRequestBody(PyStringNode $string): void
     {
-        $newPayload = array_merge(
-            json_decode($this->payloadBody, TRUE),
-            json_decode($string->getRaw(), TRUE)
-        );
+        $incomingArray = json_decode($string->getRaw(), true);
 
-        $this->payloadBody = json_encode($newPayload);
+        foreach ($incomingArray as $k => $v){
+            $this->requestBody->$k = $v;
+        }
     }
 
     /**
-     * @When I upsert to the root of the payload, a string of key :key and length :length
+     * @When I upsert to the root of the request body, a string of key :key and length :length
      *
      * @param mixed $key
      * @param int $length
+     *
+     * @noinspection PhpMethodNamingConventionInspection it's only just over, and carefully written
      */
-    public function iUpsertToTheRootOfThePayloadAStringOfKeyAndLength($key, int $length): void
+    public function iUpsertToTheRootOfTheRequestBodyAStringOfKeyAndLength($key, int $length): void
     {
         $string = str_repeat('a', $length);
 
-        $pyStringNode = new PyStringNode([
-            0 => "{",
-            1 => '        "' . $key . '": "' . $string . '"',
-            2 => "}"
-        ], 0);
-
-        $this->iUpsertToTheRootOfThePayload($pyStringNode);
+        $this->requestBody->$key = $string;
     }
 
     /**
@@ -112,17 +104,18 @@ class FeatureContext implements Context
             'http' => [
                 'header'  => "Content-type: application/json",
                 'method'  => $method,
-                'content' => $this->payloadBody
+                'content' => json_encode($this->requestBody)
             ]
         ];
 
         $context  = stream_context_create($options);
 
         try {
-            $this->responseBody = file_get_contents($url, false, $context);
+            $body = file_get_contents($url, false, $context);
+            $this->actualResponseBody = json_decode($body);
 
         } catch (Throwable $e){
-            $this->responseBody = '';
+            $this->actualResponseBody = new \stdClass();
 
         }
 
@@ -137,9 +130,7 @@ class FeatureContext implements Context
      */
     public function iSaveFromTheResponse($param): void
     {
-        $bodyArray = json_decode($this->responseBody, true);
-
-        $this->savedParams[$param] = $bodyArray[$param];
+        $this->savedParams[$param] = $this->actualResponseBody->$param;
     }
 
 
@@ -156,15 +147,49 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then the response should have a status of :status
+     * @Then the response has a status of :status
      *
      * @param string $status
      */
-    public function theResponseShouldHaveAStatusOf(string $status): void
+    public function theResponseHasAStatusOf(string $status): void
     {
         Assert::assertSame(
             $status,
             $this->responseHeaders[0],
+        );
+    }
+
+    /**
+     * @When I expect the same as the request body but with the saved :param
+     *
+     * @param string $param
+     */
+    public function iExpectTheSameAsTheRequestBodyButWithTheSaved(string $param): void
+    {
+        $this->expectedResponseBody = clone $this->requestBody;
+
+        $this->expectedResponseBody->$param = $this->savedParams[$param];
+    }
+
+    /**
+     * @Then the response body should be as expected
+     */
+    public function theResponseBodyShouldBeAsExpected(): void
+    {
+        Assert::assertEquals(
+            $this->expectedResponseBody,
+            $this->actualResponseBody
+        );
+    }
+
+    /**
+     * @Then the response body should contain what is expected
+     */
+    public function theResponseBodyShouldContainWhatIsExpected(): void
+    {
+        Assert::assertContainsEquals(
+            $this->expectedResponseBody,
+            $this->actualResponseBody
         );
     }
 }
