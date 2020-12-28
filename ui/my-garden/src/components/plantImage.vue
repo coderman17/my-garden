@@ -40,7 +40,7 @@ export default {
 <style scoped>
 img, .brokenImage {
   width: 320px;
-  height: 400px;
+  height: 320px;
   object-fit: cover;
   max-width: 100%;
 }

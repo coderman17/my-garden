@@ -147,11 +147,11 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Then the response should have a status of :status
+     * @Then the response has a status of :status
      *
      * @param string $status
      */
-    public function theResponseShouldHaveAStatusOf(string $status): void
+    public function theResponseHasAStatusOf(string $status): void
     {
         Assert::assertSame(
             $status,
@@ -192,13 +192,4 @@ class FeatureContext implements Context
             $this->actualResponseBody
         );
     }
-
-    /**
-     * @When I upsert to the root of the request body, an integer of key :key and value :value
-     */
-    public function iUpsertToTheRootOfTheRequestBodyAnIntegerOfKeyAndValue(string $key, int $value): void
-    {
-        $this->requestBody->$key = $value;
-    }
-
 }
