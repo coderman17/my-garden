@@ -15,7 +15,6 @@ Background: A valid request body
 
 Scenario: Delete a garden which exists
 	Given I call 'POST' 'http://localhost/api/garden'
-		And the response has a status of 'HTTP/1.1 201 Created'
 		And I save 'id' from the response
 	When I call 'DELETE' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response has a status of 'HTTP/1.1 204 No Content'
