@@ -18,6 +18,11 @@ class Request
 
     public string $uri;
 
+    /**
+     * @var array<int, string>
+     */
+    public array $acceptHeader = [];
+
     public function __construct()
     {
         $this->method = $_SERVER['REQUEST_METHOD'];
@@ -37,6 +42,10 @@ class Request
         }
 
         $this->uri = $_SERVER['REQUEST_URI'];
+
+        if ($_SERVER['HTTP_ACCEPT'] !== null) {
+            $this->acceptHeader = explode(',', $_SERVER['HTTP_ACCEPT']);
+        }
     }
 
     /**

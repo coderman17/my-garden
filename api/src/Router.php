@@ -4,14 +4,10 @@ declare(strict_types = 1);
 
 namespace MyGarden;
 
+use MyGarden\Controllers\ControllerCollection;
 use MyGarden\Controllers\GardenController;
 use MyGarden\Controllers\PlantController;
-use MyGarden\JsonMappers\GardenMapper;
-use MyGarden\JsonMappers\PlantMapper;
-use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
-use MyGarden\Responses\JsonResponse;
-use MyGarden\Views\JsonView;
 
 class Router
 {
@@ -20,37 +16,17 @@ class Router
      */
     protected array $routes;
 
-    protected RepositoryCollection $repositoryCollection;
-
-    protected JsonView $view;
-
     protected Request $request;
 
     protected PlantController $plantController;
 
     protected GardenController $gardenController;
 
-    /**
-     * @param RepositoryCollection $repositoryCollection
-     * @throws \Exception
-     */
-    public function __construct(RepositoryCollection $repositoryCollection)
+    public function __construct(ControllerCollection $controllerCollection)
     {
-        $this->repositoryCollection = $repositoryCollection;
+        $this->plantController = $controllerCollection->plantController;
 
-        $this->view = new JsonView();
-
-        $plantMapper = new PlantMapper();
-
-        $plantResponse = new JsonResponse($plantMapper);
-
-        $this->plantController = new PlantController($this->repositoryCollection, $plantResponse, $this->view);
-
-        $gardenMapper = new GardenMapper();
-
-        $gardenResponse = new JsonResponse($gardenMapper);
-
-        $this->gardenController = new GardenController($this->repositoryCollection, $gardenResponse, $this->view);
+        $this->gardenController = $controllerCollection->gardenController;
     }
 
     public function handle(Request $request): void
@@ -120,6 +96,30 @@ class Router
         $this->routes['POST']['plant'] = [
             'method' => function(){
                 $this->plantController->store($this->request);
+            }
+        ];
+
+        $this->routes['GET']['garden'] = [
+            'method' => function(){
+                $this->gardenController->get($this->request);
+            }
+        ];
+
+        $this->routes['GET']['gardens'] = [
+            'method' => function(){
+                $this->gardenController->getAll();
+            }
+        ];
+
+        $this->routes['DELETE']['garden'] = [
+            'method' => function(){
+                $this->gardenController->delete($this->request);
+            }
+        ];
+
+        $this->routes['PUT']['garden'] = [
+            'method' => function(){
+                $this->gardenController->update($this->request);
             }
         ];
 

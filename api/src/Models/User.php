@@ -73,4 +73,11 @@ class User extends Model
     {
         return $this->password;
     }
+
+    public function mapJson(): array
+    {
+        return [
+            'username' => $this->getUsername()
+        ];
+    }
 }

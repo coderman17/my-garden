@@ -4,11 +4,10 @@ declare(strict_types = 1);
 
 namespace MyGarden\Responses;
 
-use JsonMapper;
 use MyGarden\Models\Model;
 use TypedArrays\IntToValueArrays\IntToClassArray;
 
-class JsonResponse implements ResponseInterface
+class JsonMappedResponse implements ResponseInterface
 {
     protected int $code;
 
@@ -16,13 +15,6 @@ class JsonResponse implements ResponseInterface
      * @var array<string, int|string>|array<array<string, int|string>>
      */
     protected array $body = [];
-
-    protected JsonMapper $jsonMapper;
-
-    public function __construct(JsonMapper $jsonMapper)
-    {
-        $this->jsonMapper = $jsonMapper;
-    }
 
     public function getCode(): int
     {
@@ -44,25 +36,16 @@ class JsonResponse implements ResponseInterface
 
     public function setBodySingleResource(Model $model): void
     {
-        $this->body = $this->mapJson($model);
+        $this->body = $model->mapJson();
     }
 
     public function setBodyCollectionResource(IntToClassArray $array): void
     {
-        foreach ($array as $plant){
+        foreach ($array as $model){
             array_push(
                 $this->body,
-                $this->mapJson($plant)
+                $model->mapJson()
             );
         }
-    }
-
-    /**
-     * @param Model $model
-     * @return array<string, int|string>
-     */
-    protected function mapJson(Model $model): array
-    {
-        return $this->jsonMapper->mapJson($model);
     }
 }

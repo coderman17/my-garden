@@ -64,4 +64,9 @@ abstract class Model
             throw new OutOfRangeInt($paramName, $min, $max);
         }
     }
+
+    /**
+     * @return array<string, int|string>
+     */
+    abstract public function mapJson(): array;
 }

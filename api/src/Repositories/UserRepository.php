@@ -40,7 +40,7 @@ class UserRepository extends Repository
         $row = $stmt->fetch(\PDO::FETCH_OBJ);
 
         if ($row === false || Helper::verifyHash($password, $row->password) === false){
-            return null;
+            throw new \Exception('Could not verify user');
         }
 
         return new User(

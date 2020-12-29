@@ -81,4 +81,14 @@ class Garden extends Model
     {
         return $this->dimensionY;
     }
+
+    public function mapJson(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'dimensionX' => $this->getDimensionX(),
+            'dimensionY' => $this->getDimensionY(),
+        ];
+    }
 }

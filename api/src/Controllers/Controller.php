@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace MyGarden\Controllers;
 
+use MyGarden\Exceptions\OutOfRangeInt;
+use MyGarden\Exceptions\OverMaxChars;
+use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Models\User;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Responses\ResponseInterface;
@@ -23,7 +26,9 @@ abstract class Controller
      * @param RepositoryCollection $repositoryCollection
      * @param ResponseInterface $response
      * @param ViewInterface $view
-     * @throws \Exception
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
      */
     public function __construct(RepositoryCollection $repositoryCollection, ResponseInterface $response, ViewInterface $view)
     {
@@ -40,16 +45,15 @@ abstract class Controller
 
     /**
      * @return User
-     * @throws \Exception
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
      */
     protected function getUserFromCredentials(): User
     {
-        $user = $this->repositoryCollection->userRepository->getUserFromEmailAndPassword('dan@email.com', 'password');
-
-        if (!$user instanceof User){
-            throw new \Exception('Could not find user from credentials');
-        }
-
-        return $user;
+        return $this->repositoryCollection->userRepository->getUserFromEmailAndPassword(
+            'dan@email.com',
+            'password'
+        );
     }
 }

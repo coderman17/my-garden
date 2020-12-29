@@ -57,7 +57,7 @@ Scenario Outline: Create a garden with strings of boundary correct/incorrect len
 		| name			| 81		| HTTP/1.1 400 Bad Request	|
 
 Scenario Outline: Create a garden with integers of boundary correct/incorrect length
-	When I upsert to the root of the request body, an integer of key '<key>' and value '<value>'
+	When I upsert to the root of the request body, an int of key '<key>' and value '<value>'
 	And I call 'POST' 'http://localhost/api/garden'
 	Then the response has a status of '<status>'
 

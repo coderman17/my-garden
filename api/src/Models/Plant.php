@@ -76,4 +76,14 @@ class Plant extends Model
     {
         return $this->imageLink;
     }
+
+    public function mapJson(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'englishName' => $this->getEnglishName(),
+            'latinName' => $this->getLatinName(),
+            'imageLink' => $this->getImageLink(),
+        ];
+    }
 }

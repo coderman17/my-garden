@@ -9,51 +9,50 @@ use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Models\Garden;
-use MyGarden\Models\Plant;
-use MyGarden\TypedArrays\IntToPlantArray;
+use MyGarden\TypedArrays\IntToGardenArray;
 
 class GardenRepository extends Repository
 {
 
-//    /**
-//     * @param int $userId
-//     * @return IntToPlantArray
-//     * @throws OutOfRangeInt
-//     * @throws OverMaxChars
-//     * @throws UnderMinChars
-//     * @throws \Exception
-//     */
-//    public function getUserPlants(int $userId): IntToPlantArray
-//    {
-//        $intToPlantArray = new IntToPlantArray();
-//
-//        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-//            'SELECT *
-//            FROM `plants`
-//            WHERE `user_id` = :user_id;'
-//        );
-//
-//        if (!$stmt instanceOf \PDOStatement){
-//            throw new \Exception('Could not prepare database statement');
-//        }
-//
-//        $stmt->execute([
-//           'user_id' => $userId
-//       ]);
-//
-//        while($row = $stmt->fetch(\PDO::FETCH_OBJ)) {
-//            $plant = new Plant(
-//                $row->id,
-//                $row->user_id,
-//                $row->english_name,
-//                $row->latin_name,
-//                $row->image_link
-//            );
-//            $intToPlantArray->pushItem($plant);
-//        }
-//
-//        return $intToPlantArray;
-//    }
+    /**
+     * @param int $userId
+     * @return IntToGardenArray
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws \Exception
+     */
+    public function getUserGardens(int $userId): IntToGardenArray
+    {
+        $intToGardenArray = new IntToGardenArray();
+
+        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
+            'SELECT *
+            FROM `gardens`
+            WHERE `user_id` = :user_id;'
+        );
+
+        if (!$stmt instanceOf \PDOStatement){
+            throw new \Exception('Could not prepare database statement');
+        }
+
+        $stmt->execute([
+           'user_id' => $userId
+       ]);
+
+        while($row = $stmt->fetch(\PDO::FETCH_OBJ)) {
+            $garden = new Garden(
+                $row->id,
+                $row->user_id,
+                $row->name,
+                $row->dimension_x,
+                $row->dimension_y
+            );
+            $intToGardenArray->pushItem($garden);
+        }
+
+        return $intToGardenArray;
+    }
 
     /**
      * @param Garden $garden
@@ -90,118 +89,119 @@ class GardenRepository extends Repository
     }
 
     /**
-     * @param int $userId
-     * @param Plant $plant
-     * @return Plant
+     * @param Garden $garden
+     * @return Garden
      * @throws \Exception
      */
-//    public function updateUserPlant(int $userId, Plant $plant): Plant
-//    {
-//        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-//            'UPDATE `plants`
-//            SET `english_name` = :english_name,
-//            `latin_name` = :latin_name,
-//            `image_link` = :image_link
-//            WHERE `id` = :id
-//            AND `user_id` = :user_id;'
-//        );
+    public function updateUserGarden(Garden $garden): Garden
+    {
+        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
+            'UPDATE `gardens`
+            SET `name` = :name,
+            `dimension_x` = :dimension_x,
+            `dimension_y` = :dimension_y
+            WHERE `id` = :id
+            AND `user_id` = :user_id;'
+        );
+
+        if (!$stmt instanceOf \PDOStatement){
+            throw new \Exception('Could not prepare database statement');
+        }
+
+        $stmt->execute([
+           'id' => $garden->getId(),
+           'user_id' => $garden->getUserId(),
+           'name' => $garden->getName(),
+           'dimension_x' => $garden->getDimensionX(),
+           'dimension_y' => $garden->getDimensionY(),
+        ]);
+
+        error_log($garden->getId());
+
+        if($stmt->rowCount() < 1){
+            throw new NotFound();
+        }
+
+        if($stmt->rowCount() > 1){
+            throw new \Exception('More than one database row was affected');
+        }
+
+        return $garden;
+    }
+
+    /**
+     * @param int $userId
+     * @param string $gardenId
+     * @return Garden
+     * @throws NotFound
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws \Exception
+     */
+    public function getUserGarden(int $userId, string $gardenId): Garden
+    {
+        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
+            'SELECT *
+            FROM `gardens`
+            WHERE `user_id` = :user_id
+            AND `id` = :id;'
+        );
+
+        if (!$stmt instanceOf \PDOStatement){
+            throw new \Exception('Could not prepare database statement');
+        }
+
+        $stmt->execute([
+           'user_id' => $userId,
+           'id' => $gardenId
+        ]);
+
+        $row = $stmt->fetch(\PDO::FETCH_OBJ);
+
+        if(!$row){
+            throw new NotFound();
+        }
+
+        return new Garden(
+            $row->id,
+            $row->user_id,
+            $row->name,
+            $row->dimension_x,
+            $row->dimension_y
+        );
+    }
 //
-//        if (!$stmt instanceOf \PDOStatement){
-//            throw new \Exception('Could not prepare database statement');
-//        }
-//
-//        $stmt->execute([
-//            'id' => $plant->id,
-//            'user_id' => $userId,
-//            'english_name' => $plant->englishName,
-//            'latin_name' => $plant->latinName,
-//            'image_link' => $plant->imageLink,
-//        ]);
-//
-//        if($stmt->rowCount() < 1){
-//            throw new NotFound();
-//        }
-//
-//        if($stmt->rowCount() > 1){
-//            throw new \Exception('More than one database row was affected');
-//        }
-//
-//        return $plant;
-//    }
-//
-//    /**
-//     * @param int $userId
-//     * @param int $plantId
-//     * @return Plant
-//     * @throws NotFound
-//     * @throws OutOfRangeInt
-//     * @throws OverMaxChars
-//     * @throws UnderMinChars
-//     * @throws \Exception
-//     */
-//    public function getUserPlant(int $userId, int $plantId): Plant
-//    {
-//        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-//            'SELECT *
-//            FROM `plants`
-//            WHERE `user_id` = :user_id
-//            AND `id` = :id;'
-//        );
-//
-//        if (!$stmt instanceOf \PDOStatement){
-//            throw new \Exception('Could not prepare database statement');
-//        }
-//
-//        $stmt->execute([
-//           'user_id' => $userId,
-//           'id' => $plantId
-//        ]);
-//
-//        $row = $stmt->fetch(\PDO::FETCH_OBJ);
-//
-//        if(!$row){
-//            throw new NotFound();
-//        }
-//
-//        return new Plant(
-//            $row->id,
-//            $row->user_id,
-//            $row->english_name,
-//            $row->latin_name,
-//            $row->image_link
-//        );
-//    }
-//
-//    /**
-//     * @param int $userId
-//     * @param int $plantId
-//     * @throws NotFound
-//     * @throws \Exception
-//     */
-//    public function deleteUserPlant(int $userId, int $plantId): void
-//    {
-//        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-//            'DELETE
-//            FROM `plants`
-//            WHERE `user_id` = :user_id
-//            AND `id` = :id;'
-//        );
-//
-//        if (!$stmt instanceOf \PDOStatement){
-//            throw new \Exception('Could not prepare database statement');
-//        }
-//
-//        $stmt->execute([
-//           'user_id' => $userId,
-//           'id' => $plantId
-//        ]);
-//
-//        if($stmt->rowCount() < 1){
-//            throw new NotFound();
-//        }
-//
-//        if($stmt->rowCount() > 1){
-//            throw new \Exception('More than one database row was affected');
-//        }
-//    }
+    /**
+     * @param int $userId
+     * @param string $gardenId
+     * @throws NotFound
+     * @throws \Exception
+     */
+    public function deleteUserGarden(int $userId, string $gardenId): void
+    {
+        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
+            'DELETE
+            FROM `gardens`
+            WHERE `user_id` = :user_id
+            AND `id` = :id;'
+        );
+
+        if (!$stmt instanceOf \PDOStatement){
+            throw new \Exception('Could not prepare database statement');
+        }
+
+        $stmt->execute([
+           'user_id' => $userId,
+           'id' => $gardenId
+        ]);
+
+        if($stmt->rowCount() < 1){
+            throw new NotFound();
+        }
+
+        if($stmt->rowCount() > 1){
+            throw new \Exception('More than one database row was affected');
+        }
+    }
 }

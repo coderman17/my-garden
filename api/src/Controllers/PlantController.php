@@ -10,14 +10,8 @@ use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
-use MyGarden\JsonMappers\PlantMapper;
 use MyGarden\Models\Plant;
-use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
-use MyGarden\Responses\JsonResponse;
-use MyGarden\Responses\PlantResponse;
-use MyGarden\Responses\ResponseInterface;
-use MyGarden\Views\ViewInterface;
 
 class PlantController extends Controller
 {
