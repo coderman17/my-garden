@@ -15,7 +15,6 @@ Background: A valid request body
 
 Scenario: Update a garden which exists
 	Given I call 'POST' 'http://localhost/api/garden'
-		And the response has a status of 'HTTP/1.1 201 Created'
 		And I save 'id' from the response
 		And I have a request body:
 		"""
@@ -32,30 +31,12 @@ Scenario: Update a garden which exists
 	Then the response body should be as expected
 
 Scenario: Update a garden which doesn't exist
-	Given I call 'GET' 'http://localhost/api/garden?id=1fb93313436cb'
-		And the response has a status of 'HTTP/1.1 404 Not Found'
-		And I have a request body:
-		"""
-		{
-			"name": "updated test",
-			"dimensionX": 1,
-			"dimensionY": 1
-		}
-		"""
 	When I call 'PUT' 'http://localhost/api/garden?id=1fb93313436cb'
 	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
 Scenario Outline: Update a garden without a parameter
 	Given I call 'POST' 'http://localhost/api/garden'
 		And I save 'id' from the response
-		And I have a request body:
-		"""
-		{
-			"name": "updated test",
-			"dimensionX": 1,
-			"dimensionY": 1
-		}
-		"""
 		And I remove '<parameter>' from the root of the request body
 	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
