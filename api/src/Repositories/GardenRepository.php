@@ -116,8 +116,6 @@ class GardenRepository extends Repository
            'dimension_y' => $garden->getDimensionY(),
         ]);
 
-        error_log($garden->getId());
-
         if($stmt->rowCount() < 1){
             throw new NotFound();
         }
