@@ -35,7 +35,11 @@ export default {
   mounted() {
     this.responseAvailable = false;
     fetch("http://localhost/api/plants", {
-      "method": "GET",
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
     })
     .then(response => {
       if(response.ok){
