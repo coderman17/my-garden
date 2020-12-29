@@ -4,10 +4,11 @@ declare(strict_types = 1);
 
 namespace MyGarden;
 
+use MyGarden\Controllers\ControllerCollection;
+use MyGarden\Controllers\GardenController;
 use MyGarden\Controllers\PlantController;
-use MyGarden\Repositories\RepositoryCollection;
+use MyGarden\Exceptions\NotFound;
 use MyGarden\Request\Request;
-use MyGarden\Views\JsonView;
 
 class Router
 {
@@ -16,63 +17,35 @@ class Router
      */
     protected array $routes;
 
-    protected RepositoryCollection $repositoryCollection;
-
-    protected JsonView $view;
+    protected Request $request;
 
     protected PlantController $plantController;
 
-    /**
-     * @param RepositoryCollection $repositoryCollection
-     * @throws \Exception
-     */
-    public function __construct(RepositoryCollection $repositoryCollection)
+    protected GardenController $gardenController;
+
+    public function __construct(ControllerCollection $controllerCollection)
     {
-        $this->repositoryCollection = $repositoryCollection;
+        $this->plantController = $controllerCollection->plantController;
 
-        $this->view = new JsonView();
-
-        $this->plantController = new PlantController($this->repositoryCollection, $this->view);
+        $this->gardenController = $controllerCollection->gardenController;
     }
 
+    /**
+     * @param Request $request
+     * @throws NotFound
+     */
     public function handle(Request $request): void
     {
+        $this->request = $request;
+
+        $this->populateRoutes();
+
         //TODO this is deeply unsafe and needs to be done properly
         header('Access-Control-Allow-Origin: *');
 
         $matches = [];
 
         $response = null;
-
-        $this->routes['GET']['plant'] = [
-            'method' => function() use ($request){
-                $this->plantController->get($request);
-            }
-        ];
-
-        $this->routes['GET']['plants'] = [
-            'method' => function(){
-                $this->plantController->getAll();
-            }
-        ];
-
-        $this->routes['DELETE']['plant'] = [
-            'method' => function() use ($request){
-                $this->plantController->delete($request);
-            }
-        ];
-
-        $this->routes['PUT']['plant'] = [
-            'method' => function() use ($request){
-                $this->plantController->update($request);
-            }
-        ];
-
-        $this->routes['POST']['plant'] = [
-            'method' => function() use ($request){
-                $this->plantController->store($request);
-            }
-        ];
 
         preg_match_all('/(?<=api\/)([^\/?]+)(\d+)*/', $request->uri, $matches);
 
@@ -92,10 +65,69 @@ class Router
             }
         }
 
-        //TODO make an exception for 404
-        $response = 'Unrecognised request';
-        http_response_code(404);
+        throw new NotFound();
+    }
 
-        echo json_encode(['error' => $response]);
+    protected function populateRoutes(): void
+    {
+        $this->routes['GET']['plant'] = [
+            'method' => function(){
+                $this->plantController->get($this->request);
+            }
+        ];
+
+        $this->routes['GET']['plants'] = [
+            'method' => function(){
+                $this->plantController->getAll();
+            }
+        ];
+
+        $this->routes['DELETE']['plant'] = [
+            'method' => function(){
+                $this->plantController->delete($this->request);
+            }
+        ];
+
+        $this->routes['PUT']['plant'] = [
+            'method' => function(){
+                $this->plantController->update($this->request);
+            }
+        ];
+
+        $this->routes['POST']['plant'] = [
+            'method' => function(){
+                $this->plantController->store($this->request);
+            }
+        ];
+
+        $this->routes['GET']['garden'] = [
+            'method' => function(){
+                $this->gardenController->get($this->request);
+            }
+        ];
+
+        $this->routes['GET']['gardens'] = [
+            'method' => function(){
+                $this->gardenController->getAll();
+            }
+        ];
+
+        $this->routes['DELETE']['garden'] = [
+            'method' => function(){
+                $this->gardenController->delete($this->request);
+            }
+        ];
+
+        $this->routes['PUT']['garden'] = [
+            'method' => function(){
+                $this->gardenController->update($this->request);
+            }
+        ];
+
+        $this->routes['POST']['garden'] = [
+            'method' => function(){
+                $this->gardenController->store($this->request);
+            }
+        ];
     }
 }

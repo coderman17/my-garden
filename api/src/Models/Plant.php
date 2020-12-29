@@ -10,18 +10,18 @@ use MyGarden\Exceptions\UnderMinChars;
 
 class Plant extends Model
 {
-    public ?int $id;
+    protected string $id;
 
     protected int $userId;
 
-    public string $englishName;
+    protected string $englishName;
 
-    public string $latinName;
+    protected string $latinName;
 
-    public string $imageLink;
+    protected string $imageLink;
 
     /**
-     * @param int|null $id
+     * @param string|null $id
      * @param int $userId
      * @param string $englishName
      * @param string $latinName
@@ -30,13 +30,15 @@ class Plant extends Model
      * @throws OverMaxChars
      * @throws UnderMinChars
      */
-    public function __construct(?int $id, int $userId, string $englishName, string $latinName, string $imageLink)
+    public function __construct(?string $id, int $userId, string $englishName, string $latinName, string $imageLink)
     {
         if ($id !== null) {
-            $this->validateParamIntRange('id', $id, 0, Model::UNSIGNED_INT_MAX);
-        }
+            $this->validateParamStringLength('id', $id, Model::UUID_LENGTH, Model::UUID_LENGTH);
 
-        $this->id = $id;
+            $this->id = $id;
+        } else {
+            $this->id = uniqid();
+        }
 
         $this->validateParamIntRange('userId', $userId, 0, Model::UNSIGNED_INT_MAX);
 
@@ -53,5 +55,40 @@ class Plant extends Model
         $this->validateParamStringLength('imageLink', $imageLink, null, 500);
 
         $this->imageLink = $imageLink;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function getEnglishName(): string
+    {
+        return $this->englishName;
+    }
+
+    public function getLatinName(): string
+    {
+        return $this->latinName;
+    }
+
+    public function getImageLink(): string
+    {
+        return $this->imageLink;
+    }
+
+    public function mapJson(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'englishName' => $this->getEnglishName(),
+            'latinName' => $this->getLatinName(),
+            'imageLink' => $this->getImageLink(),
+        ];
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
     }
 }

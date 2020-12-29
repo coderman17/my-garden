@@ -14,7 +14,7 @@ Background: A valid request body
 	"""
 
 Scenario: Get a plant which doesn't exist
-	When I call 'GET' 'http://localhost/api/plant?id=439583'
+	When I call 'GET' 'http://localhost/api/plant?id=5fea8ef735b2a'
 	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
 Scenario: Get a plant which exists
@@ -30,3 +30,17 @@ Scenario: Get plants
 		And I expect the same as the request body but with the saved 'id'
 	When I call 'GET' 'http://localhost/api/plants'
 	Then the response body should contain what is expected
+
+Scenario: Get a plant without an id
+	When I call 'GET' 'http://localhost/api/plant'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+
+Scenario: Get a plant with an id of incorrect type
+	Given I have a request body:
+	"""
+	{
+		"id": 5
+	}
+	"""
+	When I call 'GET' 'http://localhost/api/plant'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'

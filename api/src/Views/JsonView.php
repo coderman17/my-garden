@@ -4,16 +4,16 @@ declare(strict_types = 1);
 
 namespace MyGarden\Views;
 
-use MyGarden\Response\Response;
+use MyGarden\Responses\ResponseInterface;
 
-class JsonView implements IView
+class JsonView implements ViewInterface
 {
-    public function display(Response $response): void
+    public function display(ResponseInterface $response): void
     {
         header('content-type: application/json');
 
-        http_response_code($response->code);
+        http_response_code($response->getCode());
 
-        echo json_encode($response->body);
+        echo json_encode($response->getBody());
     }
 }

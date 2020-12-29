@@ -27,7 +27,11 @@ export default {
   methods: {
     delete() {
       fetch("http://localhost/api/plant?id=" + this.$route.params.id, {
-        "method": "DELETE",
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }
       });
       router.push('/Plants');
     }
@@ -37,7 +41,11 @@ export default {
     if (this.plant === undefined) {
       this.responseAvailable = false;
       fetch("http://localhost/api/plant?id=" + this.$route.params.id, {
-        "method": "GET",
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        }
       })
       .then(response => {
         if(response.ok){

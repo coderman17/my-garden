@@ -10,33 +10,39 @@ use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
-use MyGarden\Models\Plant;
+use MyGarden\Models\Garden;
 use MyGarden\Request\Request;
 
-class PlantController extends Controller
+class GardenController extends Controller
 {
+
     /**
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
      * @throws \Exception
      */
     public function getAll(): void
     {
         $userId = $this->user->getId();
 
-        $plantArray = $this->repositoryCollection->plantRepository->getUserPlants($userId);
+        $gardenArray = $this->repositoryCollection->gardenRepository->getUserGardens($userId);
 
         $this->response->setCode(200);
 
-        $this->response->setBodyCollectionResource($plantArray);
+        $this->response->setBodyCollectionResource($gardenArray);
 
         $this->view->display($this->response);
     }
 
     /**
      * @param Request $request
-     * @throws NotFound
+     * @throws MissingParameter
      * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
+     * @throws WrongTypeParameter
+     * @throws NotFound
      * @throws \Exception
      */
     public function get(Request $request): void
@@ -49,20 +55,23 @@ class PlantController extends Controller
              ],
         ]);
 
-        $plantId = $request->params['id'];
+        $gardenId = $request->params['id'];
 
-        $plant = $this->repositoryCollection->plantRepository->getUserPlant($userId, $plantId);
+        $garden = $this->repositoryCollection->gardenRepository->getUserGarden($userId, $gardenId);
 
         $this->response->setCode(200);
 
-        $this->response->setBodySingleResource($plant);
+        $this->response->setBodySingleResource($garden);
 
         $this->view->display($this->response);
     }
 
+
     /**
      * @param Request $request
+     * @throws MissingParameter
      * @throws NotFound
+     * @throws WrongTypeParameter
      * @throws \Exception
      */
     public function delete(Request $request): void
@@ -75,9 +84,9 @@ class PlantController extends Controller
              ],
         ]);
 
-        $plantId = $request->params['id'];
+        $gardenId = $request->params['id'];
 
-        $this->repositoryCollection->plantRepository->deleteUserPlant($userId, $plantId);
+        $this->repositoryCollection->gardenRepository->deleteUserGarden($userId, $gardenId);
 
         $this->response->setCode(204);
 
@@ -98,36 +107,41 @@ class PlantController extends Controller
         $userId = $this->user->getId();
 
         $request->validateExistsWithType([
-            'englishName' => [
+            'name' => [
                 'type' => 'string',
             ],
-            'latinName' => [
-                'type' => 'string',
+            'dimensionX' => [
+                'type' => 'integer',
             ],
-            'imageLink' => [
-                'type' => 'string',
+            'dimensionY' => [
+                'type' => 'integer',
             ],
         ]);
 
-        $englishName = $request->params['englishName'];
+        $name = $request->params['name'];
 
-        $latinName = $request->params['latinName'];
+        $dimensionX = $request->params['dimensionX'];
 
-        $imageLink = $request->params['imageLink'];
+        $dimensionY = $request->params['dimensionY'];
 
-        $plant = new Plant(null, $userId, $englishName, $latinName, $imageLink);
+        $garden = new Garden(null, $userId, $name, $dimensionX, $dimensionY);
 
-        $plant = $this->repositoryCollection->plantRepository->saveUserPlant($plant);
+        $garden = $this->repositoryCollection->gardenRepository->saveUserGarden($garden);
 
         $this->response->setCode(201);
 
-        $this->response->setBodySingleResource($plant);
+        $this->response->setBodySingleResource($garden);
 
         $this->view->display($this->response);
     }
 
     /**
      * @param Request $request
+     * @throws MissingParameter
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
+     * @throws WrongTypeParameter
      * @throws \Exception
      */
     public function update(Request $request): void
@@ -135,35 +149,35 @@ class PlantController extends Controller
         $userId = $this->user->getId();
 
         $request->validateExistsWithType([
-            'id' => [
-                'type' => 'string',
-            ],
-             'englishName' => [
+             'id' => [
                  'type' => 'string',
              ],
-             'latinName' => [
+             'name' => [
                  'type' => 'string',
              ],
-             'imageLink' => [
-                 'type' => 'string',
+             'dimensionX' => [
+                 'type' => 'integer',
+             ],
+             'dimensionY' => [
+                 'type' => 'integer',
              ],
         ]);
 
-        $plantId = $request->params['id'];
+        $id = $request->params['id'];
 
-        $englishName = $request->params['englishName'];
+        $name = $request->params['name'];
 
-        $latinName = $request->params['latinName'];
+        $dimensionX = $request->params['dimensionX'];
 
-        $imageLink = $request->params['imageLink'];
+        $dimensionY = $request->params['dimensionY'];
 
-        $plant = new Plant($plantId, $userId, $englishName, $latinName, $imageLink);
+        $garden = new Garden($id, $userId, $name, $dimensionX, $dimensionY);
 
-        $plant = $this->repositoryCollection->plantRepository->updateUserPlant($plant);
+        $garden = $this->repositoryCollection->gardenRepository->updateUserGarden($garden);
 
         $this->response->setCode(200);
 
-        $this->response->setBodySingleResource($plant);
+        $this->response->setBodySingleResource($garden);
 
         $this->view->display($this->response);
     }

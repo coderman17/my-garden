@@ -4,10 +4,13 @@ declare(strict_types = 1);
 
 namespace MyGarden\Controllers;
 
+use MyGarden\Exceptions\OutOfRangeInt;
+use MyGarden\Exceptions\OverMaxChars;
+use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Models\User;
 use MyGarden\Repositories\RepositoryCollection;
-use MyGarden\Response\Response;
-use MyGarden\Views\IView;
+use MyGarden\Responses\ResponseInterface;
+use MyGarden\Views\ViewInterface;
 
 abstract class Controller
 {
@@ -15,18 +18,24 @@ abstract class Controller
 
     protected RepositoryCollection $repositoryCollection;
 
-    protected Response $response;
+    protected ResponseInterface $response;
 
-    protected IView $view;
+    protected ViewInterface $view;
 
     /**
      * @param RepositoryCollection $repositoryCollection
-     * @param IView $view
+     * @param ResponseInterface $response
+     * @param ViewInterface $view
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
      * @throws \Exception
      */
-    public function __construct(RepositoryCollection $repositoryCollection, IView $view)
+    public function __construct(RepositoryCollection $repositoryCollection, ResponseInterface $response, ViewInterface $view)
     {
         $this->repositoryCollection = $repositoryCollection;
+
+        $this->response = $response;
 
         $this->user = $this->getUserFromCredentials();
 
@@ -37,16 +46,16 @@ abstract class Controller
 
     /**
      * @return User
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
      * @throws \Exception
      */
     protected function getUserFromCredentials(): User
     {
-        $user = $this->repositoryCollection->userRepository->getUserFromEmailAndPassword('dan@email.com', 'password');
-
-        if (!$user instanceof User){
-            throw new \Exception('Could not find user from credentials');
-        }
-
-        return $user;
+        return $this->repositoryCollection->userRepository->getUserFromEmailAndPassword(
+            'dan@email.com',
+            'password'
+        );
     }
 }

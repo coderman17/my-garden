@@ -4,9 +4,7 @@ declare(strict_types = 1);
 
 namespace MyGarden\Request;
 
-use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\MissingParameter;
-use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\WrongTypeParameter;
 
 class Request
@@ -19,6 +17,11 @@ class Request
     public array $params = [];
 
     public string $uri;
+
+    /**
+     * @var array<int, string>
+     */
+    public array $acceptHeader = [];
 
     public function __construct()
     {
@@ -33,31 +36,34 @@ class Request
         }
 
         foreach ($_GET as $k => $v){
+            $v = $this->identifyInteger($v);
+
             $this->params[$k] = $v;
         }
 
         $this->uri = $_SERVER['REQUEST_URI'];
+
+        if ($_SERVER['HTTP_ACCEPT'] !== null) {
+            $this->acceptHeader = explode(',', $_SERVER['HTTP_ACCEPT']);
+        }
     }
 
     /**
-     * @param string $string
-     * @return int
-     * @throws \Exception
+     * @param string $value
+     * @return int|string
      */
-    public function validateInteger(string $string): int
+    protected function identifyInteger(string $value)
     {
-        if (preg_match('/[^0-9]+/', $string)){
-            throw new \Exception('Could not determine an integer in the uri');
+        if (preg_match('/^[1-9][0-9]+$|^[0-9]$/', $value)){
+            return intval($value);
         }
 
-        return intval($string);
+        return $value;
     }
 
     /**
      * @param array<string, mixed> $array
      * @throws MissingParameter
-     * @throws OverMaxChars
-     * @throws UnderMinChars
      * @throws WrongTypeParameter
      */
     public function validateExistsWithType(array $array): void
@@ -69,22 +75,6 @@ class Request
 
             if(gettype($this->params[$k]) !== $v['type']){
                 throw new WrongTypeParameter($k, $v['type']);
-            }
-
-            if(
-                $v['type'] === 'string' &&
-                isset($v['maxMbChar']) &&
-                mb_strlen($this->params[$k]) > $v['maxMbChar']
-            ){
-                throw new OverMaxChars($k, $v['maxMbChar']);
-            }
-
-            if(
-                $v['type'] === 'string' &&
-                isset($v['minMbChar']) &&
-                mb_strlen($this->params[$k]) < $v['minMbChar']
-            ){
-                throw new UnderMinChars($k, $v['minMbChar']);
             }
         }
 

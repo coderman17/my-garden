@@ -57,7 +57,8 @@ export default {
       this.requestOptions = {
         method: this.method,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
           'englishName': this.englishName,

@@ -15,13 +15,13 @@ class UserRepository extends Repository
     /**
      * @param string $email
      * @param string $password
-     * @return User|null
+     * @return User
      * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws \Exception
      */
-    public function getUserFromEmailAndPassword(string $email, string $password): ?User
+    public function getUserFromEmailAndPassword(string $email, string $password): User
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'SELECT *
@@ -40,7 +40,7 @@ class UserRepository extends Repository
         $row = $stmt->fetch(\PDO::FETCH_OBJ);
 
         if ($row === false || Helper::verifyHash($password, $row->password) === false){
-            return null;
+            throw new \Exception('Could not verify user');
         }
 
         return new User(

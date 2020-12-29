@@ -8,27 +8,27 @@ use MyGarden\Exceptions\NotFound;
 use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
-use MyGarden\Models\Plant;
-use MyGarden\TypedArrays\IntToPlantArray;
+use MyGarden\Models\Garden;
+use MyGarden\TypedArrays\IntToGardenArray;
 
-class PlantRepository extends Repository
+class GardenRepository extends Repository
 {
 
     /**
      * @param int $userId
-     * @return IntToPlantArray
+     * @return IntToGardenArray
      * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws \Exception
      */
-    public function getUserPlants(int $userId): IntToPlantArray
+    public function getUserGardens(int $userId): IntToGardenArray
     {
-        $intToPlantArray = new IntToPlantArray();
+        $intToGardenArray = new IntToGardenArray();
 
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'SELECT *
-            FROM `plants`
+            FROM `gardens`
             WHERE `user_id` = :user_id;'
         );
 
@@ -41,30 +41,30 @@ class PlantRepository extends Repository
        ]);
 
         while($row = $stmt->fetch(\PDO::FETCH_OBJ)) {
-            $plant = new Plant(
+            $garden = new Garden(
                 $row->id,
                 $row->user_id,
-                $row->english_name,
-                $row->latin_name,
-                $row->image_link
+                $row->name,
+                $row->dimension_x,
+                $row->dimension_y
             );
-            $intToPlantArray->pushItem($plant);
+            $intToGardenArray->pushItem($garden);
         }
 
-        return $intToPlantArray;
+        return $intToGardenArray;
     }
 
     /**
-     * @param Plant $plant
-     * @return Plant
+     * @param Garden $garden
+     * @return Garden
      * @throws \Exception
      */
-    public function saveUserPlant(Plant $plant): Plant
+    public function saveUserGarden(Garden $garden): Garden
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            'INSERT INTO `plants`
-            (`id`, `user_id`, `english_name`, `latin_name`, `image_link`)
-            VALUES (:id, :user_id, :english_name, :latin_name, :image_link);'
+            'INSERT INTO `gardens`
+            (`id`, `user_id`, `name`, `dimension_x`, `dimension_y`)
+            VALUES (:id, :user_id, :name, :dimension_x, :dimension_y);'
         );
 
         if (!$stmt instanceOf \PDOStatement){
@@ -73,11 +73,11 @@ class PlantRepository extends Repository
 
         $stmt->execute(
             [
-                'id' => $plant->getId(),
-                'user_id' => $plant->getUserId(),
-                'english_name' => $plant->getEnglishName(),
-                'latin_name' => $plant->getLatinName(),
-                'image_link' => $plant->getImageLink(),
+                'id' => $garden->getId(),
+                'user_id' => $garden->getUserId(),
+                'name' => $garden->getName(),
+                'dimension_x' => $garden->getDimensionX(),
+                'dimension_y' => $garden->getDimensionY(),
             ]
         );
 
@@ -85,38 +85,38 @@ class PlantRepository extends Repository
             throw new \Exception('An unexpected number of database rows were affected');
         }
 
-        return $plant;
+        return $garden;
     }
 
     /**
-     * @param Plant $plant
-     * @return Plant
+     * @param Garden $garden
+     * @return Garden
      * @throws \Exception
-     * @throws NotFound
      */
-    public function updateUserPlant(Plant $plant): Plant
+    public function updateUserGarden(Garden $garden): Garden
     {
-        //TODO how to not throw error if update sent which matches the stored Plant?
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            'UPDATE `plants`
-            SET `english_name` = :english_name,
-            `latin_name` = :latin_name,
-            `image_link` = :image_link
+            'UPDATE `gardens`
+            SET `name` = :name,
+            `dimension_x` = :dimension_x,
+            `dimension_y` = :dimension_y
             WHERE `id` = :id
             AND `user_id` = :user_id;'
         );
 
         if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement: ' . $this->repositoryCollection->databaseConnection->dbh->errorInfo()[2]);
+            throw new \Exception('Could not prepare database statement');
         }
 
         $stmt->execute([
-            'id' => $plant->getId(),
-            'user_id' => $plant->getUserId(),
-            'english_name' => $plant->getEnglishName(),
-            'latin_name' => $plant->getLatinName(),
-            'image_link' => $plant->getImageLink(),
+           'id' => $garden->getId(),
+           'user_id' => $garden->getUserId(),
+           'name' => $garden->getName(),
+           'dimension_x' => $garden->getDimensionX(),
+           'dimension_y' => $garden->getDimensionY(),
         ]);
+
+        error_log($garden->getId());
 
         if($stmt->rowCount() < 1){
             throw new NotFound();
@@ -126,24 +126,24 @@ class PlantRepository extends Repository
             throw new \Exception('More than one database row was affected');
         }
 
-        return $plant;
+        return $garden;
     }
 
     /**
      * @param int $userId
-     * @param string $plantId
-     * @return Plant
+     * @param string $gardenId
+     * @return Garden
      * @throws NotFound
      * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws \Exception
      */
-    public function getUserPlant(int $userId, string $plantId): Plant
+    public function getUserGarden(int $userId, string $gardenId): Garden
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'SELECT *
-            FROM `plants`
+            FROM `gardens`
             WHERE `user_id` = :user_id
             AND `id` = :id;'
         );
@@ -154,7 +154,7 @@ class PlantRepository extends Repository
 
         $stmt->execute([
            'user_id' => $userId,
-           'id' => $plantId
+           'id' => $gardenId
         ]);
 
         $row = $stmt->fetch(\PDO::FETCH_OBJ);
@@ -163,26 +163,26 @@ class PlantRepository extends Repository
             throw new NotFound();
         }
 
-        return new Plant(
+        return new Garden(
             $row->id,
             $row->user_id,
-            $row->english_name,
-            $row->latin_name,
-            $row->image_link
+            $row->name,
+            $row->dimension_x,
+            $row->dimension_y
         );
     }
-
+//
     /**
      * @param int $userId
-     * @param string $plantId
+     * @param string $gardenId
      * @throws NotFound
      * @throws \Exception
      */
-    public function deleteUserPlant(int $userId, string $plantId): void
+    public function deleteUserGarden(int $userId, string $gardenId): void
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'DELETE
-            FROM `plants`
+            FROM `gardens`
             WHERE `user_id` = :user_id
             AND `id` = :id;'
         );
@@ -193,7 +193,7 @@ class PlantRepository extends Repository
 
         $stmt->execute([
            'user_id' => $userId,
-           'id' => $plantId
+           'id' => $gardenId
         ]);
 
         if($stmt->rowCount() < 1){

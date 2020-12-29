@@ -11,10 +11,12 @@ class RepositoryCollection
     public DatabaseConnection $databaseConnection;
     public PlantRepository $plantRepository;
     public UserRepository $userRepository;
+    public GardenRepository $gardenRepository;
 
     public function __construct()
     {
         $this->plantRepository = new PlantRepository($this);
         $this->userRepository = new UserRepository($this);
+        $this->gardenRepository = new GardenRepository($this);
     }
 }

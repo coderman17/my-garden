@@ -32,30 +32,12 @@ Scenario: Update a plant which exists
 	Then the response body should be as expected
 
 Scenario: Update a plant which doesn't exist
-	Given I call 'GET' 'http://localhost/api/plant?id=439583'
-		And the response has a status of 'HTTP/1.1 404 Not Found'
-		And I have a request body:
-		"""
-		{
-			"englishName": "updated",
-			"latinName": "updated in latin",
-			"imageLink": "updated..."
-		}
-		"""
-	When I call 'PUT' 'http://localhost/api/plant?id=439583'
+	When I call 'PUT' 'http://localhost/api/plant?id=5fea8ef735b2a'
 	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
 Scenario Outline: Update a plant without a parameter
 	Given I call 'POST' 'http://localhost/api/plant'
 		And I save 'id' from the response
-		And I have a request body:
-		"""
-		{
-			"englishName": "updated",
-			"latinName": "updated in latin",
-			"imageLink": "updated..."
-		}
-		"""
 		And I remove '<parameter>' from the root of the request body
 	When I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
@@ -66,17 +48,23 @@ Scenario Outline: Update a plant without a parameter
 		| latinName	|
 		| imageLink	|
 
-Scenario Outline: Create a plant with a value of incorrect type
+Scenario: Update a plant without an id
+	When I call 'PUT' 'http://localhost/api/plant'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+
+Scenario: Update a plant with an id of incorrect type
+	Given I upsert to the root of the request body:
+	"""
+	{
+		"id": 5
+	}
+	"""
+	When I call 'PUT' 'http://localhost/api/plant'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+
+Scenario Outline: Update a plant with a value of incorrect type
 	Given I call 'POST' 'http://localhost/api/plant'
 		And I save 'id' from the response
-		And I have a request body:
-		"""
-		{
-			"englishName": "updated",
-			"latinName": "updated in latin",
-			"imageLink": "updated..."
-		}
-		"""
 		And I upsert to the root of the request body:
 		"""
 		{
@@ -92,17 +80,9 @@ Scenario Outline: Create a plant with a value of incorrect type
 		| latinName	| 50	|
 		| imageLink	| 50	|
 
-Scenario Outline: Create a plant with strings of boundary correct/incorrect length
+Scenario Outline: Update a plant with strings of boundary correct/incorrect length
 	Given I call 'POST' 'http://localhost/api/plant'
 		And I save 'id' from the response
-		And I have a request body:
-		"""
-		{
-			"englishName": "updated",
-			"latinName": "updated in latin",
-			"imageLink": "updated..."
-		}
-		"""
 		And I upsert to the root of the request body, a string of key '<key>' and length '<length>'
 	When I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
 	Then the response has a status of '<status>'

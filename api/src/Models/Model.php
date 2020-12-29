@@ -12,6 +12,8 @@ abstract class Model
 {
     protected const UNSIGNED_INT_MAX = 4294967295;
 
+    protected const UUID_LENGTH = 13;
+
     //This is here because models should be able to guarantee their own integrity without reliance on the proper use of
     // validation from the controller or elsewhere
     /**
@@ -62,4 +64,9 @@ abstract class Model
             throw new OutOfRangeInt($paramName, $min, $max);
         }
     }
+
+    /**
+     * @return array<string, int|string>
+     */
+    abstract public function mapJson(): array;
 }
