@@ -15,12 +15,11 @@ class Plant extends Model
 
     protected int $userId;
 
-    //TODO make all protected with setters which validate
-    public string $englishName;
+    protected string $englishName;
 
-    public string $latinName;
+    protected string $latinName;
 
-    public string $imageLink;
+    protected string $imageLink;
 
     /**
      * @param int|null $id

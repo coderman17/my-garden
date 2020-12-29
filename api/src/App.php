@@ -46,8 +46,6 @@ class App
 
     public function run(): void
     {
-//        var_dump($this->request->acceptHeader);
-//        exit();
 //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
 
         $this->router->handle($this->request);

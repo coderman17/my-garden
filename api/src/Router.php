@@ -7,6 +7,7 @@ namespace MyGarden;
 use MyGarden\Controllers\ControllerCollection;
 use MyGarden\Controllers\GardenController;
 use MyGarden\Controllers\PlantController;
+use MyGarden\Exceptions\NotFound;
 use MyGarden\Request\Request;
 
 class Router
@@ -29,6 +30,10 @@ class Router
         $this->gardenController = $controllerCollection->gardenController;
     }
 
+    /**
+     * @param Request $request
+     * @throws NotFound
+     */
     public function handle(Request $request): void
     {
         $this->request = $request;
@@ -60,11 +65,7 @@ class Router
             }
         }
 
-        //TODO make an exception for 404
-        $response = 'Unrecognised request';
-        http_response_code(404);
-
-        echo json_encode(['error' => $response]);
+        throw new NotFound();
     }
 
     protected function populateRoutes(): void

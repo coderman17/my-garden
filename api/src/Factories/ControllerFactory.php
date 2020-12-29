@@ -37,6 +37,7 @@ class ControllerFactory
      * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
+     * @throws \Exception
      */
     public function generateControllers(Request $request): ControllerCollection
     {

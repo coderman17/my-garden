@@ -75,9 +75,9 @@ class PlantRepository extends Repository
         $stmt->execute(
             [
                 'user_id' => $userId,
-                'english_name' => $plant->englishName,
-                'latin_name' => $plant->latinName,
-                'image_link' => $plant->imageLink,
+                'english_name' => $plant->getEnglishName(),
+                'latin_name' => $plant->getLatinName(),
+                'image_link' => $plant->getImageLink(),
             ]
         );
 
@@ -118,9 +118,9 @@ class PlantRepository extends Repository
         $stmt->execute([
             'id' => $plant->id,
             'user_id' => $userId,
-            'english_name' => $plant->englishName,
-            'latin_name' => $plant->latinName,
-            'image_link' => $plant->imageLink,
+            'english_name' => $plant->getEnglishName(),
+            'latin_name' => $plant->getLatinName(),
+            'image_link' => $plant->getImageLink(),
         ]);
 
         if($stmt->rowCount() < 1){

@@ -29,6 +29,7 @@ abstract class Controller
      * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
+     * @throws \Exception
      */
     public function __construct(RepositoryCollection $repositoryCollection, ResponseInterface $response, ViewInterface $view)
     {
@@ -48,6 +49,7 @@ abstract class Controller
      * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
+     * @throws \Exception
      */
     protected function getUserFromCredentials(): User
     {
