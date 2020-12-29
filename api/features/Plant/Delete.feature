@@ -22,8 +22,6 @@ Scenario: Delete a plant which exists
 	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
 Scenario: Delete a plant which doesn't exist
-	Given I call 'GET' 'http://localhost/api/plant?id=5fea8ef735b2a'
-		And the response has a status of 'HTTP/1.1 404 Not Found'
 	When I call 'DELETE' 'http://localhost/api/plant?id=5fea8ef735b2a'
 	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
