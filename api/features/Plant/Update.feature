@@ -80,8 +80,6 @@ Scenario Outline: Update a plant with a value of incorrect type
 		| latinName	| 50	|
 		| imageLink	| 50	|
 
-
-
 Scenario Outline: Update a plant with strings of boundary correct/incorrect length
 	Given I call 'POST' 'http://localhost/api/plant'
 		And I save 'id' from the response
