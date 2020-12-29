@@ -44,6 +44,9 @@ class App
         $this->router = new Router($this->controllerCollection);
     }
 
+    /**
+     * @throws Exceptions\NotFound
+     */
     public function run(): void
     {
 //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));

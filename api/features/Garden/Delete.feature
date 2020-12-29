@@ -25,3 +25,17 @@ Scenario: Delete a garden which exists
 Scenario: Delete a garden which doesn't exist
 	When I call 'DELETE' 'http://localhost/api/garden?id=1fb93313436cb'
 	Then the response has a status of 'HTTP/1.1 404 Not Found'
+
+Scenario: Delete a garden without an id
+	When I call 'DELETE' 'http://localhost/api/garden'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+
+Scenario: Delete a garden with an id of incorrect type
+	Given I have a request body:
+	"""
+	{
+		"id": 5
+	}
+	"""
+	When I call 'DELETE' 'http://localhost/api/garden'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'

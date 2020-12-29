@@ -55,17 +55,16 @@ class PlantRepository extends Repository
     }
 
     /**
-     * @param int $userId
      * @param Plant $plant
      * @return Plant
      * @throws \Exception
      */
-    public function saveUserPlant(int $userId, Plant $plant): Plant
+    public function saveUserPlant(Plant $plant): Plant
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'INSERT INTO `plants`
-            (`user_id`, `english_name`, `latin_name`, `image_link`)
-            VALUES (:user_id, :english_name, :latin_name, :image_link);'
+            (`id`, `user_id`, `english_name`, `latin_name`, `image_link`)
+            VALUES (:id, :user_id, :english_name, :latin_name, :image_link);'
         );
 
         if (!$stmt instanceOf \PDOStatement){
@@ -74,7 +73,8 @@ class PlantRepository extends Repository
 
         $stmt->execute(
             [
-                'user_id' => $userId,
+                'id' => $plant->getId(),
+                'user_id' => $plant->getUserId(),
                 'english_name' => $plant->getEnglishName(),
                 'latin_name' => $plant->getLatinName(),
                 'image_link' => $plant->getImageLink(),
@@ -85,21 +85,16 @@ class PlantRepository extends Repository
             throw new \Exception('An unexpected number of database rows were affected');
         }
 
-        $id = $this->repositoryCollection->databaseConnection->dbh->lastInsertId();
-
-        $plant->id = intval($id);
-
         return $plant;
     }
 
     /**
-     * @param int $userId
      * @param Plant $plant
      * @return Plant
      * @throws \Exception
      * @throws NotFound
      */
-    public function updateUserPlant(int $userId, Plant $plant): Plant
+    public function updateUserPlant(Plant $plant): Plant
     {
         //TODO how to not throw error if update sent which matches the stored Plant?
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
@@ -116,8 +111,8 @@ class PlantRepository extends Repository
         }
 
         $stmt->execute([
-            'id' => $plant->id,
-            'user_id' => $userId,
+            'id' => $plant->getId(),
+            'user_id' => $plant->getUserId(),
             'english_name' => $plant->getEnglishName(),
             'latin_name' => $plant->getLatinName(),
             'image_link' => $plant->getImageLink(),
@@ -136,7 +131,7 @@ class PlantRepository extends Repository
 
     /**
      * @param int $userId
-     * @param int $plantId
+     * @param string $plantId
      * @return Plant
      * @throws NotFound
      * @throws OutOfRangeInt
@@ -144,7 +139,7 @@ class PlantRepository extends Repository
      * @throws UnderMinChars
      * @throws \Exception
      */
-    public function getUserPlant(int $userId, int $plantId): Plant
+    public function getUserPlant(int $userId, string $plantId): Plant
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'SELECT *
@@ -179,11 +174,11 @@ class PlantRepository extends Repository
 
     /**
      * @param int $userId
-     * @param int $plantId
+     * @param string $plantId
      * @throws NotFound
      * @throws \Exception
      */
-    public function deleteUserPlant(int $userId, int $plantId): void
+    public function deleteUserPlant(int $userId, string $plantId): void
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'DELETE

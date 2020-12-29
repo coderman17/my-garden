@@ -147,3 +147,17 @@ Scenario Outline: Update a garden with integers of boundary correct/incorrect le
 		| dimensionY	| 1			| HTTP/1.1 200 OK			|
 		| dimensionY	| 10		| HTTP/1.1 200 OK			|
 		| dimensionY	| 11		| HTTP/1.1 400 Bad Request	|
+
+Scenario: Update a garden without an id
+	When I call 'PUT' 'http://localhost/api/garden'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+
+Scenario: Update a garden with an id of incorrect type
+	Given I upsert to the root of the request body:
+	"""
+	{
+		"id": 5
+	}
+	"""
+	When I call 'PUT' 'http://localhost/api/garden'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'

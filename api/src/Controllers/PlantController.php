@@ -43,6 +43,12 @@ class PlantController extends Controller
     {
         $userId = $this->user->getId();
 
+        $request->validateExistsWithType([
+             'id' => [
+                 'type' => 'string',
+             ],
+        ]);
+
         $plantId = $request->params['id'];
 
         $plant = $this->repositoryCollection->plantRepository->getUserPlant($userId, $plantId);
@@ -62,6 +68,12 @@ class PlantController extends Controller
     public function delete(Request $request): void
     {
         $userId = $this->user->getId();
+
+        $request->validateExistsWithType([
+             'id' => [
+                 'type' => 'string',
+             ],
+        ]);
 
         $plantId = $request->params['id'];
 
@@ -105,7 +117,7 @@ class PlantController extends Controller
 
         $plant = new Plant(null, $userId, $englishName, $latinName, $imageLink);
 
-        $plant = $this->repositoryCollection->plantRepository->saveUserPlant($userId, $plant);
+        $plant = $this->repositoryCollection->plantRepository->saveUserPlant($plant);
 
         $this->response->setCode(201);
 
@@ -124,7 +136,7 @@ class PlantController extends Controller
 
         $request->validateExistsWithType([
             'id' => [
-                'type' => 'integer',
+                'type' => 'string',
             ],
              'englishName' => [
                  'type' => 'string',
@@ -147,7 +159,7 @@ class PlantController extends Controller
 
         $plant = new Plant($plantId, $userId, $englishName, $latinName, $imageLink);
 
-        $plant = $this->repositoryCollection->plantRepository->updateUserPlant($userId, $plant);
+        $plant = $this->repositoryCollection->plantRepository->updateUserPlant($plant);
 
         $this->response->setCode(200);
 

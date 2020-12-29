@@ -30,3 +30,17 @@ Scenario: Get gardens
 		And I expect the same as the request body but with the saved 'id'
 	When I call 'GET' 'http://localhost/api/gardens'
 	Then the response body should contain what is expected
+
+Scenario: Get a garden without an id
+	When I call 'GET' 'http://localhost/api/garden'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+
+Scenario: Get a garden with an id of incorrect type
+	Given I have a request body:
+	"""
+	{
+		"id": 5
+	}
+	"""
+	When I call 'GET' 'http://localhost/api/garden'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
