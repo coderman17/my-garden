@@ -2,7 +2,7 @@
   <div>
 <!--    <router-link :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden}}">-->
 <!--      <h1 class="mt-2 mb-0">{{ garden.name }}</h1>-->
-    <div ref="container" v-bind:style="{ height: this.solidContainerHeight + 'px'}" class="solidContainer col-12 col-md-9 col-lg-8 col-xl-4">
+    <div ref="container" v-bind:style="{ height: this.solidContainerHeight + 'px'}" class="border border-success solidContainer col-12 col-md-9 col-lg-8 col-xl-4">
       <table v-bind:style="{ width: tableWidth + 'px', marginTop: 0.5 * (this.solidContainerHeight - this.cellWidth * this.garden.dimensionY) + 'px'}" class="table-bordered">
         <tr v-for="n in parseInt(garden.dimensionY)" :key="n">
         <td v-bind:style="{ height: cellWidth + 'px' }" v-for="n in parseInt(garden.dimensionX)" :key="n"></td>
@@ -65,13 +65,8 @@ table {
   display: inline-table;
 }
 .solidContainer {
+  padding: 0;
   margin: auto;
-}
-tr {
-  /*height: calc(100% / 10);*/
-}
-td {
-  /*width: calc(100% / 10);*/
 }
 a {
   color: unset;
