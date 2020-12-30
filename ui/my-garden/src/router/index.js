@@ -48,6 +48,11 @@ const routes = [
     props: true,
     component: () => import(/* webpackChunkName: "about" */ '../views/GardenForm.vue')
   },
+  {
+    path: '/Gardens',
+    name: 'Gardens',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Gardens.vue')
+  },
 ]
 
 const router = new VueRouter({

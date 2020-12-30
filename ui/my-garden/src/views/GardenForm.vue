@@ -5,7 +5,7 @@
       <garden ref="garden" class="col-12" v-bind:garden="garden"></garden>
       <form class="col-12 mb-4" @submit.prevent="processForm" method="get">
         <div class="form-group">
-          <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="name" aria-describedby="name" placeholder="Garden Name" v-model="name">
+          <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="name" aria-describedby="name" placeholder="Garden Name" v-model="garden.name">
           <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionX" aria-describedby="dimensionX" placeholder="X Dimension ('width')" v-model="garden.dimensionX">
           <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionY" aria-describedby="dimensionY" placeholder="Y Dimension ('height')" v-model="garden.dimensionY">
           <button type="submit" class="mt-4 btn btn-primary">Submit</button>
@@ -66,11 +66,12 @@ export default {
           'Accept': 'application/json',
         },
         body: JSON.stringify({
-          'name': this.englishName,
-          'dimensionX': this.dimensionX,
-          'dimensionY': this.dimensionY
+          'name': this.garden.name,
+          'dimensionX': parseInt(this.garden.dimensionX),
+          'dimensionY': parseInt(this.garden.dimensionY)
         })
       };
+      console.log(this.requestOptions);
       fetch(this.apiUrl,this.requestOptions)
           .then(response => {
             if(response.ok){

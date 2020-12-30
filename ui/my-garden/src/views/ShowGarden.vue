@@ -2,7 +2,7 @@
   <div class="gardens container-fluid">
     <heading>{{garden.name}}</heading>
     <div class="gardensContainer row justify-content-center">
-      <garden class="col-12" v-bind:garden="garden"></garden>
+      <garden ref="garden" class="col-12" v-bind:garden="garden"></garden>
       <button v-on:click=this.delete class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4 mr-5 btn btn-danger">Delete</button>
       <router-link class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4" :to="{name: 'GardenForm', params: {garden: garden}}">
         <button type="submit" class="btn btn-primary" style="width:100%;">Edit</button>
@@ -62,6 +62,8 @@ export default {
         console.log(err);
       });
     }
+    setTimeout(function(){ this.$refs.garden.calculateCellWidth(); }.bind(this), 1000);
+
   }
 }
 </script>
