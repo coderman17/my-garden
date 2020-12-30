@@ -18,7 +18,7 @@ use MyGarden\Views\HtmlView;
 use MyGarden\Views\JsonView;
 use MyGarden\Views\ViewInterface;
 
-class ControllerCollectionFactory
+class SimpleControllerCollectionFactory
 {
     protected ViewInterface $view;
 
