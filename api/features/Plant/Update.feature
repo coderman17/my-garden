@@ -31,6 +31,14 @@ Scenario: Update a plant which exists
 	When I call 'GET' 'http://localhost/api/plant?id=' appending the saved 'id'
 	Then the response body should be as expected
 
+Scenario: Update a plant but without altering it
+	Given I call 'POST' 'http://localhost/api/plant'
+		And I save 'id' from the response
+		And I expect the same as the request body but with the saved 'id'
+	When I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
+	Then the response has a status of 'HTTP/1.1 200 OK'
+		And the response body should be as expected
+
 Scenario: Update a plant which doesn't exist
 	When I call 'PUT' 'http://localhost/api/plant?id=5fea8ef735b2a'
 	Then the response has a status of 'HTTP/1.1 404 Not Found'

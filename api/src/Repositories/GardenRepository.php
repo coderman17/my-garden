@@ -116,7 +116,13 @@ class GardenRepository extends Repository
            'dimension_y' => $garden->getDimensionY(),
         ]);
 
-        if($stmt->rowCount() < 1){
+        error_log($garden->getId());
+
+        /** @noinspection PhpNonStrictObjectEqualityInspection this is on purpose */
+        if(
+            $stmt->rowCount() < 1 &&
+            $this->getUserGarden($garden->getUserId(), $garden->getId()) != $garden
+        ){
             throw new NotFound();
         }
 

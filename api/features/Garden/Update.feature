@@ -30,6 +30,14 @@ Scenario: Update a garden which exists
 	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected
 
+Scenario: Update a garden but without altering it
+	Given I call 'POST' 'http://localhost/api/garden'
+		And I save 'id' from the response
+		And I expect the same as the request body but with the saved 'id'
+	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
+	Then the response has a status of 'HTTP/1.1 200 OK'
+		And the response body should be as expected
+
 Scenario: Update a garden which doesn't exist
 	When I call 'PUT' 'http://localhost/api/garden?id=1fb93313436cb'
 	Then the response has a status of 'HTTP/1.1 404 Not Found'
