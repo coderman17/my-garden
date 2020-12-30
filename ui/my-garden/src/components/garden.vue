@@ -2,11 +2,13 @@
   <div>
 <!--    <router-link :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden}}">-->
 <!--      <h1 class="mt-2 mb-0">{{ garden.name }}</h1>-->
-      <table ref="table" class="table-bordered col-12 col-md-9 col-lg-8 col-xl-5">
+    <div ref="container" v-bind:style="{ height: this.solidContainerHeight + 'px'}" class="solidContainer col-12 col-md-9 col-lg-8 col-xl-4">
+      <table v-bind:style="{ width: tableWidth + 'px', marginTop: 0.5 * (this.solidContainerHeight - this.cellWidth * this.garden.dimensionY) + 'px'}" class="table-bordered">
         <tr v-for="n in parseInt(garden.dimensionY)" :key="n">
         <td v-bind:style="{ height: cellWidth + 'px' }" v-for="n in parseInt(garden.dimensionX)" :key="n"></td>
         </tr>
       </table>
+    </div>
 
 <!--      <h2 class="font-italic mb-4">{{ garden.dimensionY }}</h2>-->
 <!--    </router-link>-->
@@ -24,6 +26,7 @@ export default {
   data() {
     return {
       cellWidth: 15,
+      tableWidth: 15,
       brokenImage : false
     }
   },
@@ -32,7 +35,9 @@ export default {
       this.brokenImage = true
     },
     calculateCellWidth: function() {
-      this.cellWidth = this.$refs.table.clientWidth / this.garden.dimensionX;
+      this.solidContainerHeight = this.$refs.container.clientWidth
+      this.cellWidth = this.$refs.container.clientWidth / 10;
+      this.tableWidth = this.cellWidth * this.garden.dimensionX;
     }
   },
   mounted() {
@@ -46,7 +51,10 @@ export default {
 table {
   margin: auto;
   table-layout: fixed;
-  width: 100%;
+  display: inline-table;
+}
+.solidContainer {
+  margin: auto;
 }
 tr {
   /*height: calc(100% / 10);*/
