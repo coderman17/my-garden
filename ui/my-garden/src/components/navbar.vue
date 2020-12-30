@@ -10,6 +10,9 @@
         <li class="nav-item active">
           <router-link class="nav-link text-white" to="/Plants">Plants<span class="sr-only">(current)</span></router-link>
         </li>
+        <li class="nav-item active">
+          <router-link class="nav-link text-white" to="/Gardens">Gardens<span class="sr-only">(current)</span></router-link>
+        </li>
       </ul>
     </div>
   </nav>

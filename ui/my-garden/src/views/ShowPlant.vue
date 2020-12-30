@@ -1,8 +1,7 @@
 <template>
   <div class="plants container-fluid">
-    <heading>Plant Details:</heading>
     <div class="plantsContainer row justify-content-center">
-      <plant class="col-12" v-bind:plant="plant"></plant>
+      <plant class="col-12 mt-3" v-bind:plant="plant"></plant>
       <button v-on:click=this.delete class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4 mr-5 btn btn-danger">Delete</button>
       <router-link class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4" :to="{name: 'PlantForm', params: {plant: plant}}">
         <button type="submit" class="btn btn-primary" style="width:100%;">Edit</button>
@@ -14,7 +13,6 @@
 <script>
 // @ is an alias to /src
 import plant from '@/components/plant.vue'
-import heading from '@/components/heading.vue'
 import router from "@/router";
 
 export default {
@@ -22,7 +20,6 @@ export default {
   id: '',
   components: {
     plant,
-    heading
   },
   methods: {
     delete() {

@@ -1,7 +1,5 @@
 <template>
   <div>
-
-<!--      <h1 class="mt-2 mb-0">{{ garden.name }}</h1>-->
     <div ref="container" v-bind:style="{ height: this.solidContainerHeight + 'px'}" class="border border-success solidContainer col-12 col-md-9 col-lg-8 col-xl-4">
       <table v-bind:style="{ width: tableWidth + 'px', marginTop: 0.5 * (this.solidContainerHeight - this.cellWidth * this.garden.dimensionY) + 'px'}" class="table-bordered">
         <tr v-for="n in parseInt(garden.dimensionY)" :key="n">
@@ -10,9 +8,6 @@
       </table>
     </div>
     <h1 class="mt-2 mb-0">{{ garden.name }}</h1>
-
-<!--      <h2 class="font-italic mb-4">{{ garden.dimensionY }}</h2>-->
-
   </div>
 </template>
 
@@ -39,7 +34,8 @@ export default {
     return {
       cellWidth: 15,
       tableWidth: 15,
-      brokenImage : false
+      brokenImage : false,
+      solidContainerHeight: 15
     }
   },
   methods: {

@@ -1,8 +1,7 @@
 <template>
   <div class="gardens container-fluid">
-    <heading>{{headingText}}</heading>
     <div class="gardensContainer row justify-content-center">
-      <garden ref="garden" class="col-12" v-bind:garden="garden"></garden>
+      <garden ref="garden" class="col-12 mt-3" v-bind:garden="garden"></garden>
       <form class="col-12 mb-4" @submit.prevent="processForm" method="get">
         <div class="form-group">
           <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="name" aria-describedby="name" placeholder="Garden Name" v-model="garden.name">
@@ -18,7 +17,6 @@
 <script>
 // @ is an alias to /src
 import router from '@/router'
-import heading from '@/components/heading.vue'
 import garden from "@/components/garden";
 
 export default {
@@ -36,18 +34,18 @@ export default {
   props: ['garden'],
   components: {
     garden,
-    heading
   },
   mounted() {
     if(this.garden !== undefined){
       this.headingText = 'Edit garden:'
       this.method = 'PUT'
       this.apiUrl = this.apiUrl + '?id=' + this.garden.id
-      this.name = this.garden.englishName
+      this.name = this.garden.name
       this.dimensionX = this.garden.dimensionX
       this.dimensionY = this.garden.dimensionY
     } else {
       this.garden = {
+        name: '',
         dimensionX: 10,
         dimensionY: 10
       }

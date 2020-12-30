@@ -1,9 +1,6 @@
 <template>
   <div class="plants container-fluid">
-
-  <h1 class="mt-5 mb-2">
-    Garden Plants:
-  </h1>
+    <heading>Plants:</heading>
     <div class="plantsContainer row">
       <router-link class="plant col-12 col-lg-4 col-xl-3 col-md-6 col-sm-12" v-for="plant in plants" :key="plant.id"  :to="{name: 'ShowPlant', params: {id: plant.id, plant: plant}}">
         <plant  v-bind:plant="plant"></plant>
@@ -22,6 +19,7 @@
 // @ is an alias to /src
 import plant from '@/components/plant.vue';
 import floatingActionButton from "@/components/floatingActionButton.vue";
+import heading from "@/components/heading.vue";
 
 export default {
   name: 'Plants',
@@ -32,7 +30,8 @@ export default {
   },
   components: {
     floatingActionButton,
-    plant
+    plant,
+    heading
   },
   mounted() {
     this.responseAvailable = false;
