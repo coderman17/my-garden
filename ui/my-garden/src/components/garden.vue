@@ -1,7 +1,7 @@
 <template>
   <div>
     <div ref="container" v-bind:style="{ height: this.solidContainerHeight + 'px'}" class="border border-success solidContainer col-12 col-md-9 col-lg-8 col-xl-4">
-      <table v-bind:style="{ width: tableWidth + 'px', marginTop: 0.5 * (this.solidContainerHeight - this.cellWidth * this.garden.dimensionY) + 'px'}" class="table-bordered">
+      <table v-bind:style="{ width: tableWidth + 'px', marginTop: Math.floor(0.5 * (this.solidContainerHeight - this.cellWidth * this.garden.dimensionY)) - 1 + 'px'}" class="table-bordered">
         <tr v-for="n in parseInt(garden.dimensionY)" :key="n">
         <td v-bind:style="{ height: cellWidth + 'px' }" v-for="n in parseInt(garden.dimensionX)" :key="n"></td>
         </tr>
@@ -43,13 +43,13 @@ export default {
       this.brokenImage = true
     },
     calculateCellWidth: function() {
-      this.solidContainerHeight = this.$refs.container.clientWidth
-      this.cellWidth = this.$refs.container.clientWidth / 10;
+      this.solidContainerHeight = this.$refs.container.clientWidth + 2
+      this.cellWidth = Math.floor(this.$refs.container.clientWidth / 10);
       this.tableWidth = this.cellWidth * this.garden.dimensionX;
     }
   },
   mounted() {
-    setTimeout(function(){ this.calculateCellWidth(); }.bind(this), 500);
+    setTimeout(function(){ this.calculateCellWidth(); }.bind(this), 0);
   }
 }
 </script>
@@ -64,5 +64,6 @@ table {
 .solidContainer {
   padding: 0;
   margin: auto;
+  line-height: 0;
 }
 </style>
