@@ -15,7 +15,18 @@
   </div>
 </template>
 
+
+
 <script>
+/*
+ * must convert back to 'initial working garden edit... commit for the show garden view so pics are big' use the set width and height only for plot edit
+ *
+ *
+ *
+ *
+ */
+
+
 /**
  * @property {int} dimensionX
  * @property {int} dimensionY
