@@ -37,6 +37,8 @@ export default {
   cursor: pointer;
   color: #006d00;
 }
-
+h1, h2 {
+  word-break: break-word;
+}
 
 </style>

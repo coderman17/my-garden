@@ -66,4 +66,7 @@ table {
   margin: auto;
   line-height: 0;
 }
+h1 {
+  word-break: break-word;
+}
 </style>
