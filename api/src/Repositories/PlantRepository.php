@@ -118,7 +118,11 @@ class PlantRepository extends Repository
             'image_link' => $plant->getImageLink(),
         ]);
 
-        if($stmt->rowCount() < 1){
+        /** @noinspection PhpNonStrictObjectEqualityInspection this is on purpose */
+        if(
+            $stmt->rowCount() < 1 &&
+            $this->getUserPlant($plant->getUserId(), $plant->getId()) != $plant
+        ){
             throw new NotFound();
         }
 

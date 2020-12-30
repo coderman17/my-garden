@@ -118,7 +118,11 @@ class GardenRepository extends Repository
 
         error_log($garden->getId());
 
-        if($stmt->rowCount() < 1){
+        /** @noinspection PhpNonStrictObjectEqualityInspection this is on purpose */
+        if(
+            $stmt->rowCount() < 1 &&
+            $this->getUserGarden($garden->getUserId(), $garden->getId()) != $garden
+        ){
             throw new NotFound();
         }
 
