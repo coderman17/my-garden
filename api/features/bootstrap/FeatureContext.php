@@ -45,7 +45,7 @@ class FeatureContext implements Context
     /**
      * @Given I replace variables in the request body with the saved value
      */
-    public function iReplaceVariablesInTheRequestBodyWithTheSavedValue()
+    public function iReplaceVariablesInTheRequestBodyWithTheSavedValue(): void
     {
         $this->recursiveReplace($this->requestBody);
     }
