@@ -49,3 +49,9 @@ VALUES
     ('5fea8ef735b2e', 1, 'Grass', 'Lolium Perenne', 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/background-of-green-and-healthy-grass-royalty-free-image-1586800097.jpg'),
     ('5fea8ef735b2f', 1, 'English Vine', 'Toxicodendron radicans', 'https://www.thespruce.com/thmb/3I4dYlSaqS0OmA7yMH4NyJ_ExnU=/4001x3001/smart/filters:no_upscale()/english-ivy-plants-2132215-hero-03-0a8ee662826b418d86a5b6e08ee7a207.jpg'),
     ('5fea8ef735b2g', 1, 'Peony', 'Paeonia suffruticosa', 'https://www.bsfa.org/wp-content/uploads/2018/06/peonies.jpg');
+
+INSERT INTO gardens (id, user_id, name, dimension_x, dimension_y)
+VALUES
+('5fed05c8c6423', 1, 'Vegetable Patch', 4, 8),
+('5fed061b036cf', 1, 'Front Garden', 10, 4),
+('5fed061b036ce', 1, 'Back Garden', 10, 10)
