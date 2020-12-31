@@ -18,7 +18,7 @@ use MyGarden\Views\HtmlView;
 use MyGarden\Views\JsonView;
 use MyGarden\Views\ViewInterface;
 
-class ControllerFactory
+class SimpleControllerCollectionFactory
 {
     protected ViewInterface $view;
 
@@ -39,7 +39,7 @@ class ControllerFactory
      * @throws UnderMinChars
      * @throws \Exception
      */
-    public function generateControllers(Request $request): ControllerCollection
+    public function create(Request $request): ControllerCollection
     {
         $acceptHeader = $request->acceptHeader;
 

@@ -1,7 +1,7 @@
 <template>
   <div id="imageContainer">
-      <img v-if="this.check === true" class="rounded mt-3" :src="imageLink" ref="img" @error="imageLoadError">
-      <div v-if="this.imageMessage === true" class='bg-white brokenImage mt-3 border border-success rounded'>{{msg}}</div>
+      <img v-if="this.check === true" class="rounded" :src="imageLink" ref="img" @error="imageLoadError">
+      <div v-if="this.imageMessage === true" class='bg-white brokenImage border border-success rounded'>{{msg}}</div>
   </div>
 </template>
 
