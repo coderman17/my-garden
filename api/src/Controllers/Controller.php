@@ -60,10 +60,9 @@ abstract class Controller
      */
     protected function getUserFromCredentials(): User
     {
-//        return $this->repositoryCollection->userRepository->getUserFromEmailAndPassword(
-//            'dan@email.com',
-//            'password'
-//        );
-        return new User(1, 'dan', 'dan@email.com', 'password');
+        return $this->repositoryCollection->userRepository->getUserFromEmailAndPassword(
+            'dan@email.com',
+            'password'
+        );
     }
 }
