@@ -116,6 +116,34 @@ class GardenController extends Controller
             'dimensionY' => [
                 'type' => 'integer',
             ],
+            'plants' => [
+                'type' => 'array',
+                'optional' => true,
+                'arrayType' => 'indexed',
+                'contents' => [
+                    0 => [
+                        'type' => 'array',
+                        'arrayType' => 'associative',
+                        'contents' => [
+                            'id' => [
+                                'type' => 'string',
+                            ],
+                            'coordinateX' => [
+                                'type' => 'integer',
+                            ],
+                            'coordinateY' => [
+                                'type' => 'integer',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'name1' => [
+                'type' => 'string',
+            ],
+            'dimensionZ' => [
+                'type' => 'integer',
+            ],
         ]);
 
         $name = $request->params['name'];
