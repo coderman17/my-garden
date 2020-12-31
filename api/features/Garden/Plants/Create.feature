@@ -49,6 +49,11 @@ Scenario: Create a garden with two plants
 					"id": "{{plantOneId}}",
 					"coordinateX": 1,
 					"coordinateY": 1
+				},
+				{
+					"id": "{{plantTwoId}}",
+					"coordinateX": 2,
+					"coordinateY": 1
 				}
 			]
 		}
@@ -59,7 +64,7 @@ Scenario: Create a garden with two plants
 		And I save 'id' from the response
 		And I expect the same as the request body but with the saved 'id'
 	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response body should contain what is expected
+	Then the response body should be as expected
 
 #Scenario Outline: Create a garden without a parameter
 #	Given I remove '<parameter>' from the root of the request body

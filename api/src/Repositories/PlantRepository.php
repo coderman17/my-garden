@@ -56,10 +56,9 @@ class PlantRepository extends Repository
 
     /**
      * @param Plant $plant
-     * @return Plant
      * @throws \Exception
      */
-    public function saveUserPlant(Plant $plant): Plant
+    public function saveUserPlant(Plant $plant): void
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'INSERT INTO `plants`
@@ -84,17 +83,14 @@ class PlantRepository extends Repository
         if($stmt->rowCount() !== 1){
             throw new \Exception('An unexpected number of database rows were affected');
         }
-
-        return $plant;
     }
 
     /**
      * @param Plant $plant
-     * @return Plant
      * @throws \Exception
      * @throws NotFound
      */
-    public function updateUserPlant(Plant $plant): Plant
+    public function updateUserPlant(Plant $plant): void
     {
         //TODO how to not throw error if update sent which matches the stored Plant?
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
@@ -129,8 +125,6 @@ class PlantRepository extends Repository
         if($stmt->rowCount() > 1){
             throw new \Exception('More than one database row was affected');
         }
-
-        return $plant;
     }
 
     /**

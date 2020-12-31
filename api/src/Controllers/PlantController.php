@@ -12,17 +12,22 @@ use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
 use MyGarden\Models\Plant;
 use MyGarden\Request\Request;
+use MyGarden\Validators\PlantValidator;
+use MyGarden\Validators\Validator;
 
 class PlantController extends Controller
 {
+    protected function getValidator(): Validator
+    {
+        return new PlantValidator();
+    }
+
     /**
      * @throws \Exception
      */
     public function getAll(): void
     {
-        $userId = $this->user->getId();
-
-        $plantArray = $this->repositoryCollection->plantRepository->getUserPlants($userId);
+        $plantArray = $this->repositoryCollection->plantRepository->getUserPlants($this->user->getId());
 
         $this->response->setCode(200);
 
@@ -41,17 +46,12 @@ class PlantController extends Controller
      */
     public function get(Request $request): void
     {
-        $userId = $this->user->getId();
+        $this->validator->validateRequestId($request);
 
-        $request->validateExistsWithType([
-             'id' => [
-                 'type' => 'string',
-             ],
-        ]);
-
-        $plantId = $request->params['id'];
-
-        $plant = $this->repositoryCollection->plantRepository->getUserPlant($userId, $plantId);
+        $plant = $this->repositoryCollection->plantRepository->getUserPlant(
+            $this->user->getId(),
+            $request->params['id']
+        );
 
         $this->response->setCode(200);
 
@@ -67,17 +67,12 @@ class PlantController extends Controller
      */
     public function delete(Request $request): void
     {
-        $userId = $this->user->getId();
+        $this->validator->validateRequestId($request);
 
-        $request->validateExistsWithType([
-             'id' => [
-                 'type' => 'string',
-             ],
-        ]);
-
-        $plantId = $request->params['id'];
-
-        $this->repositoryCollection->plantRepository->deleteUserPlant($userId, $plantId);
+        $this->repositoryCollection->plantRepository->deleteUserPlant(
+            $this->user->getId(),
+            $request->params['id']
+        );
 
         $this->response->setCode(204);
 
@@ -95,29 +90,17 @@ class PlantController extends Controller
      */
     public function store(Request $request): void
     {
-        $userId = $this->user->getId();
+        $this->validator->validateRequestWithoutId($request);
 
-        $request->validateExistsWithType([
-            'englishName' => [
-                'type' => 'string',
-            ],
-            'latinName' => [
-                'type' => 'string',
-            ],
-            'imageLink' => [
-                'type' => 'string',
-            ],
-        ]);
+        $plant = new Plant(
+            null,
+            $this->user->getId(),
+            $request->params['englishName'],
+            $request->params['latinName'],
+            $request->params['imageLink']
+        );
 
-        $englishName = $request->params['englishName'];
-
-        $latinName = $request->params['latinName'];
-
-        $imageLink = $request->params['imageLink'];
-
-        $plant = new Plant(null, $userId, $englishName, $latinName, $imageLink);
-
-        $plant = $this->repositoryCollection->plantRepository->saveUserPlant($plant);
+        $this->repositoryCollection->plantRepository->saveUserPlant($plant);
 
         $this->response->setCode(201);
 
@@ -132,34 +115,17 @@ class PlantController extends Controller
      */
     public function update(Request $request): void
     {
-        $userId = $this->user->getId();
+        $this->validator->validateRequestWithId($request);
 
-        $request->validateExistsWithType([
-            'id' => [
-                'type' => 'string',
-            ],
-             'englishName' => [
-                 'type' => 'string',
-             ],
-             'latinName' => [
-                 'type' => 'string',
-             ],
-             'imageLink' => [
-                 'type' => 'string',
-             ],
-        ]);
+        $plant = new Plant(
+            $request->params['id'],
+            $this->user->getId(),
+            $request->params['englishName'],
+            $request->params['latinName'],
+            $request->params['imageLink']
+        );
 
-        $plantId = $request->params['id'];
-
-        $englishName = $request->params['englishName'];
-
-        $latinName = $request->params['latinName'];
-
-        $imageLink = $request->params['imageLink'];
-
-        $plant = new Plant($plantId, $userId, $englishName, $latinName, $imageLink);
-
-        $plant = $this->repositoryCollection->plantRepository->updateUserPlant($plant);
+        $this->repositoryCollection->plantRepository->updateUserPlant($plant);
 
         $this->response->setCode(200);
 

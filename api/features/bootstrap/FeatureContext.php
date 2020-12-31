@@ -51,7 +51,7 @@ class FeatureContext implements Context
     }
 
     /**
-     * @param array|object $iterable
+     * @param mixed $iterable
      */
     protected function recursiveReplace(&$iterable): void
     {
