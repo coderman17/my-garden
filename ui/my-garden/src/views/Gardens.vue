@@ -1,12 +1,12 @@
 <template>
-  <div class="plants container-fluid">
-    <heading>Plants:</heading>
-    <div class="plantsContainer row">
-      <router-link class="plant col-12 col-lg-4 col-xl-3 col-md-6 col-sm-12" v-for="plant in plants" :key="plant.id"  :to="{name: 'ShowPlant', params: {id: plant.id, plant: plant}}">
-        <plant  v-bind:plant="plant"></plant>
+  <div class="gardens container-fluid">
+  <heading>Gardens:</heading>
+    <div class="gardensContainer row">
+      <router-link class="garden col-12 col-md-6 col-sm-12" v-for="garden in gardens" :key="garden.id"  :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden}}">
+        <garden  v-bind:garden="garden"></garden>
       </router-link>
     </div>
-    <router-link to="/PlantForm">
+    <router-link to="/gardenForm">
       <floatingActionButton>
         <img src="@/assets/plus.png">
       </floatingActionButton>
@@ -17,25 +17,25 @@
 
 <script>
 // @ is an alias to /src
-import plant from '@/components/plant.vue';
+import garden from '@/components/garden.vue';
 import floatingActionButton from "@/components/floatingActionButton.vue";
 import heading from "@/components/heading.vue";
 
 export default {
-  name: 'Plants',
+  name: 'Gardens',
   data() {
     return {
-      plants: []
+      gardens: []
     }
   },
   components: {
     floatingActionButton,
-    plant,
+    garden,
     heading
   },
   mounted() {
     this.responseAvailable = false;
-    fetch("http://localhost/api/plants", {
+    fetch("http://localhost/api/gardens", {
       method: "GET",
       headers: {
         'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default {
     })
     .then(response => {
       console.log(response)
-      this.plants = response;
+      this.gardens = response;
       this.responseAvailable = true;
     })
     .catch(err => {
@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style scoped>
-.plants {
+.gardens {
   margin-bottom: 100px;
 }
 a:hover {

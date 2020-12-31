@@ -1,8 +1,7 @@
 <template>
   <div class="plants container-fluid">
-    <heading>{{headingText}}</heading>
     <div class="plantsContainer row justify-content-center">
-      <plantImage ref="plantImage" :imageLink=this.imageLink></plantImage>
+      <plantImage ref="plantImage" class="mt-3" :imageLink=this.imageLink></plantImage>
       <form class="col-12 mb-4" @submit.prevent="processForm" method="get">
         <div class="form-group">
           <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="imageLink" aria-describedby="imageLink" placeholder="Link to picture" v-model="imageLink">
@@ -18,7 +17,6 @@
 <script>
 // @ is an alias to /src
 import router from '@/router'
-import heading from '@/components/heading.vue'
 import plantImage from "@/components/plantImage";
 
 export default {
@@ -36,7 +34,6 @@ export default {
   props: ['plant'],
   components: {
     plantImage,
-    heading
   },
   mounted() {
     if(this.plant !== undefined){

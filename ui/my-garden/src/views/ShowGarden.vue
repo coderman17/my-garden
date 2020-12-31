@@ -1,9 +1,9 @@
 <template>
-  <div class="plants container-fluid">
-    <div class="plantsContainer row justify-content-center">
-      <plant class="col-12 mt-3" v-bind:plant="plant"></plant>
+  <div class="gardens container-fluid">
+    <div class="gardensContainer row justify-content-center">
+      <garden ref="garden" class="col-12 mt-3" v-bind:garden="garden"></garden>
       <button v-on:click=this.delete class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4 mr-5 btn btn-danger">Delete</button>
-      <router-link class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4" :to="{name: 'PlantForm', params: {plant: plant}}">
+      <router-link class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4" :to="{name: 'GardenForm', params: {garden: garden}}">
         <button type="submit" class="btn btn-primary" style="width:100%;">Edit</button>
       </router-link>
     </div>
@@ -12,32 +12,32 @@
 
 <script>
 // @ is an alias to /src
-import plant from '@/components/plant.vue'
+import garden from '@/components/garden.vue'
 import router from "@/router";
 
 export default {
-  name: 'Plants',
+  name: 'gardens',
   id: '',
   components: {
-    plant,
+    garden,
   },
   methods: {
     delete() {
-      fetch("http://localhost/api/plant?id=" + this.$route.params.id, {
+      fetch("http://localhost/api/garden?id=" + this.$route.params.id, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         }
       });
-      router.push('/Plants');
+      router.push('/gardens');
     }
   },
-  props: ['plant'],
+  props: ['garden'],
   mounted() {
-    if (this.plant === undefined) {
+    if (this.garden === undefined) {
       this.responseAvailable = false;
-      fetch("http://localhost/api/plant?id=" + this.$route.params.id, {
+      fetch("http://localhost/api/garden?id=" + this.$route.params.id, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -52,19 +52,21 @@ export default {
         }
       })
       .then(response => {
-        this.plant = response;
+        this.garden = response;
         this.responseAvailable = true;
       })
       .catch(err => {
         console.log(err);
       });
     }
+    setTimeout(function(){ this.$refs.garden.calculateCellWidth(); }.bind(this), 1000);
+
   }
 }
 </script>
 
 <style scoped>
-.plants {
+.gardens {
   margin-bottom: 100px;
 }
 </style>

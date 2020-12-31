@@ -6,7 +6,7 @@ namespace MyGarden;
 
 use MyGarden\Controllers\ControllerCollection;
 use MyGarden\Database\DatabaseConnection;
-use MyGarden\Factories\ControllerFactory;
+use MyGarden\Factories\SimpleControllerCollectionFactory;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
 
@@ -20,7 +20,7 @@ class App
 
     protected Router $router;
 
-    protected ControllerFactory $controllerFactory;
+    protected SimpleControllerCollectionFactory $controllerFactory;
 
     protected ControllerCollection $controllerCollection;
 
@@ -37,9 +37,9 @@ class App
 
         $this->request = new Request();
 
-        $this->controllerFactory = new ControllerFactory($this->repositoryCollection);
+        $this->controllerFactory = new SimpleControllerCollectionFactory($this->repositoryCollection);
 
-        $this->controllerCollection = $this->controllerFactory->generateControllers($this->request);
+        $this->controllerCollection = $this->controllerFactory->create($this->request);
 
         $this->router = new Router($this->controllerCollection);
     }
