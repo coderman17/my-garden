@@ -43,14 +43,30 @@ class FeatureContext implements Context
     }
 
     /**
-     * Initializes context.
-     *
-     * Every scenario gets its own context instance.
-     * You can also pass arbitrary arguments to the
-     * context constructor through behat.yml.
+     * @Given I replace variables in the request body with the saved value
      */
-    public function __construct()
+    public function iReplaceVariablesInTheRequestBodyWithTheSavedValue(): void
     {
+        $this->recursiveReplace($this->requestBody);
+    }
+
+    /**
+     * @param mixed $iterable
+     */
+    protected function recursiveReplace(&$iterable): void
+    {
+        foreach ($iterable as &$item){
+            if (is_object($item) || is_array($item)){
+                $this->recursiveReplace($item);
+            } else {
+                if(!is_string($item)){
+                    continue;
+                }
+                if(preg_match('/(?<={{).+(?=}})/', $item, $matches) == 1){
+                    $item = $this->savedParams[$matches[0]];
+                }
+            }
+        }
     }
 
     /**
@@ -125,12 +141,17 @@ class FeatureContext implements Context
 
     /**
      * @When I save :param from the response
+     * @When I save :param from the response as :name
      *
      * @param mixed $param
+     * @param string|null $name
      */
-    public function iSaveFromTheResponse($param): void
+    public function iSaveFromTheResponse($param, string $name = null): void
     {
-        $this->savedParams[$param] = $this->actualResponseBody->$param;
+        if ($name == null){
+            $name = $param;
+        }
+        $this->savedParams[$name] = $this->actualResponseBody->$param;
     }
 
 

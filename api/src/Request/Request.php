@@ -4,9 +4,6 @@ declare(strict_types = 1);
 
 namespace MyGarden\Request;
 
-use MyGarden\Exceptions\MissingParameter;
-use MyGarden\Exceptions\WrongTypeParameter;
-
 class Request
 {
     public string $method;
@@ -59,24 +56,5 @@ class Request
         }
 
         return $value;
-    }
-
-    /**
-     * @param array<string, mixed> $array
-     * @throws MissingParameter
-     * @throws WrongTypeParameter
-     */
-    public function validateExistsWithType(array $array): void
-    {
-        foreach ($array as $k => $v){
-            if(!isset($this->params[$k])){
-                throw new MissingParameter($k);
-            }
-
-            if(gettype($this->params[$k]) !== $v['type']){
-                throw new WrongTypeParameter($k, $v['type']);
-            }
-        }
-
     }
 }

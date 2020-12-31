@@ -10,6 +10,7 @@ use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Models\User;
 use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Responses\ResponseInterface;
+use MyGarden\Validators\Validator;
 use MyGarden\Views\ViewInterface;
 
 abstract class Controller
@@ -21,6 +22,8 @@ abstract class Controller
     protected ResponseInterface $response;
 
     protected ViewInterface $view;
+
+    protected Validator $validator;
 
     /**
      * @param RepositoryCollection $repositoryCollection
@@ -40,7 +43,11 @@ abstract class Controller
         $this->user = $this->getUserFromCredentials();
 
         $this->view = $view;
+
+        $this->validator = $this->getValidator();
     }
+
+    abstract protected function getValidator(): Validator;
 
     //This is a placeholder until I review auth systems properly
 

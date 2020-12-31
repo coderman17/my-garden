@@ -56,10 +56,9 @@ class GardenRepository extends Repository
 
     /**
      * @param Garden $garden
-     * @return Garden
      * @throws \Exception
      */
-    public function saveUserGarden(Garden $garden): Garden
+    public function saveUserGarden(Garden $garden): void
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'INSERT INTO `gardens`
@@ -84,16 +83,13 @@ class GardenRepository extends Repository
         if($stmt->rowCount() !== 1){
             throw new \Exception('An unexpected number of database rows were affected');
         }
-
-        return $garden;
     }
 
     /**
      * @param Garden $garden
-     * @return Garden
      * @throws \Exception
      */
-    public function updateUserGarden(Garden $garden): Garden
+    public function updateUserGarden(Garden $garden): void
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'UPDATE `gardens`
@@ -127,8 +123,6 @@ class GardenRepository extends Repository
         if($stmt->rowCount() > 1){
             throw new \Exception('More than one database row was affected');
         }
-
-        return $garden;
     }
 
     /**

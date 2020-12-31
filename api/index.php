@@ -6,10 +6,9 @@ require 'vendor/autoload.php';
 require '.env.php';
 
 error_reporting(0);
-
-$app = new MyGarden\App();
-
 try {
+    $app = new MyGarden\App();
+
     $app->run();
 
 } catch (\Throwable $exception) {
