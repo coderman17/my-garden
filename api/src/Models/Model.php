@@ -66,7 +66,7 @@ abstract class Model
     }
 
     /**
-     * @return array<string, int|string>
+     * @return array<string, mixed>
      */
     abstract public function mapJson(): array;
 }

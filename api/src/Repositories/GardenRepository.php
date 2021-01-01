@@ -9,6 +9,7 @@ use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Models\Garden;
+use MyGarden\Models\Plant;
 use MyGarden\TypedArrays\IntToGardenArray;
 
 class GardenRepository extends Repository
@@ -155,10 +156,22 @@ class GardenRepository extends Repository
     public function getUserGarden(int $userId, string $gardenId): Garden
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            'SELECT *
+            'SELECT gardens.id as gardenId,
+                gardens.user_id as gardenUserId,
+                gardens.name,
+                gardens.dimension_x,
+                gardens.dimension_y,
+                gardens_plants.coordinate_x,
+                gardens_plants.coordinate_y,
+                plants.id as plantId,
+                plants.english_name,
+                plants.latin_name,
+                plants.image_link
             FROM `gardens`
-            WHERE `user_id` = :user_id
-            AND `id` = :id;'
+            LEFT JOIN gardens_plants ON gardens.id=gardens_plants.garden_id
+            LEFT JOIN plants ON gardens_plants.plant_id=plants.id
+            WHERE gardens.user_id = :user_id
+            AND gardens.id = :id;'
         );
 
         if (!$stmt instanceOf \PDOStatement){
@@ -176,13 +189,33 @@ class GardenRepository extends Repository
             throw new NotFound();
         }
 
-        return new Garden(
-            $row->id,
-            $row->user_id,
+        $garden = new Garden(
+            $row->gardenId,
+            $row->gardenUserId,
             $row->name,
             $row->dimension_x,
             $row->dimension_y
         );
+
+        while($row) {
+            if ($row->plantId !== null){
+                $plant = new Plant(
+                    $row->plantId,
+                    $row->gardenUserId,
+                    $row->english_name,
+                    $row->latin_name,
+                    $row->image_link
+                );
+
+                $garden->setPlantLocation($plant,
+                    $row->coordinate_x,
+                    $row->coordinate_y
+                );
+            }
+            $row = $stmt->fetch(\PDO::FETCH_OBJ);
+        }
+
+        return $garden;
     }
 //
     /**

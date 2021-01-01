@@ -105,11 +105,18 @@ class Garden extends Model
 
     public function mapJson(): array
     {
+        $plantLocations = [];
+
+        foreach($this->getPlantLocations() as $plantLocation){
+            array_push($plantLocations, $plantLocation->mapJson());
+        }
+
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
             'dimensionX' => $this->getDimensionX(),
             'dimensionY' => $this->getDimensionY(),
+            'plantLocations' => $plantLocations
         ];
     }
 

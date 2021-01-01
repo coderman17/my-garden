@@ -44,7 +44,7 @@ Scenario: Create a garden with two plants
 			"name": "test",
 			"dimensionX": 8,
 			"dimensionY": 8,
-			"plants": [
+			"plantLocations": [
 				{
 					"id": "{{plantOneId}}",
 					"coordinateX": 1,

@@ -33,9 +33,8 @@ class GardenValidator extends Validator
             'dimensionY' => [
                 'type' => 'integer',
             ],
-            'plants' => [
+            'plantLocations' => [
                 'type' => 'array',
-                'optional' => true,
                 'arrayType' => 'indexed',
                 'contents' => [
                     0 => [
