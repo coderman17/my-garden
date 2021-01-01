@@ -97,7 +97,7 @@ class Garden extends Model
 
         if(isset($this->plantLocations[$coordinateX][$coordinateY])){
             //logic exception?
-            throw new \InvalidArgumentException('There is already a plant at that location in the garden');
+            throw new \LogicException('There is already a plant at that location in the garden', 400);
         }
 
         $this->plantLocations[$coordinateX][$coordinateY] = new PlantLocation($plant->getId(), $coordinateX, $coordinateY);
