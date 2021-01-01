@@ -108,7 +108,25 @@ class GardenController extends Controller
             $request->params['dimensionY']
         );
 
+        if($request->params['plants']){
+            foreach($request->params['plants'] as $plantLocation){
+                $plant = $this->repositoryCollection->plantRepository->getUserPlant(
+                    $this->user->getId(),
+                    $plantLocation['id']
+                );
+
+                $garden->setPlantLocation(
+                    $plant,
+                    $plantLocation['coordinateX'],
+                    $plantLocation['coordinateY']
+                );
+            }
+        }
+
         $this->repositoryCollection->gardenRepository->saveUserGarden($garden);
+        $this->repositoryCollection->gardenRepository->saveUserGardenPlants($garden);
+
+
 
         $this->response->setCode(201);
 

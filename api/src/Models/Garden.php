@@ -20,6 +20,8 @@ class Garden extends Model
 
     protected int $dimensionY;
 
+    protected array $plantLocations;
+
     /**
      * @param string|null $id
      * @param int $userId
@@ -82,6 +84,25 @@ class Garden extends Model
         return $this->dimensionY;
     }
 
+    public function setPlantLocation(Plant $plant, int $coordinateX, int $coordinateY): void
+    {
+        if($plant->getUserId() !== $this->userId){
+            //logic exception?
+            throw new \InvalidArgumentException('The User associated with the plant does not match the User associated with the garden');
+        }
+
+        $this->validateParamIntRange('coordinateX for ' . $plant->getId(), $coordinateX, 1, $this->dimensionX);
+
+        $this->validateParamIntRange('coordinateY for ' . $plant->getId(), $coordinateY, 1, $this->dimensionY);
+
+        if(isset($this->plantLocations[$coordinateX][$coordinateY])){
+            //logic exception?
+            throw new \InvalidArgumentException('There is already a plant at that location in the garden');
+        }
+
+        $this->plantLocations[$coordinateX][$coordinateY] = new PlantLocation($plant->getId(), $coordinateX, $coordinateY);
+    }
+
     public function mapJson(): array
     {
         return [
@@ -90,5 +111,21 @@ class Garden extends Model
             'dimensionX' => $this->getDimensionX(),
             'dimensionY' => $this->getDimensionY(),
         ];
+    }
+
+    /**
+     * @return array<int, PlantLocation>
+     */
+    public function getPlantLocations(): array
+    {
+        $plantLocations = [];
+
+        foreach ($this->plantLocations as $coordinateY){
+            foreach ($coordinateY as $plantLocation){
+                array_push($plantLocations, $plantLocation);
+            }
+        }
+
+        return $plantLocations;
     }
 }

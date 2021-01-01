@@ -89,6 +89,41 @@ class GardenRepository extends Repository
      * @param Garden $garden
      * @throws \Exception
      */
+    public function saveUserGardenPlants(Garden $garden): void
+    {
+        //merge with saveUserGarden and keep prep and exec. separate
+        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
+            'INSERT INTO `gardens_plants`
+            (`garden_id`, `plant_id`, `coordinate_x`, `coordinate_y`)
+            VALUES (:garden_id, :plant_id, :coordinate_x, :coordinate_y);'
+        );
+
+        if (!$stmt instanceOf \PDOStatement){
+            throw new \Exception('Could not prepare database statement');
+        }
+
+        $plantLocations = $garden->getPlantLocations();
+
+        foreach($plantLocations as $plantLocation) {
+            $stmt->execute(
+                [
+                    'garden_id' => $garden->getId(),
+                    'plant_id' => $plantLocation->getPlantId(),
+                    'coordinate_x' => $plantLocation->getCoordinateX(),
+                    'coordinate_y' => $plantLocation->getCoordinateY(),
+                ]
+            );
+
+            if($stmt->rowCount() !== 1){
+                throw new \Exception('An unexpected number of database rows were affected');
+            }
+        }
+    }
+
+    /**
+     * @param Garden $garden
+     * @throws \Exception
+     */
     public function updateUserGarden(Garden $garden): void
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
