@@ -60,63 +60,45 @@ class GardenRepository extends Repository
      */
     public function saveUserGarden(Garden $garden): void
     {
-        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
+        $stmtGardens = $this->prepare(
             'INSERT INTO `gardens`
             (`id`, `user_id`, `name`, `dimension_x`, `dimension_y`)
             VALUES (:id, :user_id, :name, :dimension_x, :dimension_y);'
         );
 
-        if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement');
-        }
+        $stmtGardenPlants = $this->prepare(
+            'INSERT INTO `gardens_plants`
+            (`garden_id`, `plant_id`, `coordinate_x`, `coordinate_y`)
+            VALUES (:garden_id, :plant_id, :coordinate_x, :coordinate_y);'
+        );
 
-        $stmt->execute(
+        $expectOneRowAffected = function ($rowCount){ return $rowCount !== 1; };
+
+        $plantLocations = $garden->getPlantLocations();
+
+        $this->execute(
             [
                 'id' => $garden->getId(),
                 'user_id' => $garden->getUserId(),
                 'name' => $garden->getName(),
                 'dimension_x' => $garden->getDimensionX(),
                 'dimension_y' => $garden->getDimensionY(),
-            ]
+            ],
+            $stmtGardens,
+            $expectOneRowAffected
         );
-
-        if($stmt->rowCount() !== 1){
-            throw new \Exception('An unexpected number of database rows were affected');
-        }
-    }
-
-    /**
-     * @param Garden $garden
-     * @throws \Exception
-     */
-    public function saveUserGardenPlants(Garden $garden): void
-    {
-        //merge with saveUserGarden and keep prep and exec. separate
-        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            'INSERT INTO `gardens_plants`
-            (`garden_id`, `plant_id`, `coordinate_x`, `coordinate_y`)
-            VALUES (:garden_id, :plant_id, :coordinate_x, :coordinate_y);'
-        );
-
-        if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement');
-        }
-
-        $plantLocations = $garden->getPlantLocations();
 
         foreach($plantLocations as $plantLocation) {
-            $stmt->execute(
+            $this->execute(
                 [
                     'garden_id' => $garden->getId(),
                     'plant_id' => $plantLocation->getPlantId(),
                     'coordinate_x' => $plantLocation->getCoordinateX(),
                     'coordinate_y' => $plantLocation->getCoordinateY(),
-                ]
+                ],
+                $stmtGardenPlants,
+                $expectOneRowAffected
             );
-
-            if($stmt->rowCount() !== 1){
-                throw new \Exception('An unexpected number of database rows were affected');
-            }
         }
     }
 

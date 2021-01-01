@@ -124,7 +124,7 @@ class GardenController extends Controller
         }
 
         $this->repositoryCollection->gardenRepository->saveUserGarden($garden);
-        $this->repositoryCollection->gardenRepository->saveUserGardenPlants($garden);
+//        $this->repositoryCollection->gardenRepository->saveUserGardenPlants($garden);
 
 
 

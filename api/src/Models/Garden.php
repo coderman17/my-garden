@@ -20,7 +20,7 @@ class Garden extends Model
 
     protected int $dimensionY;
 
-    protected array $plantLocations;
+    protected array $plantLocations = [];
 
     /**
      * @param string|null $id
