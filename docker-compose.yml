@@ -44,6 +44,8 @@ services:
       - app-network
 
   #MySQL
+  #kill existing local windows instances before docker-compose up with:
+  # taskkill /F /IM mysqld.exe
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password

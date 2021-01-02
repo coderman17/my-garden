@@ -6,13 +6,13 @@ namespace MyGarden\Exceptions;
 
 class NotFound extends \Exception
 {
-    public string $publicMessage;
+    public function __construct(string $resourceId = null, \Exception $previous = null) {
+        if ($resourceId == null){
+            $this->message = 'The resource was not found, or you are not authorized to access it';
+        } else {
+            $this->message = 'The resource (id: ' . $resourceId . ') was not found, or you are not authorized to access it';
+        }
 
-    public function __construct(\Exception $previous = null) {
-        $this->publicMessage = 'The requested resource was not found, or you are not authorized to access it';
-
-        $code = 404;
-
-        parent::__construct($this->publicMessage, $code, $previous);
+        parent::__construct($this->message, 404, $previous);
     }
 }

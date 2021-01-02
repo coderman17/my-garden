@@ -31,10 +31,10 @@ CREATE TABLE plants (
 );
 
 CREATE TABLE gardens_plants (
-    garden_id INT UNSIGNED NOT NULL,
-    plant_id INT UNSIGNED NOT NULL,
-    x_coordinate SMALLINT UNSIGNED NOT NULL,
-    y_coordinate SMALLINT UNSIGNED NOT NULL
+    garden_id CHAR(13) NOT NULL,
+    plant_id CHAR(13) NOT NULL,
+    coordinate_x SMALLINT UNSIGNED NOT NULL,
+    coordinate_y SMALLINT UNSIGNED NOT NULL
 );
 
 INSERT INTO users (username, email, password)
@@ -52,6 +52,6 @@ VALUES
 
 INSERT INTO gardens (id, user_id, name, dimension_x, dimension_y)
 VALUES
-('5fed05c8c6423', 1, 'Vegetable Patch', 4, 8),
-('5fed061b036cf', 1, 'Front Garden', 10, 4),
-('5fed061b036ce', 1, 'Back Garden', 10, 10)
+    ('5fed05c8c6423', 1, 'Vegetable Patch', 4, 8),
+    ('5fed061b036cf', 1, 'Front Garden', 10, 4),
+    ('5fed061b036ce', 1, 'Back Garden', 10, 10)

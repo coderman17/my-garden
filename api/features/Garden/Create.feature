@@ -9,7 +9,8 @@ Background: A valid request body
 	{
 		"name": "test",
 		"dimensionX": 8,
-		"dimensionY": 8
+		"dimensionY": 8,
+		"plantLocations": []
 	}
 	"""
 
@@ -23,10 +24,11 @@ Scenario Outline: Create a garden without a parameter
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
-	| parameter	|
-	| name		|
-	| dimensionX	|
-	| dimensionY	|
+		| parameter		|
+		| name			|
+		| dimensionX		|
+		| dimensionY		|
+		| plantLocations	|
 
 Scenario Outline: Create a garden with a value of incorrect type
 	Given I upsert to the root of the request body:
@@ -39,10 +41,11 @@ Scenario Outline: Create a garden with a value of incorrect type
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
-	| parameter	| value	|
-	| name		| 50	|
-	| dimensionX	| "a"	|
-	| dimensionY	| "a"	|
+		| parameter		| value	|
+		| name			| 50	|
+		| dimensionX		| "a"	|
+		| dimensionY		| "a"	|
+		| plantLocations	| 50	|
 
 Scenario Outline: Create a garden with strings of boundary correct/incorrect length
 	Given I upsert to the root of the request body, a string of key '<key>' and length '<length>'

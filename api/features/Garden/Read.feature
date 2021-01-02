@@ -9,7 +9,8 @@ Background: A valid request body
 	{
 		"name": "test",
 		"dimensionX": 8,
-		"dimensionY": 8
+		"dimensionY": 8,
+		"plantLocations": []
 	}
 	"""
 

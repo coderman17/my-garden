@@ -9,7 +9,8 @@ Background: A valid request body
 	{
 		"name": "test",
 		"dimensionX": 8,
-		"dimensionY": 8
+		"dimensionY": 8,
+		"plantLocations": []
 	}
 	"""
 		And I call 'POST' 'http://localhost/api/garden'
@@ -21,7 +22,8 @@ Scenario: Update a garden which exists
 	{
 		"name": "updated test",
 		"dimensionX": 1,
-		"dimensionY": 1
+		"dimensionY": 1,
+		"plantLocations": []
 	}
 	"""
 	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
@@ -41,7 +43,8 @@ Scenario: Update a garden which doesn't exist
 		And I expect the same as the request body but with the saved 'id'
 	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response has a status of 'HTTP/1.1 201 Created'
-		And the response body should be as expected
+	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	Then the response body should be as expected
 
 Scenario Outline: Update a garden without a parameter
 	Given I remove '<parameter>' from the root of the request body
@@ -53,6 +56,7 @@ Scenario Outline: Update a garden without a parameter
 		| name		|
 		| dimensionX	|
 		| dimensionY	|
+		| plantLocations|
 
 Scenario Outline: Update a garden with a value of incorrect type
 	Given I upsert to the root of the request body:
@@ -65,10 +69,11 @@ Scenario Outline: Update a garden with a value of incorrect type
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
-		| parameter	| value	|
-		| name		| 50	|
-		| dimensionX	| "a"	|
-		| dimensionY	| "a"	|
+		| parameter		| value	|
+		| name			| 50	|
+		| dimensionX		| "a"	|
+		| dimensionY		| "a"	|
+		| plantLocations	| "a"	|
 
 Scenario Outline: Update a garden with strings of boundary correct/incorrect length
 	Given I upsert to the root of the request body, a string of key '<key>' and length '<length>'

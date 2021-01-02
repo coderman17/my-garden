@@ -43,6 +43,18 @@ class FeatureContext implements Context
     }
 
     /**
+     * @Given I remove :param from the first :arrayKey object in the request body
+     *
+     * @param string $param
+     * @param string $arrayKey
+     */
+    public function iRemoveFromTheFirstObjectInTheRequestBody(string $param, string $arrayKey): void
+    {
+        unset($this->requestBody->$arrayKey[0]->$param);
+    }
+
+
+    /**
      * @Given I replace variables in the request body with the saved value
      */
     public function iReplaceVariablesInTheRequestBodyWithTheSavedValue(): void

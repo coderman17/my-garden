@@ -92,7 +92,6 @@ class PlantRepository extends Repository
      */
     public function updateUserPlant(Plant $plant): void
     {
-        //TODO how to not throw error if update sent which matches the stored Plant?
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'UPDATE `plants`
             SET `english_name` = :english_name,
@@ -114,12 +113,11 @@ class PlantRepository extends Repository
             'image_link' => $plant->getImageLink(),
         ]);
 
-        /** @noinspection PhpNonStrictObjectEqualityInspection this is on purpose */
         if(
-            $stmt->rowCount() < 1 &&
-            $this->getUserPlant($plant->getUserId(), $plant->getId()) != $plant
+            $stmt->rowCount() < 1
         ){
-            throw new NotFound();
+            //throws Not Found
+            $this->getUserPlant($plant->getUserId(), $plant->getId());
         }
 
         if($stmt->rowCount() > 1){
@@ -158,7 +156,7 @@ class PlantRepository extends Repository
         $row = $stmt->fetch(\PDO::FETCH_OBJ);
 
         if(!$row){
-            throw new NotFound();
+            throw new NotFound($plantId);
         }
 
         return new Plant(
@@ -195,7 +193,7 @@ class PlantRepository extends Repository
         ]);
 
         if($stmt->rowCount() < 1){
-            throw new NotFound();
+            throw new NotFound($plantId);
         }
 
         if($stmt->rowCount() > 1){
