@@ -109,6 +109,7 @@ class GardenController extends Controller
         );
 
         foreach($request->params['plantLocations'] as $plantLocation){
+            //TODO perhaps this should be one call to get them in bulk or get all user plants then select relevant ones
             $plant = $this->repositoryCollection->plantRepository->getUserPlant(
                 $this->user->getId(),
                 $plantLocation['id']
@@ -150,6 +151,20 @@ class GardenController extends Controller
             $request->params['dimensionX'],
             $request->params['dimensionY']
         );
+
+        foreach($request->params['plantLocations'] as $plantLocation){
+            //TODO perhaps this should be one call to get them in bulk or get all user plants then select relevant ones
+            $plant = $this->repositoryCollection->plantRepository->getUserPlant(
+                $this->user->getId(),
+                $plantLocation['id']
+            );
+
+            $garden->setPlantLocation(
+                $plant,
+                $plantLocation['coordinateX'],
+                $plantLocation['coordinateY']
+            );
+        }
 
         $this->response->setCode(200);
 

@@ -43,6 +43,27 @@ Scenario: Create a garden with two plants
 	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected
 
+Scenario: Create a garden with a plant which doesn't exist
+	Given I have a request body:
+	"""
+	{
+		"name": "test",
+		"dimensionX": 8,
+		"dimensionY": 8,
+		"plantLocations": [
+			{
+				"id": "{{plantOneId}}",
+				"coordinateX": 1,
+				"coordinateY": 1
+			}
+		]
+	}
+	"""
+	Given I generate and save a random 'plantOneId'
+		And I replace variables in the request body with the saved value
+	When I call 'POST' 'http://localhost/api/plant'
+	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+
 Scenario Outline: Create a garden with a plant location parameter of the wrong type
 	Given I have a request body:
 	"""
@@ -172,7 +193,7 @@ Scenario Outline: Create a garden with a plant but without a parameter
 		"plantLocations": [
 			{
 				"id": "{{plantOneId}}",
-				"coordinateX": 9,
+				"coordinateX": 2,
 				"coordinateY": 1
 			}
 		]

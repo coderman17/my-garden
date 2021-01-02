@@ -158,37 +158,67 @@ class GardenRepository extends Repository
      */
     public function updateUserGarden(Garden $garden): void
     {
-        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
+        $stmt = $this->prepare(
             'UPDATE `gardens`
-            SET `name` = :name,
-            `dimension_x` = :dimension_x,
-            `dimension_y` = :dimension_y
+            SET
+                `name` = :name,
+                `dimension_x` = :dimension_x,
+                `dimension_y` = :dimension_y
             WHERE `id` = :id
             AND `user_id` = :user_id;'
         );
 
-        if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement');
-        }
+        $this->execute(
+            [
+                'id' => $garden->getId(),
+                'user_id' => $garden->getUserId(),
+                'name' => $garden->getName(),
+                'dimension_x' => $garden->getDimensionX(),
+                'dimension_y' => $garden->getDimensionY(),
+            ],
+            $stmt,
+            function ($rowCount){ return $rowCount > 1; }
+        );
 
-        $stmt->execute([
-           'id' => $garden->getId(),
-           'user_id' => $garden->getUserId(),
-           'name' => $garden->getName(),
-           'dimension_x' => $garden->getDimensionX(),
-           'dimension_y' => $garden->getDimensionY(),
-        ]);
-
-        /** @noinspection PhpNonStrictObjectEqualityInspection this is on purpose */
         if(
-            $stmt->rowCount() < 1 &&
-            $this->getUserGarden($garden->getUserId(), $garden->getId()) != $garden
+            $stmt->rowCount() < 1
         ){
-            throw new NotFound($garden->getId());
+            //throws Not Found
+            $this->getUserGarden($garden->getUserId(), $garden->getId());
         }
 
-        if($stmt->rowCount() > 1){
-            throw new \Exception('More than one database row was affected');
+        $stmt = $this->prepare(
+            'DELETE FROM `gardens_plants`
+            WHERE `garden_id` = :garden_id;'
+        );
+
+        $this->execute(
+            [
+                'garden_id' => $garden->getId(),
+            ],
+            $stmt,
+            function (){ return false; }
+        );
+
+        $stmtGardenPlants = $this->prepare(
+            'INSERT INTO `gardens_plants`
+            (`garden_id`, `plant_id`, `coordinate_x`, `coordinate_y`)
+            VALUES (:garden_id, :plant_id, :coordinate_x, :coordinate_y);'
+        );
+
+        $plantLocations = $garden->getPlantLocations();
+
+        foreach($plantLocations as $plantLocation) {
+            $this->execute(
+                [
+                    'garden_id' => $garden->getId(),
+                    'plant_id' => $plantLocation->getPlantId(),
+                    'coordinate_x' => $plantLocation->getCoordinateX(),
+                    'coordinate_y' => $plantLocation->getCoordinateY(),
+                ],
+                $stmtGardenPlants,
+                function ($rowCount){ return $rowCount !== 1; }
+            );
         }
     }
 
