@@ -43,7 +43,8 @@ Scenario: Update a garden which doesn't exist
 		And I expect the same as the request body but with the saved 'id'
 	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response has a status of 'HTTP/1.1 201 Created'
-		And the response body should be as expected
+	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	Then the response body should be as expected
 
 Scenario Outline: Update a garden without a parameter
 	Given I remove '<parameter>' from the root of the request body
