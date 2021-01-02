@@ -219,7 +219,7 @@ class FeatureContext implements Context
      *
      * @param string $param
      */
-    public function iGenerateAndSaveARandom(string $param)
+    public function iGenerateAndSaveARandom(string $param): void
     {
         $this->savedParams[$param] = uniqid();
     }
