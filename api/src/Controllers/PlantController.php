@@ -125,9 +125,15 @@ class PlantController extends Controller
             $request->params['imageLink']
         );
 
-        $this->repositoryCollection->plantRepository->updateUserPlant($plant);
-
         $this->response->setCode(200);
+
+        try {
+            $this->repositoryCollection->plantRepository->updateUserPlant($plant);
+        } catch (NotFound $e) {
+            $this->repositoryCollection->plantRepository->saveUserPlant($plant);
+
+            $this->response->setCode(201);
+        }
 
         $this->response->setBodySingleResource($plant);
 

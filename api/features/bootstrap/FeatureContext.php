@@ -215,6 +215,17 @@ class FeatureContext implements Context
     }
 
     /**
+     * @Given I generate and save a random :param
+     *
+     * @param string $param
+     */
+    public function iGenerateAndSaveARandom(string $param)
+    {
+        $this->savedParams[$param] = uniqid();
+    }
+
+
+    /**
      * @When I upsert to the root of the request body, an int of key :key and value :value
      *
      * @param string $key
