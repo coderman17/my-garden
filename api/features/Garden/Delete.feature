@@ -22,7 +22,8 @@ Scenario: Delete a garden which exists
 	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
 Scenario: Delete a garden which doesn't exist
-	When I call 'DELETE' 'http://localhost/api/garden?id=1fb93313436cb'
+	Given I generate and save a random 'id'
+	When I call 'DELETE' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response has a status of 'HTTP/1.1 404 Not Found'
 
 Scenario: Delete a garden without an id

@@ -88,6 +88,7 @@ class GardenRepository extends Repository
     /**
      * @param Garden $garden
      * @throws \Exception
+     * @throws NotFound
      */
     public function updateUserGarden(Garden $garden): void
     {
