@@ -27,30 +27,78 @@ class GardenRepository extends Repository
     {
         $intToGardenArray = new IntToGardenArray();
 
-        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
-            'SELECT *
-            FROM `gardens`
-            WHERE `user_id` = :user_id;'
+        $stmt = $this->prepare(
+            'SELECT
+                gardens.id as gardenId,
+                gardens.user_id as gardenUserId,
+                gardens.name,
+                gardens.dimension_x,
+                gardens.dimension_y,
+                gardens_plants.coordinate_x,
+                gardens_plants.coordinate_y,
+                plants.id as plantId,
+                plants.english_name,
+                plants.latin_name,
+                plants.image_link
+            FROM
+                `gardens`
+            LEFT JOIN
+                gardens_plants
+                ON gardens.id=gardens_plants.garden_id
+            LEFT JOIN
+                plants
+                ON gardens_plants.plant_id=plants.id
+            WHERE
+                gardens.user_id = :user_id;'
         );
 
-        if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement');
-        }
-
-        $stmt->execute([
+        $this->execute(
+            [
            'user_id' => $userId
-       ]);
+            ],
+            $stmt,
+            function ($rowCount){ return false; }
+        );
+
+        $previousGardenId = null;
+
+        $garden = null;
 
         while($row = $stmt->fetch(\PDO::FETCH_OBJ)) {
-            $garden = new Garden(
-                $row->id,
-                $row->user_id,
-                $row->name,
-                $row->dimension_x,
-                $row->dimension_y
-            );
-            $intToGardenArray->pushItem($garden);
+            if($row->gardenId !== $previousGardenId) {
+                if($garden !== null){
+                    $intToGardenArray->pushItem($garden);
+                }
+
+                $garden = new Garden(
+                    $row->gardenId,
+                    $row->gardenUserId,
+                    $row->name,
+                    $row->dimension_x,
+                    $row->dimension_y
+                );
+            }
+
+            if ($row->plantId !== null){
+                $plant = new Plant(
+                    $row->plantId,
+                    $row->gardenUserId,
+                    $row->english_name,
+                    $row->latin_name,
+                    $row->image_link
+                );
+
+                $garden->setPlantLocation(
+                    $plant,
+                    $row->coordinate_x,
+                    $row->coordinate_y
+                );
+            }
+
+            $previousGardenId = $garden->getId();
         }
+
+        $intToGardenArray->pushItem($garden);
 
         return $intToGardenArray;
     }
@@ -73,8 +121,6 @@ class GardenRepository extends Repository
             VALUES (:garden_id, :plant_id, :coordinate_x, :coordinate_y);'
         );
 
-        $expectOneRowAffected = function ($rowCount){ return $rowCount !== 1; };
-
         $plantLocations = $garden->getPlantLocations();
 
         $this->execute(
@@ -86,7 +132,7 @@ class GardenRepository extends Repository
                 'dimension_y' => $garden->getDimensionY(),
             ],
             $stmtGardens,
-            $expectOneRowAffected
+            function ($rowCount){ return $rowCount !== 1; }
         );
 
         foreach($plantLocations as $plantLocation) {
@@ -98,7 +144,7 @@ class GardenRepository extends Repository
                     'coordinate_y' => $plantLocation->getCoordinateY(),
                 ],
                 $stmtGardenPlants,
-                $expectOneRowAffected
+                function ($rowCount){ return $rowCount !== 1; }
             );
         }
     }
@@ -135,7 +181,7 @@ class GardenRepository extends Repository
             $stmt->rowCount() < 1 &&
             $this->getUserGarden($garden->getUserId(), $garden->getId()) != $garden
         ){
-            throw new NotFound();
+            throw new NotFound($garden->getId());
         }
 
         if($stmt->rowCount() > 1){
@@ -186,7 +232,7 @@ class GardenRepository extends Repository
         $row = $stmt->fetch(\PDO::FETCH_OBJ);
 
         if(!$row){
-            throw new NotFound();
+            throw new NotFound($gardenId);
         }
 
         $garden = new Garden(
@@ -207,7 +253,8 @@ class GardenRepository extends Repository
                     $row->image_link
                 );
 
-                $garden->setPlantLocation($plant,
+                $garden->setPlantLocation(
+                    $plant,
                     $row->coordinate_x,
                     $row->coordinate_y
                 );
@@ -243,7 +290,7 @@ class GardenRepository extends Repository
         ]);
 
         if($stmt->rowCount() < 1){
-            throw new NotFound();
+            throw new NotFound($gardenId);
         }
 
         if($stmt->rowCount() > 1){

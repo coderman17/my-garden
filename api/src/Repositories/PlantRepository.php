@@ -119,7 +119,7 @@ class PlantRepository extends Repository
             $stmt->rowCount() < 1 &&
             $this->getUserPlant($plant->getUserId(), $plant->getId()) != $plant
         ){
-            throw new NotFound();
+            throw new NotFound($plant->getId());
         }
 
         if($stmt->rowCount() > 1){
@@ -158,7 +158,7 @@ class PlantRepository extends Repository
         $row = $stmt->fetch(\PDO::FETCH_OBJ);
 
         if(!$row){
-            throw new NotFound();
+            throw new NotFound($plantId);
         }
 
         return new Plant(
@@ -195,7 +195,7 @@ class PlantRepository extends Repository
         ]);
 
         if($stmt->rowCount() < 1){
-            throw new NotFound();
+            throw new NotFound($plantId);
         }
 
         if($stmt->rowCount() > 1){
