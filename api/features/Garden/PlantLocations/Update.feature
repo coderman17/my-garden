@@ -149,7 +149,8 @@ Scenario: Update a garden containing plants, which doesn't exist
 		And I expect the same as the request body but with the saved 'id'
 	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response has a status of 'HTTP/1.1 201 Created'
-		And the response body should be as expected
+	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	Then the response body should be as expected
 
 Scenario: Update a garden with plants without altering anything
 	Given I expect the same as the request body but with the saved 'id'
@@ -206,24 +207,24 @@ Scenario Outline: Update a garden with a plant location parameter of the wrong t
 Scenario: Update a garden with two plants in the same location
 	Given I have a request body:
 	"""
-		{
-			"name": "test",
-			"dimensionX": 8,
-			"dimensionY": 8,
-			"plantLocations": [
-				{
-					"id": "{{plantOneId}}",
-					"coordinateX": 1,
-					"coordinateY": 1
-				},
-				{
-					"id": "{{plantTwoId}}",
-					"coordinateX": 1,
-					"coordinateY": 1
-				}
-			]
-		}
-		"""
+	{
+		"name": "test",
+		"dimensionX": 8,
+		"dimensionY": 8,
+		"plantLocations": [
+			{
+				"id": "{{plantOneId}}",
+				"coordinateX": 1,
+				"coordinateY": 1
+			},
+			{
+				"id": "{{plantTwoId}}",
+				"coordinateX": 1,
+				"coordinateY": 1
+			}
+		]
+	}
+	"""
 		And I replace variables in the request body with the saved value
 	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
@@ -232,16 +233,16 @@ Scenario Outline: Update a garden with a plant in a location outside of the gard
 	Given I have a request body:
 	"""
 	{
-	"name": "test",
-	"dimensionX": 8,
-	"dimensionY": 8,
-	"plantLocations": [
-		{
-			"id": "{{plantOneId}}",
-			"coordinateX": <coordinateX>,
-			"coordinateY": <coordinateY>
-		}
-	]
+		"name": "test",
+		"dimensionX": 8,
+		"dimensionY": 8,
+		"plantLocations": [
+			{
+				"id": "{{plantOneId}}",
+				"coordinateX": <coordinateX>,
+				"coordinateY": <coordinateY>
+			}
+		]
 	}
 	"""
 		And I replace variables in the request body with the saved value
