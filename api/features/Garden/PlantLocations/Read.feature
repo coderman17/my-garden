@@ -1,6 +1,6 @@
-Feature: Add plants when creating a garden
+Feature: Get gardens containing plants
 As a user
-I need to create a garden with plants
+I need to get the gardens I have created containing plants
 So that I can see them
 
 Background: Given I have the payload to create a garden with plants
