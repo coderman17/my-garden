@@ -9,7 +9,8 @@ Background: A valid request body
 	{
 		"name": "test",
 		"dimensionX": 8,
-		"dimensionY": 8
+		"dimensionY": 8,
+		"plantLocations": []
 	}
 	"""
 
@@ -21,7 +22,8 @@ Scenario: Update a garden which exists
 		{
 			"name": "updated test",
 			"dimensionX": 1,
-			"dimensionY": 1
+			"dimensionY": 1,
+			"plantLocations": []
 		}
 		"""
 	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'

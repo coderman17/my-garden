@@ -13,6 +13,11 @@ abstract class Repository
         $this->repositoryCollection = $repositoryCollection;
     }
 
+    /**
+     * @param string $query
+     * @return \PDOStatement
+     * @throws \Exception
+     */
     protected function prepare(string $query): \PDOStatement
     {
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare($query);
@@ -24,6 +29,12 @@ abstract class Repository
         return $stmt;
     }
 
+    /**
+     * @param array<string, string|int> $mapping
+     * @param \PDOStatement $stmt
+     * @param callable $unexpectedRowCount
+     * @throws \Exception
+     */
     protected function execute(array $mapping, \PDOStatement $stmt, callable $unexpectedRowCount): void
     {
         $stmt->execute($mapping);

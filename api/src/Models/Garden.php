@@ -20,6 +20,9 @@ class Garden extends Model
 
     protected int $dimensionY;
 
+    /**
+     * @var array<int, array<int, PlantLocation>>
+     */
     protected array $plantLocations = [];
 
     /**
@@ -84,6 +87,12 @@ class Garden extends Model
         return $this->dimensionY;
     }
 
+    /**
+     * @param Plant $plant
+     * @param int $coordinateX
+     * @param int $coordinateY
+     * @throws OutOfRangeInt
+     */
     public function setPlantLocation(Plant $plant, int $coordinateX, int $coordinateY): void
     {
         if($plant->getUserId() !== $this->userId){

@@ -49,7 +49,9 @@ class GardenRepository extends Repository
                 plants
                 ON gardens_plants.plant_id=plants.id
             WHERE
-                gardens.user_id = :user_id;'
+                gardens.user_id = :user_id
+            ORDER BY
+                gardenId, gardens_plants.coordinate_x, gardens_plants.coordinate_y;'
         );
 
         $this->execute(
@@ -57,7 +59,7 @@ class GardenRepository extends Repository
            'user_id' => $userId
             ],
             $stmt,
-            function ($rowCount){ return false; }
+            function (){ return false; }
         );
 
         $previousGardenId = null;
