@@ -151,9 +151,15 @@ class GardenController extends Controller
             $request->params['dimensionY']
         );
 
-        $this->repositoryCollection->gardenRepository->updateUserGarden($garden);
-
         $this->response->setCode(200);
+
+        try {
+            $this->repositoryCollection->gardenRepository->updateUserGarden($garden);
+        } catch (NotFound $e) {
+            $this->repositoryCollection->gardenRepository->saveUserGarden($garden);
+
+            $this->response->setCode(201);
+        }
 
         $this->response->setBodySingleResource($garden);
 
