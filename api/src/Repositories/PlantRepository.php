@@ -92,7 +92,6 @@ class PlantRepository extends Repository
      */
     public function updateUserPlant(Plant $plant): void
     {
-        //TODO how to not throw error if update sent which matches the stored Plant?
         $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
             'UPDATE `plants`
             SET `english_name` = :english_name,
