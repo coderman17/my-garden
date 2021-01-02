@@ -96,8 +96,8 @@ Scenario Outline: Create a garden with a plant location parameter of the wrong t
 
 	Examples:
 		| coordinateX	| coordinateY	|
-		| "a"			| 1				|
-		| 1				| "a"			|
+		| "a"		| 1		|
+		| 1		| "a"		|
 
 Scenario: Create a garden with two plants in the same location
 	Given I have a request body:
@@ -168,10 +168,10 @@ Scenario Outline: Create a garden with a plant in a location outside of the gard
 
 	Examples:
 		| coordinateX	| coordinateY	|
-		| 0				| 1				|
-		| 1				| 0				|
-		| 8				| 9				|
-		| 9				| 8				|
+		| 0		| 1		|
+		| 1		| 0		|
+		| 8		| 9		|
+		| 9		| 8		|
 
 Scenario Outline: Create a garden with a plant but without a parameter
 	Given I have a request body:
@@ -205,7 +205,7 @@ Scenario Outline: Create a garden with a plant but without a parameter
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
-		| parameter			|
-		| id				|
+		| parameter		|
+		| id			|
 		| coordinateX		|
 		| coordinateY		|
