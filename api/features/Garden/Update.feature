@@ -68,10 +68,10 @@ Scenario Outline: Update a garden with a value of incorrect type
 	Then the response has a status of 'HTTP/1.1 400 Bad Request'
 
 	Examples:
-		| parameter	| value	|
-		| name		| 50	|
-		| dimensionX	| "a"	|
-		| dimensionY	| "a"	|
+		| parameter		| value	|
+		| name			| 50	|
+		| dimensionX		| "a"	|
+		| dimensionY		| "a"	|
 		| plantLocations	| "a"	|
 
 Scenario Outline: Update a garden with strings of boundary correct/incorrect length
