@@ -148,8 +148,6 @@ class GardenController extends Controller
             $this->response->setCode(201);
         }
 
-
-
         $this->response->setBodySingleResource($garden);
 
         $this->view->display($this->response);
