@@ -3,7 +3,7 @@
   <heading>Gardens:</heading>
     <div class="gardensContainer row">
       <router-link class="garden col-12 col-md-6 col-sm-12" v-for="garden in gardens" :key="garden.id"  :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden}}">
-        <garden  v-bind:garden="garden"></garden>
+        <garden ref="gardenRefForRefresh" v-bind:garden="garden"></garden>
       </router-link>
     </div>
     <router-link to="/gardenForm">
@@ -46,7 +46,7 @@ export default {
       if(response.ok){
         return response.json()
       } else{
-        alert("Server returned " + response.status + " : " + response.statusText);
+        console.log(response); alert("Server returned " + response.status + " : " + response.statusText + " data: " + response.data);
       }
     })
     .then(response => {

@@ -69,7 +69,7 @@ export default {
               router.push('Plants');
               return response;
             } else{
-              alert("Server returned " + response.status + " : " + response.statusText);
+              console.log(response); alert("Server returned " + response.status + " : " + response.statusText + " data: " + response.data);
             }
           })
           .then(response => {

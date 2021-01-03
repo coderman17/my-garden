@@ -7,7 +7,7 @@
           <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="name" aria-describedby="name" placeholder="Garden Name" v-model="garden.name">
           <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionX" aria-describedby="dimensionX" placeholder="X Dimension ('width')" v-model="garden.dimensionX">
           <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionY" aria-describedby="dimensionY" placeholder="Y Dimension ('height')" v-model="garden.dimensionY">
-          <button type="submit" class="mt-4 btn btn-primary">Submit</button>
+          <button type="submit" class="mt-4 btn btn-primary">Save</button>
         </div>
       </form>
     </div>
@@ -66,7 +66,8 @@ export default {
         body: JSON.stringify({
           'name': this.garden.name,
           'dimensionX': parseInt(this.garden.dimensionX),
-          'dimensionY': parseInt(this.garden.dimensionY)
+          'dimensionY': parseInt(this.garden.dimensionY),
+          'plantLocations': this.garden.plantLocations
         })
       };
       console.log(this.requestOptions);
@@ -76,6 +77,7 @@ export default {
               router.push('gardens');
               return response;
             } else{
+              console.log(response.json());
               alert("Server returned " + response.status + " : " + response.statusText);
             }
           })

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div ref="container" v-bind:style="{ height: this.solidContainerHeight + 'px'}" class="border border-success solidContainer col-12 col-md-9 col-lg-8 col-xl-4">
-      <table v-bind:style="{ width: tableWidth + 'px', marginTop: Math.floor(0.5 * (this.solidContainerHeight - this.cellWidth * this.garden.dimensionY)) - 1 + 'px'}" class="table-bordered" id="gardenTable">
+    <div ref="container" v-bind:style="{ height: this.solidContainerHeight + 'px'}" class="solidContainer col-12 col-md-9 col-lg-8 col-xl-4">
+      <table v-bind:style="{width: tableWidth + 'px', marginTop: Math.floor(0.5 * (this.solidContainerHeight - this.cellWidth * this.garden.dimensionY)) - 1 + 'px'}" class="table-bordered" id="gardenTable">
         <tr v-for="n in parseInt(garden.dimensionY)" :key="n">
 
-          <td v-bind:style="{ height: cellWidth + 'px' }" v-for="moo in parseInt(garden.dimensionX)" :key="moo">
+          <td v-bind:style="{ height: cellWidth + 'px' }" v-for="moo in parseInt(garden.dimensionX)" :key="moo" @click="handleTdClick">
 <!--            {{ concat(n, moo) }}-->
 <!--            <h2>{{ this.plantLocations[moo][n] }}</h2>-->
           </td>
@@ -50,20 +50,18 @@ export default {
   },
   methods: {
     setPlantLocationsArray: function () {
-      let plantLocationObject = {}
-      console.log(plantLocationObject)
-      for (let i = 0; i < this.garden.plantLocations.length; i++) {
-        let innerObj = {}
-        // innerObj[this.garden.plantLocations[i].coordinateY] = this.garden.plantLocations[i].id
-        console.log('attempting to get plant ' + this.garden.plantLocations[i].id)
-        this.getPlant(this.garden.plantLocations[i].id, this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
-        innerObj[this.garden.plantLocations[i].coordinateY] = this.plant
-        plantLocationObject[this.garden.plantLocations[i].coordinateX] = innerObj
-        console.log(plantLocationObject)
-      }
 
-      this.plantLocations = plantLocationObject
-      console.log(this.plantLocations)
+        if(this.garden === undefined){
+          setTimeout(function(){
+            this.setPlantLocationsArray();
+          }.bind(this), 10);
+        } else {
+          console.log('setting plant locs')
+          for (let i = 0; i < this.garden.plantLocations.length; i++) {
+            console.log('attempting to get plant ' + this.garden.plantLocations[i].id)
+            this.getPlant(this.garden.plantLocations[i].id, this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
+          }
+        }
     },
     getPlant: function(id, x, y) {
       this.responseAvailable = false;
@@ -76,9 +74,10 @@ export default {
       })
           .then(response => {
             if(response.ok){
+
               return response.json()
             } else{
-              alert("Server returned " + response.status + " : " + response.statusText);
+              alert("Unfortunately, the server returned " + response.status + " : " + response.statusText + " data: " + response.json());
             }
           })
           .then(response => {
@@ -92,22 +91,49 @@ export default {
     },
     insertPlant: function (response, x, y) {
       let table = document.getElementById('gardenTable')
-      table.children[table.childElementCount - y].children[x - 1].innerHTML = "<img style='width:100%;object-fit: cover;height:100%' src=" + response.imageLink + "></img>"
+      table.children[table.childElementCount - y].children[x - 1].innerHTML = "<img style='width:100%;object-fit: cover;border-radius: 60px;height:100%' src=" + response.imageLink + "></img>"
     },
     imageLoadError() {
       this.brokenImage = true
     },
     calculateCellWidth: function() {
-      this.solidContainerHeight = this.$refs.container.clientWidth + 2
-      this.cellWidth = Math.floor(this.$refs.container.clientWidth / 10);
-      this.tableWidth = this.cellWidth * this.garden.dimensionX;
+      console.log('calculating cell width')
+      if(this.$refs.container === undefined){
+        setTimeout(function(){
+          this.calculateCellWidth();
+        }.bind(this), 10);
+      } else {
+        this.solidContainerHeight = this.$refs.container.clientWidth + 2
+        this.cellWidth = Math.floor(this.$refs.container.clientWidth / 10);
+        this.tableWidth = this.cellWidth * this.garden.dimensionX;
+      }
+    },
+    handleTdClick(event){
+
+      let target = event.target
+      while (target.nodeName !== 'TD'){
+        target = target.parentElement
+      }
+      let td = target
+      if(td.innerHTML === ''){
+        alert('adding plant')
+      } else{
+        if (confirm('Are you sure you would like to remove the plant from that location?')) {
+          td.innerHTML = ''
+          for (let i = 0; i < this.garden.plantLocations.length; i++) {
+            if (this.garden.plantLocations[i].coordinateX === (td.cellIndex + 1) && this.garden.plantLocations[i].coordinateY === (this.garden.dimensionY - td.parentElement.rowIndex)) {
+              this.garden.plantLocations.splice(i, 1)
+            }
+          }
+        }
+      }
     }
   },
   mounted() {
-    setTimeout(function(){
+    // setTimeout(function(){
       this.calculateCellWidth();
       this.setPlantLocationsArray();
-    }.bind(this), 2000);
+    // }.bind(this), 2000);
   }
 }
 </script>
@@ -118,10 +144,17 @@ table {
   margin: auto;
   table-layout: fixed;
   display: inline-table;
-  background-color: #6d4620;
+  /*background-color: #6d4620;*/
+  background-size: cover;
+  background-image: url('~@/assets/soil 1.jpg');
 }
 .table-bordered td, .table-bordered th {
-  border: 1px solid #462d14;
+  border: 1px solid #868686;
+}
+.table-bordered td {
+  padding: 4px;
+  /*background-size: cover;*/
+  /*background-image: url('~@/assets/soil 1.jpg');*/
 }
 .solidContainer {
   padding: 0;
@@ -131,7 +164,7 @@ table {
 h1 {
   word-break: break-word;
 }
-img {
+.table-bordered td img {
   width: 320px;
   height: 320px;
   object-fit: cover;
