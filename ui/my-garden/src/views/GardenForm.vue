@@ -5,8 +5,8 @@
       <form class="col-12 mb-4" @submit.prevent="processForm" method="get">
         <div class="form-group">
           <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="name" aria-describedby="name" placeholder="Garden Name" v-model="garden.name">
-          <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionX" aria-describedby="dimensionX" placeholder="X Dimension ('width')" v-model="garden.dimensionX">
-          <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionY" aria-describedby="dimensionY" placeholder="Y Dimension ('height')" v-model="garden.dimensionY">
+          <input v-on:blur="triggerResizing" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionX" aria-describedby="dimensionX" placeholder="X Dimension ('width')" v-model="garden.dimensionX">
+          <input v-on:blur="triggerResizing" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionY" aria-describedby="dimensionY" placeholder="Y Dimension ('height')" v-model="garden.dimensionY">
           <button type="submit" class="mt-4 btn btn-primary">Save</button>
         </div>
       </form>
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import router from '@/router'
 import garden from "@/components/garden";
 import userPlantsGetter from "@/components/userPlantsGetter";
@@ -51,15 +50,13 @@ export default {
         dimensionY: 10
       }
     }
-    console.log(this.userPlants)
     this.setUserPlants()
   },
   methods: {
-    recheckImage() {
+    triggerResizing() {
       this.$refs.garden.calculateCellWidth();
     },
     setUserPlants() {
-      console.log('setting user plants from gardenForm')
       if (this.userPlants === undefined) {
         setTimeout(function () {
           userPlantsGetter.methods.populate()
@@ -87,29 +84,27 @@ export default {
           'plantLocations': plantLocations
         })
       };
-      console.log(this.requestOptions);
       fetch(this.apiUrl,this.requestOptions)
-          .then(response => {
-            if(response.ok){
-              router.push('gardens');
-              return response;
-            } else{
-              console.log(response.json());
-              alert("Server returned " + response.status + " : " + response.statusText);
-            }
-          })
-          .then(response => {
-            console.log(response.json())
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        .then(response => {
+          if(response.ok){
+            router.push('gardens');
+            return response;
+          } else{
+            console.log(response.json());
+            alert("Server returned " + response.status + " : " + response.statusText);
+          }
+        })
+        .then(response => {
+          console.log(response.json())
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
   },
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .gardensContainer img, .add {
   width: 320px;

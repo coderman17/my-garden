@@ -16,7 +16,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import plant from '@/components/plant.vue';
 import floatingActionButton from "@/components/floatingActionButton.vue";
 import heading from "@/components/heading.vue";

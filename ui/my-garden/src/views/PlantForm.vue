@@ -15,7 +15,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import router from '@/router'
 import plantImage from "@/components/plantImage";
 
@@ -86,7 +85,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .plantsContainer img, .add {
   width: 320px;
@@ -102,5 +100,4 @@ export default {
   color: #28a745;
   margin: auto;
 }
-
 </style>

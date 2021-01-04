@@ -3,7 +3,6 @@ export default {
   name: 'userPlantsGetter',
   methods: {
     populate() {
-      // alert()
       fetch("http://localhost/api/plants", {
         method: "GET",
         headers: {

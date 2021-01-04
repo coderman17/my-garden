@@ -11,7 +11,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import plant from '@/components/plant.vue'
 import router from "@/router";
 
@@ -36,7 +35,6 @@ export default {
   props: ['plant'],
   mounted() {
     if (this.plant === undefined) {
-      this.responseAvailable = false;
       fetch("http://localhost/api/plant?id=" + this.$route.params.id, {
         method: "GET",
         headers: {
@@ -53,7 +51,6 @@ export default {
       })
       .then(response => {
         this.plant = response;
-        this.responseAvailable = true;
       })
       .catch(err => {
         console.log(err);

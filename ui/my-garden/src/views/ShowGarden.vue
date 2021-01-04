@@ -11,7 +11,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import garden from '@/components/garden.vue'
 import router from "@/router";
 import userPlantsGetter from "@/components/userPlantsGetter";
@@ -31,7 +30,7 @@ export default {
           'Accept': 'application/json',
         }
       });
-      router.push('/gardens');
+      router.push('/Gardens');
     },
     setUserPlants() {
       console.log('setting user plants from showGarden')
@@ -47,7 +46,6 @@ export default {
   props: ['garden', 'userPlants'],
   mounted() {
     if (this.garden === undefined) {
-      this.responseAvailable = false;
       fetch("http://localhost/api/garden?id=" + this.$route.params.id, {
         method: "GET",
         headers: {
@@ -64,17 +62,13 @@ export default {
       })
       .then(response => {
         this.garden = response;
-
-        console.log('about to log garden from showGarden view:')
-        console.log(this.garden)
-        this.responseAvailable = true;
       })
       .catch(err => {
         console.log(err);
       });
     }
     this.setUserPlants()
-    setTimeout(function(){ console.log('line 74 on showGarden, calculating cell width');this.$refs.garden.calculateCellWidth(); }.bind(this), 1000);
+    setTimeout(function(){ this.$refs.garden.calculateCellWidth(); }.bind(this), 1000);
 
   }
 }
