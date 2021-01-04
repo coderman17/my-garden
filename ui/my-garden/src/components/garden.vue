@@ -189,7 +189,10 @@ export default {
     },
 
     handleTdClick(event){
-
+      //work-around until the modal is a self-contained component with a <td> listener:
+      if(this.$route.name!== 'GardenForm'){
+        return
+      }
       let target = event.target
       while (target.nodeName !== 'TD'){
         target = target.parentElement
