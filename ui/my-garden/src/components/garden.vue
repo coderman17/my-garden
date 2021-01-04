@@ -25,21 +25,21 @@
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+            <h5 class="modal-title" id="exampleModalLongTitle">Select Plant</h5>
+<!--            <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--              <span aria-hidden="true">&times;</span>-->
+<!--            </button>-->
           </div>
           <div class="modal-body">
             <table class="table" id="modalTable">
-              <tr>
-                <td><a href="#" role="button" class="btn btn-secondary popover-test" title="Popover title" data-content="Popover body content is set in this attribute.">button</a></td>
-              </tr>
+<!--              <tr>-->
+<!--                <td><a href="#" role="button" class="btn btn-secondary popover-test" title="Popover title" data-content="Popover body content is set in this attribute.">button</a></td>-->
+<!--              </tr>-->
             </table>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+<!--            <button type="button" class="btn btn-primary">Save changes</button>-->
           </div>
         </div>
       </div>
@@ -141,7 +141,16 @@ export default {
         let modalTable = document.getElementById('modalTable')
         for (let i = 0; i < this.userPlants.length; i++) {
           let plant = this.userPlants[i]
-          modalTable.append("<tr>" + plant.englishName + "</tr>")
+          let tr = document.createElement("TR")
+          let td = document.createElement("TD")
+          let a = document.createElement("A")
+          a.classList.add("btn", "btn-success", "btn-block")
+          a.setAttribute("role", "button")
+          a.setAttribute("plantId", plant.id)
+          a.innerHTML = plant.englishName
+          td.append(a)
+          tr.append(td)
+          modalTable.append(tr)
         }
       }
     },
@@ -202,6 +211,9 @@ table {
 }
 h1 {
   word-break: break-word;
+}
+#modalTable {
+  color: white
 }
 .table-bordered td img {
   width: 320px;
