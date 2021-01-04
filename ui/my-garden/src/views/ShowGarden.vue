@@ -45,7 +45,6 @@ export default {
   },
   props: ['garden', 'userPlants'],
   mounted() {
-    this.setUserPlants()
     if (this.garden === undefined) {
       this.responseAvailable = false;
       fetch("http://localhost/api/garden?id=" + this.$route.params.id, {
@@ -70,6 +69,7 @@ export default {
         console.log(err);
       });
     }
+    this.setUserPlants()
     setTimeout(function(){ this.$refs.garden.calculateCellWidth(); }.bind(this), 1000);
 
   }

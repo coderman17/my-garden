@@ -18,6 +18,7 @@
 // @ is an alias to /src
 import router from '@/router'
 import garden from "@/components/garden";
+import userPlantsGetter from "@/components/userPlantsGetter";
 
 export default {
   name: 'gardenForm',
@@ -51,10 +52,20 @@ export default {
       }
     }
     console.log(this.userPlants)
+    this.setUserPlants()
   },
   methods: {
     recheckImage() {
       this.$refs.garden.calculateCellWidth();
+    },
+    setUserPlants() {
+      if (this.userPlants === undefined) {
+        setTimeout(function () {
+          userPlantsGetter.methods.populate()
+          this.userPlants = userPlantsGetter.methods.get()
+          this.setUserPlants();
+        }.bind(this), 50);
+      }
     },
     processForm(){
       this.responseAvailable = false;
