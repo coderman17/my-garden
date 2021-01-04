@@ -38,7 +38,7 @@
             </table>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" ref="closeModal" class="btn btn-secondary" data-dismiss="modal">Close</button>
 <!--            <button type="button" class="btn btn-primary">Save changes</button>-->
           </div>
         </div>
@@ -50,6 +50,10 @@
 
 
 <script>
+// eslint-disable-next-line no-unused-vars
+// function addPlant(){
+//   alert()
+// }
 /*
  * must convert back to 'initial working garden edit... commit for the show garden view so pics are big' use the set width and height only for plot edit
  *
@@ -76,7 +80,7 @@ export default {
       brokenImage : false,
       solidContainerHeight: 15,
       plantLocations : {},
-      plant:{}
+      plant:{},
     }
   },
   methods: {
@@ -95,17 +99,22 @@ export default {
           setTimeout(function(){
             this.setPlantLocationsArray();
           }.bind(this), 10);
+      } else if (this.garden.plantLocations === undefined){
+          alert('create garden plantlocations in this block or in ADDPLANT() and look at removing the plant locations object in data???')
       } else {
         console.log('setting plant locs')
         console.log(this.garden)
         for (let i = 0; i < this.garden.plantLocations.length; i++) {
           console.log('attempting to get plant ' + this.garden.plantLocations[i].id)
-          for (let j =0; j < this.userPlants.length; j++){
-            if (this.userPlants[j].id === this.garden.plantLocations[i].id){
-              console.log('found plant locally')
-              this.insertPlant(this.userPlants[j], this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
-            }
-          }
+          let plant = this.getPlant(this.garden.plantLocations[i].id)
+          this.insertPlant(plant, this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
+        }
+      }
+    },
+    getPlant(id){
+      for (let j =0; j < this.userPlants.length; j++){
+        if (this.userPlants[j].id === id){
+          return this.userPlants[j]
         }
       }
     },
@@ -146,6 +155,7 @@ export default {
           let a = document.createElement("A")
           a.classList.add("btn", "btn-success", "btn-block")
           a.setAttribute("role", "button")
+          a.addEventListener("click", this.addPlant, false)
           a.setAttribute("plantId", plant.id)
           a.innerHTML = plant.englishName
           td.append(a)
@@ -154,6 +164,25 @@ export default {
         }
       }
     },
+    addPlant(event){
+      let plant = this.getPlant(event.target.attributes.plantId.value)
+      this.insertPlant(plant, this.xCoordinate, this.yCoordinate)
+      this.$refs.closeModal.click()
+      // let parsedobj = JSON.stringify(this.plantLocations)
+      // console.log(parsedobj == new Observer({}))
+      // console.log(parsedobj == "{}")
+      // console.log(this.plantLocations == {})
+      console.log(this.garden.plantLocations.push({
+        id: plant.id,
+        coordinateX: this.xCoordinate,
+        coordinateY: this.yCoordinate
+      }))
+      console.log(this.garden.plantLocations)
+      console.log(event)
+      console.log(event.target.attributes.plantId.value)
+      // alert(this.id)
+    },
+
     handleTdClick(event){
 
       let target = event.target
@@ -162,12 +191,14 @@ export default {
       }
       let td = target
       if(td.innerHTML === ''){
+        this.xCoordinate = td.cellIndex + 1
+        this.yCoordinate = this.garden.dimensionY - td.parentElement.rowIndex
         this.$refs.myBtn.click()
       } else{
         if (confirm('Are you sure you would like to remove the plant from that location?')) {
           td.innerHTML = ''
           for (let i = 0; i < this.garden.plantLocations.length; i++) {
-            if (this.garden.plantLocations[i].coordinateX === (td.cellIndex + 1) && this.garden.plantLocations[i].coordinateY === (this.garden.dimensionY - td.parentElement.rowIndex)) {
+            if (this.garden.plantLocations[i].coordinateX === this.xCoordinate && this.garden.plantLocations[i].coordinateY === this.yCoordinate) {
               this.garden.plantLocations.splice(i, 1)
             }
           }
