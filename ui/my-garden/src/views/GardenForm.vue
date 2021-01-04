@@ -1,7 +1,7 @@
 <template>
   <div class="gardens container-fluid">
     <div class="gardensContainer row justify-content-center">
-      <garden ref="garden" class="col-12 mt-3" v-bind:garden="garden"></garden>
+      <garden ref="garden" class="col-12 mt-3" v-bind:garden="garden" v-bind:userPlants="userPlants"></garden>
       <form class="col-12 mb-4" @submit.prevent="processForm" method="get">
         <div class="form-group">
           <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="name" aria-describedby="name" placeholder="Garden Name" v-model="garden.name">
@@ -31,7 +31,7 @@ export default {
       apiUrl: 'http://localhost/api/garden'
     }
   },
-  props: ['garden'],
+  props: ['garden', 'userPlants'],
   components: {
     garden,
   },
@@ -50,6 +50,7 @@ export default {
         dimensionY: 10
       }
     }
+    console.log(this.userPlants)
   },
   methods: {
     recheckImage() {

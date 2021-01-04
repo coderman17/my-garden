@@ -1,9 +1,9 @@
 <template>
   <div class="gardens container-fluid">
   <heading>Gardens:</heading>
-    <div class="gardensContainer row">
-      <router-link class="garden col-12 col-md-6 col-sm-12" v-for="garden in gardens" :key="garden.id"  :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden}}">
-        <garden ref="gardenRefForRefresh" v-bind:garden="garden"></garden>
+    <div class="gardensContainer row" v-if = "this.responseAvailable === true">
+      <router-link class="garden col-12 col-md-6 col-sm-12" v-for="garden in gardens" :key="garden.id"  :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden, userPlants: userPlants}}">
+        <garden ref="gardenRefForRefresh" v-bind:garden="garden" v-bind:userPlants="userPlants"></garden>
       </router-link>
     </div>
     <router-link to="/gardenForm">
@@ -25,7 +25,9 @@ export default {
   name: 'Gardens',
   data() {
     return {
-      gardens: []
+      gardens: undefined,
+      userPlants: undefined,
+      responseAvailable: false
     }
   },
   components: {
@@ -34,7 +36,6 @@ export default {
     heading
   },
   mounted() {
-    this.responseAvailable = false;
     fetch("http://localhost/api/gardens", {
       method: "GET",
       headers: {
@@ -50,14 +51,33 @@ export default {
       }
     })
     .then(response => {
-      console.log(response)
       this.gardens = response;
-      this.responseAvailable = true;
     })
     .catch(err => {
       console.log(err);
     });
-  }
+    fetch("http://localhost/api/plants", {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+    .then(response => {
+      if(response.ok){
+        return response.json()
+      } else{
+        console.log(response); alert("Server returned " + response.status + " : " + response.statusText + " data: " + response.data);
+      }
+    })
+    .then(response => {
+      this.userPlants = response;
+      this.responseAvailable = true
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  },
 }
 </script>
 

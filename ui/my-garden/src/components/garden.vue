@@ -37,7 +37,7 @@
  */
 export default {
   name: 'garden',
-  props: ['garden'],
+  props: ['garden', 'userPlants'],
   data() {
     return {
       cellWidth: 15,
@@ -50,16 +50,26 @@ export default {
   },
   methods: {
     setPlantLocationsArray: function () {
-
-        if(this.garden === undefined){
+        if(this.garden === undefined || this.userPlants === undefined){
           setTimeout(function(){
             this.setPlantLocationsArray();
           }.bind(this), 10);
         } else {
           console.log('setting plant locs')
+          console.log(this.garden)
           for (let i = 0; i < this.garden.plantLocations.length; i++) {
             console.log('attempting to get plant ' + this.garden.plantLocations[i].id)
-            this.getPlant(this.garden.plantLocations[i].id, this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
+            let found = false
+            for (let j =0; j < this.userPlants.length; j++){
+              if (this.userPlants[j].id === this.garden.plantLocations[i].id){
+                console.log('found plant locally')
+                found = true
+                this.insertPlant(this.userPlants[j], this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
+              }
+            }
+            if (found === false) {
+              this.getPlant(this.garden.plantLocations[i].id, this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
+            }
           }
         }
     },
@@ -74,16 +84,13 @@ export default {
       })
           .then(response => {
             if(response.ok){
-
               return response.json()
             } else{
               alert("Unfortunately, the server returned " + response.status + " : " + response.statusText + " data: " + response.json());
             }
           })
           .then(response => {
-            console.log(response)
             this.insertPlant(response, x, y)
-            this.plant = response;
           })
           .catch(err => {
             console.log(err);
@@ -130,6 +137,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.userPlants)
     // setTimeout(function(){
       this.calculateCellWidth();
       this.setPlantLocationsArray();

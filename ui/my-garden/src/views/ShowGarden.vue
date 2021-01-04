@@ -1,9 +1,9 @@
 <template>
   <div class="gardens container-fluid">
     <div class="gardensContainer row justify-content-center">
-      <garden ref="garden" class="col-12 mt-3" v-bind:garden="garden"></garden>
+      <garden ref="garden" class="col-12 mt-3" v-bind:garden="garden" v-bind:userPlants="userPlants"></garden>
       <button v-on:click=this.delete class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4 mr-5 btn btn-danger">Delete</button>
-      <router-link class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4" :to="{name: 'GardenForm', params: {garden: garden}}">
+      <router-link class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4" :to="{name: 'GardenForm', params: {garden: garden, userPlants: userPlants}}">
         <button type="submit" class="btn btn-primary" style="width:100%;">Edit</button>
       </router-link>
     </div>
@@ -33,7 +33,7 @@ export default {
       router.push('/gardens');
     }
   },
-  props: ['garden'],
+  props: ['garden', 'userPlants'],
   mounted() {
     if (this.garden === undefined) {
       this.responseAvailable = false;
