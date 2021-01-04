@@ -66,7 +66,6 @@ export default {
       }
     },
     processForm(){
-      this.responseAvailable = false;
       let plantLocations = []
       if (this.garden.plantLocations !== undefined){
         plantLocations = this.garden.plantLocations

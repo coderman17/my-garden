@@ -49,7 +49,6 @@ export default {
       this.$refs.plantImage.recheck();
     },
     processForm(){
-      this.responseAvailable = false;
       this.requestOptions = {
         method: this.method,
         headers: {

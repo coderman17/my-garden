@@ -33,7 +33,6 @@ export default {
     heading
   },
   mounted() {
-    this.responseAvailable = false;
     fetch("http://localhost/api/plants", {
       method: "GET",
       headers: {
@@ -52,7 +51,6 @@ export default {
     .then(response => {
       console.log(response)
       this.plants = response;
-      this.responseAvailable = true;
     })
     .catch(err => {
       console.log(err);

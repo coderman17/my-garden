@@ -3,7 +3,7 @@
   <heading>Gardens:</heading>
     <div class="gardensContainer row" v-if="this.gardens !== undefined">
       <router-link class="garden col-12 col-md-6 col-sm-12" v-for="garden in gardens" :key="garden.id"  :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden, userPlants: userPlants}}">
-        <garden ref="gardenRefForRefresh" v-bind:garden="garden" v-bind:userPlants="userPlants"></garden>
+        <garden v-bind:garden="garden" v-bind:userPlants="userPlants"></garden>
       </router-link>
     </div>
     <router-link to="/gardenForm">
@@ -28,7 +28,6 @@ export default {
     return {
       gardens: undefined,
       userPlants: undefined,
-      responseAvailable: false,
     }
   },
   components: {
