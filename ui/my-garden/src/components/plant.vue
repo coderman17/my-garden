@@ -29,14 +29,7 @@ export default {
 </script>
 
 <style scoped>
-/*TODO remove this commented section?*/
-/*.plant {*/
-/*  min-height: 450px;*/
-/*  cursor: pointer;*/
-/*  color: #006d00;*/
-/*}*/
 h1, h2 {
   word-break: break-word;
 }
-
 </style>

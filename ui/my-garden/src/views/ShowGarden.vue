@@ -57,7 +57,8 @@ export default {
         if(response.ok){
           return response.json()
         } else{
-          console.log(response); alert("Server returned " + response.status + " : " + response.statusText + " data: " + response.data);
+          console.log(response);
+          alert("Server returned " + response.status + " : " + response.statusText + " data: " + response.data);
         }
       })
       .then(response => {
