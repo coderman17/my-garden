@@ -58,6 +58,10 @@ export default {
     },
     processForm(){
       this.responseAvailable = false;
+      let plantLocations = []
+      if (this.garden.plantLocations !== undefined){
+        plantLocations = this.garden.plantLocations
+      }
       this.requestOptions = {
         method: this.method,
         headers: {
@@ -68,7 +72,7 @@ export default {
           'name': this.garden.name,
           'dimensionX': parseInt(this.garden.dimensionX),
           'dimensionY': parseInt(this.garden.dimensionY),
-          'plantLocations': this.garden.plantLocations
+          'plantLocations': plantLocations
         })
       };
       console.log(this.requestOptions);

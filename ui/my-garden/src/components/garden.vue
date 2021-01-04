@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       cellWidth: 15,
+      reload: 0,
       tableWidth: 15,
       brokenImage : false,
       solidContainerHeight: 15,
@@ -53,14 +54,15 @@ export default {
   methods: {
     setPlantLocationsArray: function () {
       console.log('setting plant locations')
-      if (this.userPlants === undefined){
+      this.reload++
+      if (this.userPlants === undefined && this.reload < 20){
         // userPlantsGetter.methods.populate()
         // this.userPlants = userPlantsGetter.methods.get()
         console.log(this.userPlants)
         setTimeout(function(){
           this.setPlantLocationsArray();
         }.bind(this), 50);
-      } else if(this.garden === undefined){
+      } else if(this.garden === undefined  && this.reload < 25){
         console.log('LOCATIONS')
           setTimeout(function(){
             this.setPlantLocationsArray();
@@ -106,7 +108,7 @@ export default {
       }
       let td = target
       if(td.innerHTML === ''){
-        alert('adding plant')
+        this.$refs.myBtn.click()
       } else{
         if (confirm('Are you sure you would like to remove the plant from that location?')) {
           td.innerHTML = ''
