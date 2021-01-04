@@ -1,7 +1,7 @@
 <template>
   <div class="gardens container-fluid">
   <heading>Gardens:</heading>
-    <div class="gardensContainer row" v-if = "this.responseAvailable === true">
+    <div class="gardensContainer row">
       <router-link class="garden col-12 col-md-6 col-sm-12" v-for="garden in gardens" :key="garden.id"  :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden, userPlants: userPlants}}">
         <garden ref="gardenRefForRefresh" v-bind:garden="garden" v-bind:userPlants="userPlants"></garden>
       </router-link>
@@ -20,6 +20,8 @@
 import garden from '@/components/garden.vue';
 import floatingActionButton from "@/components/floatingActionButton.vue";
 import heading from "@/components/heading.vue";
+import userPlantsGetter from "@/components/userPlantsGetter";
+
 
 export default {
   name: 'Gardens',
@@ -35,7 +37,19 @@ export default {
     garden,
     heading
   },
+  methods: {
+    setUserPlants() {
+      if (this.userPlants === undefined) {
+        setTimeout(function () {
+          userPlantsGetter.methods.populate()
+          this.userPlants = userPlantsGetter.methods.get()
+          this.setUserPlants();
+        }.bind(this), 50);
+      }
+    }
+  },
   mounted() {
+    this.setUserPlants()
     fetch("http://localhost/api/gardens", {
       method: "GET",
       headers: {
@@ -56,27 +70,28 @@ export default {
     .catch(err => {
       console.log(err);
     });
-    fetch("http://localhost/api/plants", {
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-    .then(response => {
-      if(response.ok){
-        return response.json()
-      } else{
-        console.log(response); alert("Server returned " + response.status + " : " + response.statusText + " data: " + response.data);
-      }
-    })
-    .then(response => {
-      this.userPlants = response;
-      this.responseAvailable = true
-    })
-    .catch(err => {
-      console.log(err);
-    });
+    // fetch("http://localhost/api/plants", {
+    //   method: "GET",
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Accept': 'application/json',
+    //   }
+    // })
+    // .then(response => {
+    //   if(response.ok){
+    //     return response.json()
+    //   } else{
+    //     console.log(response); alert("Server returned " + response.status + " : " + response.statusText + " data: " + response.data);
+    //   }
+    // })
+    // .then(response => {
+    //   this.userPlants = response;
+    //   this.responseAvailable = true
+    // })
+    // .catch(err => {
+    //   console.log(err);
+    // });
+
   },
 }
 </script>

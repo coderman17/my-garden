@@ -31,6 +31,8 @@
  */
 
 
+// import userPlantsGetter from "@/components/userPlantsGetter";
+
 /**
  * @property {int} dimensionX
  * @property {int} dimensionY
@@ -50,51 +52,32 @@ export default {
   },
   methods: {
     setPlantLocationsArray: function () {
-        if(this.garden === undefined || this.userPlants === undefined){
+      console.log('setting plant locations')
+      if (this.userPlants === undefined){
+        // userPlantsGetter.methods.populate()
+        // this.userPlants = userPlantsGetter.methods.get()
+        console.log(this.userPlants)
+        setTimeout(function(){
+          this.setPlantLocationsArray();
+        }.bind(this), 50);
+      } else if(this.garden === undefined){
+        console.log('LOCATIONS')
           setTimeout(function(){
             this.setPlantLocationsArray();
           }.bind(this), 10);
-        } else {
-          console.log('setting plant locs')
-          console.log(this.garden)
-          for (let i = 0; i < this.garden.plantLocations.length; i++) {
-            console.log('attempting to get plant ' + this.garden.plantLocations[i].id)
-            let found = false
-            for (let j =0; j < this.userPlants.length; j++){
-              if (this.userPlants[j].id === this.garden.plantLocations[i].id){
-                console.log('found plant locally')
-                found = true
-                this.insertPlant(this.userPlants[j], this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
-              }
-            }
-            if (found === false) {
-              this.getPlant(this.garden.plantLocations[i].id, this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
+      } else {
+        console.log('setting plant locs')
+        console.log(this.garden)
+        for (let i = 0; i < this.garden.plantLocations.length; i++) {
+          console.log('attempting to get plant ' + this.garden.plantLocations[i].id)
+          for (let j =0; j < this.userPlants.length; j++){
+            if (this.userPlants[j].id === this.garden.plantLocations[i].id){
+              console.log('found plant locally')
+              this.insertPlant(this.userPlants[j], this.garden.plantLocations[i].coordinateX, this.garden.plantLocations[i].coordinateY)
             }
           }
         }
-    },
-    getPlant: function(id, x, y) {
-      this.responseAvailable = false;
-      fetch("http://localhost/api/plant?id=" + id, {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        }
-      })
-          .then(response => {
-            if(response.ok){
-              return response.json()
-            } else{
-              alert("Unfortunately, the server returned " + response.status + " : " + response.statusText + " data: " + response.json());
-            }
-          })
-          .then(response => {
-            this.insertPlant(response, x, y)
-          })
-          .catch(err => {
-            console.log(err);
-          });
+      }
     },
     insertPlant: function (response, x, y) {
       let table = document.getElementById('gardenTable')

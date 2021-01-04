@@ -14,6 +14,7 @@
 // @ is an alias to /src
 import garden from '@/components/garden.vue'
 import router from "@/router";
+import userPlantsGetter from "@/components/userPlantsGetter";
 
 export default {
   name: 'gardens',
@@ -31,10 +32,20 @@ export default {
         }
       });
       router.push('/gardens');
+    },
+    setUserPlants() {
+      if (this.userPlants === undefined) {
+        setTimeout(function () {
+          userPlantsGetter.methods.populate()
+          this.userPlants = userPlantsGetter.methods.get()
+          this.setUserPlants();
+        }.bind(this), 50);
+      }
     }
   },
   props: ['garden', 'userPlants'],
   mounted() {
+    this.setUserPlants()
     if (this.garden === undefined) {
       this.responseAvailable = false;
       fetch("http://localhost/api/garden?id=" + this.$route.params.id, {
