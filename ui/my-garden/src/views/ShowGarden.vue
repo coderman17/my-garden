@@ -1,6 +1,6 @@
 <template>
   <div class="gardens container-fluid">
-    <div class="gardensContainer row justify-content-center">
+    <div v-if="this.garden !== undefined" class="gardensContainer row justify-content-center">
       <garden ref="garden" class="col-12 mt-3" v-bind:garden="garden" v-bind:userPlants="userPlants"></garden>
       <button v-on:click=this.delete class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4 mr-5 btn btn-danger">Delete</button>
       <router-link class="col-3 col-sm-2 pr-0 pl-0 col-md-1 mt-4" :to="{name: 'GardenForm', params: {garden: garden, userPlants: userPlants}}">
@@ -17,7 +17,7 @@ import router from "@/router";
 import userPlantsGetter from "@/components/userPlantsGetter";
 
 export default {
-  name: 'gardens',
+  name: 'ShowGarden',
   id: '',
   components: {
     garden,
@@ -34,12 +34,13 @@ export default {
       router.push('/gardens');
     },
     setUserPlants() {
+      console.log('setting user plants from showGarden')
       if (this.userPlants === undefined) {
         setTimeout(function () {
           userPlantsGetter.methods.populate()
           this.userPlants = userPlantsGetter.methods.get()
           this.setUserPlants();
-        }.bind(this), 50);
+        }.bind(this), 500);
       }
     }
   },
@@ -63,6 +64,9 @@ export default {
       })
       .then(response => {
         this.garden = response;
+
+        console.log('about to log garden from showGarden view:')
+        console.log(this.garden)
         this.responseAvailable = true;
       })
       .catch(err => {
@@ -70,7 +74,7 @@ export default {
       });
     }
     this.setUserPlants()
-    setTimeout(function(){ this.$refs.garden.calculateCellWidth(); }.bind(this), 1000);
+    setTimeout(function(){ console.log('line 74 on showGarden, calculating cell width');this.$refs.garden.calculateCellWidth(); }.bind(this), 1000);
 
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div ref="container" v-bind:style="{ height: this.solidContainerHeight + 'px'}" class="solidContainer col-12 col-md-9 col-lg-8 col-xl-4">
-      <table v-bind:style="{width: tableWidth + 'px', marginTop: Math.floor(0.5 * (this.solidContainerHeight - this.cellWidth * this.garden.dimensionY)) - 1 + 'px'}" class="table-bordered" id="gardenTable">
+      <table ref="gardenTable" v-bind:style="{width: tableWidth + 'px', marginTop: Math.floor(0.5 * (this.solidContainerHeight - this.cellWidth * this.garden.dimensionY)) - 1 + 'px'}" class="table-bordered" id="gardenTable">
         <tr v-for="n in parseInt(garden.dimensionY)" :key="n">
 
           <td v-bind:style="{ height: cellWidth + 'px' }" v-for="moo in parseInt(garden.dimensionX)" :key="moo" @click="handleTdClick">
@@ -79,31 +79,31 @@ export default {
       tableWidth: 15,
       brokenImage : false,
       solidContainerHeight: 15,
-      plantLocations : {},
-      plant:{},
+      // eslint-disable-next-line no-undef
+      // dimensionX: garden.dimensionX
+      // plantLocations : {},
+      // plant:{},
     }
   },
   methods: {
     setPlantLocationsArray: function () {
-      console.log('setting plant locations')
+      console.log('this.garden.dimensionX is defined at garden component: ' + (this.garden.dimensionX !== undefined).toString())
+      console.log(this.garden.dimensionX)
+      console.log('setting plant locations from garden')
       this.reload++
       if (this.userPlants === undefined && this.reload < 20){
         // userPlantsGetter.methods.populate()
         // this.userPlants = userPlantsGetter.methods.get()
-        console.log(this.userPlants)
+        console.log('this.userPlants was undefined in garden component')
         setTimeout(function(){
           this.setPlantLocationsArray();
-        }.bind(this), 50);
-      } else if(this.garden === undefined  && this.reload < 25){
-        console.log('LOCATIONS')
-          setTimeout(function(){
-            this.setPlantLocationsArray();
-          }.bind(this), 10);
+        }.bind(this), 500);
       } else if (this.garden.plantLocations === undefined){
-          alert('create garden plantlocations in this block or in ADDPLANT() and look at removing the plant locations object in data???')
+          console.log('successfully found userPlants "defined" in garden component, and reload count was: ' + this.reload)
+          console.log('this.garden.plantLocations is undefined on garden component, reload count is: ' + this.reload)
       } else {
-        console.log('setting plant locs')
-        console.log(this.garden)
+        console.log('successfully found this.garden.plantLocations "defined" in garden component, and reload count was: ' + this.reload)
+        // console.log(this)
         for (let i = 0; i < this.garden.plantLocations.length; i++) {
           console.log('attempting to get plant ' + this.garden.plantLocations[i].id)
           let plant = this.getPlant(this.garden.plantLocations[i].id)
@@ -119,18 +119,19 @@ export default {
       }
     },
     insertPlant: function (response, x, y) {
-      let table = document.getElementById('gardenTable')
+      // let table = document.getElementById('gardenTable')
+      let table = this.$refs.gardenTable
       table.children[table.childElementCount - y].children[x - 1].innerHTML = "<img style='width:100%;object-fit: cover;border-radius: 60px;height:100%' src=" + response.imageLink + "></img>"
     },
     imageLoadError() {
       this.brokenImage = true
     },
     calculateCellWidth: function() {
-      console.log('calculating cell width')
+      console.log('calculating cell width from garden')
       if(this.$refs.container === undefined){
         setTimeout(function(){
           this.calculateCellWidth();
-        }.bind(this), 10);
+        }.bind(this), 1000);
       } else {
         this.solidContainerHeight = this.$refs.container.clientWidth + 2
         this.cellWidth = Math.floor(this.$refs.container.clientWidth / 10);
@@ -138,9 +139,10 @@ export default {
       }
     },
     addRowsToModal(){
+      console.log('adding rows to modal')
       if (this.userPlants === undefined){
         setTimeout(function(){
-          // console.log('here:')
+
           // console.log(this.userPlants)
           this.addRowsToModal();
         }.bind(this), 500);
@@ -172,6 +174,9 @@ export default {
       // console.log(parsedobj == new Observer({}))
       // console.log(parsedobj == "{}")
       // console.log(this.plantLocations == {})
+      if (this.garden.plantLocations === undefined){
+        this.garden.plantLocations = []
+      }
       console.log(this.garden.plantLocations.push({
         id: plant.id,
         coordinateX: this.xCoordinate,
@@ -190,16 +195,19 @@ export default {
         target = target.parentElement
       }
       let td = target
+      this.xCoordinate = td.cellIndex + 1
+      this.yCoordinate = this.garden.dimensionY - td.parentElement.rowIndex
       if(td.innerHTML === ''){
-        this.xCoordinate = td.cellIndex + 1
-        this.yCoordinate = this.garden.dimensionY - td.parentElement.rowIndex
         this.$refs.myBtn.click()
       } else{
         if (confirm('Are you sure you would like to remove the plant from that location?')) {
-          td.innerHTML = ''
           for (let i = 0; i < this.garden.plantLocations.length; i++) {
+            console.log('Comparing this x coordinate: ' + this.garden.plantLocations[i].coordinateX + 'with: ' + this.xCoordinate)
+            console.log('Comparing this y coordinate: ' + this.garden.plantLocations[i].coordinateY + 'with: ' + this.yCoordinate)
             if (this.garden.plantLocations[i].coordinateX === this.xCoordinate && this.garden.plantLocations[i].coordinateY === this.yCoordinate) {
+              console.log('found matching plantLocation to remove')
               this.garden.plantLocations.splice(i, 1)
+              td.innerHTML = ''
             }
           }
         }
@@ -207,7 +215,13 @@ export default {
     }
   },
   mounted() {
-    console.log(this.userPlants)
+
+    console.log('logging this garden from garden component:')
+    // for(let i=0; i<this.gardens.length; i++){
+      console.log(this.garden)
+    // }
+
+    // console.log(this.userPlants)
     // setTimeout(function(){
       this.calculateCellWidth();
       this.setPlantLocationsArray();

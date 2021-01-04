@@ -59,12 +59,13 @@ export default {
       this.$refs.garden.calculateCellWidth();
     },
     setUserPlants() {
+      console.log('setting user plants from gardenForm')
       if (this.userPlants === undefined) {
         setTimeout(function () {
           userPlantsGetter.methods.populate()
           this.userPlants = userPlantsGetter.methods.get()
           this.setUserPlants();
-        }.bind(this), 50);
+        }.bind(this), 500);
       }
     },
     processForm(){
