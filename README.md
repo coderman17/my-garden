@@ -16,4 +16,4 @@ A webapp to help visualise and plan your garden
 # Use
 The UI should be fairly self-explanatory, but essentially you can add and edit your plant collection, using images from the web.  
 A small plant collection is already pre-loaded.  
-You can then use your plants to design or visualise your gardens
+You can then use your plants to populate your gardens, helping you design your perfect garden!
