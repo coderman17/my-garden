@@ -6,13 +6,10 @@ namespace MyGarden\Exceptions;
 
 class MissingParameter extends \Exception
 {
-    public string $publicMessage;
+    public function __construct(string $parameter, \Exception $previous = null)
+    {
+        $message = "Parameter '" . $parameter . "' is required";
 
-    public function __construct(string $parameter, \Exception $previous = null) {
-        $this->publicMessage = "Parameter '" . $parameter . "' is required";
-
-        $code = 400;
-
-        parent::__construct($this->publicMessage, $code, $previous);
+        parent::__construct($message, 400, $previous);
     }
 }
