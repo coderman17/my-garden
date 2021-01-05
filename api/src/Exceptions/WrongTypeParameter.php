@@ -6,13 +6,10 @@ namespace MyGarden\Exceptions;
 
 class WrongTypeParameter extends \Exception
 {
-    public string $publicMessage;
+    public function __construct(string $parameter, string $expectedType, \Exception $previous = null)
+    {
+        $message = "Parameter '" . $parameter . "' should be of type " . $expectedType;
 
-    public function __construct(string $parameter, string $expectedType, \Exception $previous = null) {
-        $this->publicMessage = "Parameter '" . $parameter . "' should be of type " . $expectedType;
-
-        $code = 400;
-
-        parent::__construct($this->publicMessage, $code, $previous);
+        parent::__construct($message, 400, $previous);
     }
 }

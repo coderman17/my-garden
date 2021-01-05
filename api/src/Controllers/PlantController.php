@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace MyGarden\Controllers;
 
+use MyGarden\Exceptions\ConstructionFailure;
 use MyGarden\Exceptions\MissingParameter;
 use MyGarden\Exceptions\NotFound;
 use MyGarden\Exceptions\OutOfRangeInt;
@@ -24,6 +25,8 @@ class PlantController extends Controller
 
     /**
      * @throws \Exception
+     * @throws ConstructionFailure
+     * @throws \InvalidArgumentException
      */
     public function getAll(): void
     {
@@ -39,10 +42,10 @@ class PlantController extends Controller
     /**
      * @param Request $request
      * @throws NotFound
-     * @throws OutOfRangeInt
-     * @throws OverMaxChars
-     * @throws UnderMinChars
+     * @throws ConstructionFailure
      * @throws \Exception
+     * @throws MissingParameter
+     * @throws WrongTypeParameter
      */
     public function get(Request $request): void
     {
@@ -64,6 +67,8 @@ class PlantController extends Controller
      * @param Request $request
      * @throws NotFound
      * @throws \Exception
+     * @throws MissingParameter
+     * @throws WrongTypeParameter
      */
     public function delete(Request $request): void
     {
@@ -112,6 +117,11 @@ class PlantController extends Controller
     /**
      * @param Request $request
      * @throws \Exception
+     * @throws MissingParameter
+     * @throws WrongTypeParameter
+     * @throws OutOfRangeInt
+     * @throws OverMaxChars
+     * @throws UnderMinChars
      */
     public function update(Request $request): void
     {

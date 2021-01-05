@@ -4,10 +4,8 @@ declare(strict_types = 1);
 
 namespace MyGarden\Repositories;
 
+use MyGarden\Exceptions\ConstructionFailure;
 use MyGarden\Exceptions\NotFound;
-use MyGarden\Exceptions\OutOfRangeInt;
-use MyGarden\Exceptions\OverMaxChars;
-use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Models\Garden;
 use MyGarden\Models\Plant;
 use MyGarden\TypedArrays\IntToGardenArray;
@@ -18,10 +16,9 @@ class GardenRepository extends Repository
     /**
      * @param int $userId
      * @return IntToGardenArray
-     * @throws OutOfRangeInt
-     * @throws OverMaxChars
-     * @throws UnderMinChars
      * @throws \Exception
+     * @throws ConstructionFailure
+     * @throws \InvalidArgumentException
      */
     public function getUserGardens(int $userId): IntToGardenArray
     {
@@ -72,29 +69,39 @@ class GardenRepository extends Repository
                     $intToGardenArray->pushItem($garden);
                 }
 
-                $garden = new Garden(
-                    $row->gardenId,
-                    $row->gardenUserId,
-                    $row->name,
-                    $row->dimension_x,
-                    $row->dimension_y
-                );
+                try {
+                    $garden = new Garden(
+                        $row->gardenId,
+                        $row->gardenUserId,
+                        $row->name,
+                        $row->dimension_x,
+                        $row->dimension_y
+                    );
+
+                } catch (\Exception $e){
+                    throw new ConstructionFailure($e);
+                }
             }
 
             if ($row->plantId !== null){
-                $plant = new Plant(
-                    $row->plantId,
-                    $row->gardenUserId,
-                    $row->english_name,
-                    $row->latin_name,
-                    $row->image_link
-                );
+                try {
+                    $plant = new Plant(
+                        $row->plantId,
+                        $row->gardenUserId,
+                        $row->english_name,
+                        $row->latin_name,
+                        $row->image_link
+                    );
 
-                $garden->setPlantLocation(
-                    $plant,
-                    $row->coordinate_x,
-                    $row->coordinate_y
-                );
+                    $garden->setPlantLocation(
+                        $plant,
+                        $row->coordinate_x,
+                        $row->coordinate_y
+                    );
+
+                } catch (\Exception $e){
+                    throw new ConstructionFailure($e);
+                }
             }
 
             $previousGardenId = $garden->getId();
@@ -160,8 +167,7 @@ class GardenRepository extends Repository
     {
         $stmt = $this->prepare(
             'UPDATE `gardens`
-            SET
-                `name` = :name,
+            SET `name` = :name,
                 `dimension_x` = :dimension_x,
                 `dimension_y` = :dimension_y
             WHERE `id` = :id
@@ -183,7 +189,7 @@ class GardenRepository extends Repository
         if(
             $stmt->rowCount() < 1
         ){
-            //throws Not Found
+            //throws NotFound
             $this->getUserGarden($garden->getUserId(), $garden->getId());
         }
 
@@ -227,14 +233,12 @@ class GardenRepository extends Repository
      * @param string $gardenId
      * @return Garden
      * @throws NotFound
-     * @throws OutOfRangeInt
-     * @throws OverMaxChars
-     * @throws UnderMinChars
      * @throws \Exception
+     * @throws ConstructionFailure
      */
     public function getUserGarden(int $userId, string $gardenId): Garden
     {
-        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
+        $stmt = $this->prepare(
             'SELECT gardens.id as gardenId,
                 gardens.user_id as gardenUserId,
                 gardens.name,
@@ -253,14 +257,14 @@ class GardenRepository extends Repository
             AND gardens.id = :id;'
         );
 
-        if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement');
-        }
-
-        $stmt->execute([
-           'user_id' => $userId,
-           'id' => $gardenId
-        ]);
+        $this->execute(
+            [
+               'user_id' => $userId,
+               'id' => $gardenId
+            ],
+            $stmt,
+            function (){ return false; }
+        );
 
         $row = $stmt->fetch(\PDO::FETCH_OBJ);
 
@@ -268,30 +272,41 @@ class GardenRepository extends Repository
             throw new NotFound($gardenId);
         }
 
-        $garden = new Garden(
-            $row->gardenId,
-            $row->gardenUserId,
-            $row->name,
-            $row->dimension_x,
-            $row->dimension_y
-        );
+        try {
+            $garden = new Garden(
+                $row->gardenId,
+                $row->gardenUserId,
+                $row->name,
+                $row->dimension_x,
+                $row->dimension_y
+            );
+
+        } catch (\Exception $e){
+            throw new ConstructionFailure($e);
+        }
 
         while($row) {
             if ($row->plantId !== null){
-                $plant = new Plant(
-                    $row->plantId,
-                    $row->gardenUserId,
-                    $row->english_name,
-                    $row->latin_name,
-                    $row->image_link
-                );
+                try {
+                    $plant = new Plant(
+                        $row->plantId,
+                        $row->gardenUserId,
+                        $row->english_name,
+                        $row->latin_name,
+                        $row->image_link
+                    );
 
-                $garden->setPlantLocation(
-                    $plant,
-                    $row->coordinate_x,
-                    $row->coordinate_y
-                );
+                    $garden->setPlantLocation(
+                        $plant,
+                        $row->coordinate_x,
+                        $row->coordinate_y
+                    );
+
+                } catch (\Exception $e){
+                    throw new ConstructionFailure($e);
+                }
             }
+
             $row = $stmt->fetch(\PDO::FETCH_OBJ);
         }
 
@@ -306,28 +321,24 @@ class GardenRepository extends Repository
      */
     public function deleteUserGarden(int $userId, string $gardenId): void
     {
-        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare(
+        $stmt = $this->prepare(
             'DELETE
             FROM `gardens`
             WHERE `user_id` = :user_id
             AND `id` = :id;'
         );
 
-        if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement');
-        }
-
-        $stmt->execute([
-           'user_id' => $userId,
-           'id' => $gardenId
-        ]);
+        $this->execute(
+            [
+               'user_id' => $userId,
+               'id' => $gardenId
+            ],
+            $stmt,
+            function ($rowCount){ return $rowCount > 1; }
+        );
 
         if($stmt->rowCount() < 1){
             throw new NotFound($gardenId);
-        }
-
-        if($stmt->rowCount() > 1){
-            throw new \Exception('More than one database row was affected');
         }
     }
 }

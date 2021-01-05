@@ -6,20 +6,31 @@ require 'vendor/autoload.php';
 require '.env.php';
 
 error_reporting(0);
+
+//TODO experiment with moving this error handling into the App and show appropriately for json or not
 try {
     $app = new MyGarden\App();
 
     $app->run();
 
-} catch (\Throwable $exception) {
-    //TODO move this error handling into the app and show appropriately for json or not
-    error_log("Exception: " . $exception->getMessage() . "\nStack trace:\n" . $exception->getTraceAsString() . "\n  thrown in " . $exception->getFile() . " on line " . $exception->getLine());
+} catch (\Throwable $throwable) {
+    log_throwable($throwable);
+
+    $previous = $throwable->getPrevious();
+
+    while($previous !== null) {
+        error_log("Previous:\n");
+
+        log_throwable($previous);
+
+        $previous = $previous->getPrevious();
+    }
 
     header('Content-Type: application/json');
 
-    $code = ($exception->getCode() === 0) ? 500 : $exception->getCode();
+    $code = ($throwable->getCode() === 0) ? 500 : $throwable->getCode();
 
-    $message = ($code === 500) ? 'Internal Server Error' : $exception->getMessage();
+    $message = ($code === 500) ? 'Internal Server Error' : $throwable->getMessage();
 
     http_response_code($code);
 
@@ -31,4 +42,9 @@ try {
     ];
 
     echo json_encode($error);
+}
+
+function log_throwable(Throwable $throwable): void
+{
+    error_log("Exception: " . $throwable->getMessage() . "\nStack trace:\n" . $throwable->getTraceAsString() . "\n  thrown in " . $throwable->getFile() . " on line " . $throwable->getLine());
 }
