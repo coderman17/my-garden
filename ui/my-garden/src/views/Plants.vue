@@ -16,7 +16,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import plant from '@/components/plant.vue';
 import floatingActionButton from "@/components/floatingActionButton.vue";
 import heading from "@/components/heading.vue";
@@ -34,7 +33,6 @@ export default {
     heading
   },
   mounted() {
-    this.responseAvailable = false;
     fetch("http://localhost/api/plants", {
       method: "GET",
       headers: {
@@ -46,13 +44,13 @@ export default {
       if(response.ok){
         return response.json()
       } else{
-        alert("Server returned " + response.status + " : " + response.statusText);
+        console.log(response);
+        alert("Server returned " + response.status + " : " + response.statusText + " data: " + response.data);
       }
     })
     .then(response => {
       console.log(response)
       this.plants = response;
-      this.responseAvailable = true;
     })
     .catch(err => {
       console.log(err);

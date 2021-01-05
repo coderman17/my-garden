@@ -1,9 +1,9 @@
 <template>
   <div class="gardens container-fluid">
   <heading>Gardens:</heading>
-    <div class="gardensContainer row">
-      <router-link class="garden col-12 col-md-6 col-sm-12" v-for="garden in gardens" :key="garden.id"  :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden}}">
-        <garden  v-bind:garden="garden"></garden>
+    <div class="gardensContainer row" v-if="this.gardens !== undefined">
+      <router-link class="garden col-12 col-md-6 col-sm-12" v-for="garden in gardens" :key="garden.id"  :to="{name: 'ShowGarden', params: {id: garden.id, garden: garden, userPlants: userPlants}}">
+        <garden v-bind:garden="garden" v-bind:userPlants="userPlants"></garden>
       </router-link>
     </div>
     <router-link to="/gardenForm">
@@ -16,16 +16,18 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import garden from '@/components/garden.vue';
 import floatingActionButton from "@/components/floatingActionButton.vue";
 import heading from "@/components/heading.vue";
+import userPlantsGetter from "@/components/userPlantsGetter";
+
 
 export default {
   name: 'Gardens',
   data() {
     return {
-      gardens: []
+      gardens: undefined,
+      userPlants: undefined,
     }
   },
   components: {
@@ -33,8 +35,19 @@ export default {
     garden,
     heading
   },
+  methods: {
+    setUserPlants() {
+      if (this.userPlants === undefined) {
+        setTimeout(function () {
+          userPlantsGetter.methods.populate()
+          this.userPlants = userPlantsGetter.methods.get()
+          this.setUserPlants();
+        }.bind(this), 500);
+      }
+    }
+  },
   mounted() {
-    this.responseAvailable = false;
+    this.setUserPlants()
     fetch("http://localhost/api/gardens", {
       method: "GET",
       headers: {
@@ -46,18 +59,17 @@ export default {
       if(response.ok){
         return response.json()
       } else{
-        alert("Server returned " + response.status + " : " + response.statusText);
+        console.log(response);
+        alert("Server returned " + response.status + " : " + response.statusText + " data: " + response.data);
       }
     })
     .then(response => {
-      console.log(response)
       this.gardens = response;
-      this.responseAvailable = true;
     })
     .catch(err => {
       console.log(err);
     });
-  }
+  },
 }
 </script>
 

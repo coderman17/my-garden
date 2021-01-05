@@ -1,13 +1,13 @@
 <template>
   <div class="gardens container-fluid">
     <div class="gardensContainer row justify-content-center">
-      <garden ref="garden" class="col-12 mt-3" v-bind:garden="garden"></garden>
+      <garden ref="garden" class="col-12 mt-3" v-bind:garden="garden" v-bind:userPlants="userPlants"></garden>
       <form class="col-12 mb-4" @submit.prevent="processForm" method="get">
         <div class="form-group">
           <input type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="name" aria-describedby="name" placeholder="Garden Name" v-model="garden.name">
-          <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionX" aria-describedby="dimensionX" placeholder="X Dimension ('width')" v-model="garden.dimensionX">
-          <input v-on:blur="recheckImage" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionY" aria-describedby="dimensionY" placeholder="Y Dimension ('height')" v-model="garden.dimensionY">
-          <button type="submit" class="mt-4 btn btn-primary">Submit</button>
+          <input v-on:blur="triggerResizing" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionX" aria-describedby="dimensionX" placeholder="X Dimension ('width')" v-model="garden.dimensionX">
+          <input v-on:blur="triggerResizing" type="text" class="mt-4 text-center form-control offset-md-2 col-md-8" id="dimensionY" aria-describedby="dimensionY" placeholder="Y Dimension ('height')" v-model="garden.dimensionY">
+          <button type="submit" class="mt-4 btn btn-primary">Save</button>
         </div>
       </form>
     </div>
@@ -15,9 +15,9 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import router from '@/router'
 import garden from "@/components/garden";
+import userPlantsGetter from "@/components/userPlantsGetter";
 
 export default {
   name: 'gardenForm',
@@ -31,7 +31,7 @@ export default {
       apiUrl: 'http://localhost/api/garden'
     }
   },
-  props: ['garden'],
+  props: ['garden', 'userPlants'],
   components: {
     garden,
   },
@@ -50,13 +50,26 @@ export default {
         dimensionY: 10
       }
     }
+    this.setUserPlants()
   },
   methods: {
-    recheckImage() {
+    triggerResizing() {
       this.$refs.garden.calculateCellWidth();
     },
+    setUserPlants() {
+      if (this.userPlants === undefined) {
+        setTimeout(function () {
+          userPlantsGetter.methods.populate()
+          this.userPlants = userPlantsGetter.methods.get()
+          this.setUserPlants();
+        }.bind(this), 500);
+      }
+    },
     processForm(){
-      this.responseAvailable = false;
+      let plantLocations = []
+      if (this.garden.plantLocations !== undefined){
+        plantLocations = this.garden.plantLocations
+      }
       this.requestOptions = {
         method: this.method,
         headers: {
@@ -66,31 +79,31 @@ export default {
         body: JSON.stringify({
           'name': this.garden.name,
           'dimensionX': parseInt(this.garden.dimensionX),
-          'dimensionY': parseInt(this.garden.dimensionY)
+          'dimensionY': parseInt(this.garden.dimensionY),
+          'plantLocations': plantLocations
         })
       };
-      console.log(this.requestOptions);
       fetch(this.apiUrl,this.requestOptions)
-          .then(response => {
-            if(response.ok){
-              router.push('gardens');
-              return response;
-            } else{
-              alert("Server returned " + response.status + " : " + response.statusText);
-            }
-          })
-          .then(response => {
-            console.log(response.json())
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        .then(response => {
+          if(response.ok){
+            router.push('gardens');
+            return response;
+          } else{
+            console.log(response.json());
+            alert("Server returned " + response.status + " : " + response.statusText);
+          }
+        })
+        .then(response => {
+          console.log(response.json())
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
   },
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .gardensContainer img, .add {
   width: 320px;
