@@ -1,6 +1,13 @@
 # my-garden
 A webapp to help visualise and plan your garden
 
+# Prerequisites
+  - php 7.4
+  - composer
+  - npm
+  - docker
+  - docker-compose
+  
 # Installation
   - clone the repo
   - run `composer install` from /api
