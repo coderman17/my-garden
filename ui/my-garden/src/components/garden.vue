@@ -67,7 +67,7 @@ export default {
     },
     insertPlant: function (response, x, y) {
       let table = this.$refs.gardenTable
-      table.children[table.childElementCount - y].children[x - 1].innerHTML = "<img style='width:100%;object-fit: cover;border-radius: 60px;height:100%' src=" + response.imageLink + "></img>"
+      table.children[table.childElementCount - y].children[x - 1].innerHTML = "<img style='width:100%;object-fit: cover;border-radius: 0px;height:100%' src=" + response.imageLink + "></img>"
     },
     imageLoadError() {
       this.brokenImage = true
@@ -166,7 +166,7 @@ table {
   border: 1px solid #868686;
 }
 .table-bordered td {
-  padding: 2px;
+  padding: 0px;
 }
 .solidContainer {
   padding: 0;
