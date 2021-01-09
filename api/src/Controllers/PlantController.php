@@ -70,10 +70,7 @@ class PlantController extends Controller
     {
         $this->validator->validateRequestId($request);
 
-        $this->repositoryCollection->plantRepository->deleteUserPlant(
-            $this->user->getId(),
-            $request->params['id']
-        );
+        $this->user->deletePlant($request->params['id']);
 
         $this->response->setCode(204);
 
@@ -100,7 +97,7 @@ class PlantController extends Controller
             $request->params['imageLink']
         );
 
-        $this->repositoryCollection->plantRepository->saveUserPlant($plant);
+        $this->user->savePlant($plant);
 
         $this->response->setCode(201);
 
@@ -132,9 +129,9 @@ class PlantController extends Controller
         $this->response->setCode(200);
 
         try {
-            $this->repositoryCollection->plantRepository->updateUserPlant($plant);
+            $this->user->updatePlant($plant);
         } catch (NotFound $e) {
-            $this->repositoryCollection->plantRepository->saveUserPlant($plant);
+            $this->user->savePlant($plant);
 
             $this->response->setCode(201);
         }

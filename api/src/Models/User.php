@@ -9,10 +9,8 @@ use MyGarden\Exceptions\NotFound;
 use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
-use MyGarden\Helpers\Helper;
 use MyGarden\Repositories\Repository;
 use MyGarden\TypedArrays\IntToGardenArray;
-use MyGarden\TypedArrays\IntToPlantArray;
 use MyGarden\TypedArrays\StringToPlantArray;
 
 class User extends Model
@@ -55,9 +53,7 @@ class User extends Model
 
         $this->email = $email;
 
-        $hashedPassword = Helper::hash($password);
-
-        $this->password = $hashedPassword;
+        $this->password = $password;
 
         $this->repository = new Repository();
     }
@@ -557,6 +553,95 @@ class User extends Model
                 $plants[$plantId],
                 $plantLocation
             );
+        }
+    }
+
+    /**
+     * @param string $plantId
+     * @throws NotFound
+     * @throws \Exception
+     */
+    public function deletePlant(string $plantId): void
+    {
+        $stmt = $this->repository->prepare(
+            'DELETE
+            FROM `plants`
+            WHERE `user_id` = :user_id
+            AND `id` = :id;'
+        );
+
+        $this->repository->execute(
+            [
+                'user_id' => $this->id,
+                'id' => $plantId
+            ],
+            $stmt,
+            function ($rowCount){ return $rowCount > 1; }
+        );
+
+        if($stmt->rowCount() < 1){
+            throw new NotFound($plantId);
+        }
+    }
+
+    /**
+     * @param Plant $plant
+     * @throws \Exception
+     */
+    public function savePlant(Plant $plant): void
+    {
+        $stmt = $this->repository->prepare(
+            'INSERT INTO `plants`
+            (`id`, `user_id`, `english_name`, `latin_name`, `image_link`)
+            VALUES (:id, :user_id, :english_name, :latin_name, :image_link);'
+        );
+
+        $this->repository->execute(
+            [
+                'id' => $plant->getId(),
+                'user_id' => $this->id,
+                'english_name' => $plant->getEnglishName(),
+                'latin_name' => $plant->getLatinName(),
+                'image_link' => $plant->getImageLink(),
+            ],
+            $stmt,
+            function ($rowCount){ return $rowCount !== 1; }
+        );
+    }
+
+    /**
+     * @param Plant $plant
+     * @throws \Exception
+     * @throws NotFound
+     */
+    public function updatePlant(Plant $plant): void
+    {
+        $stmt = $this->repository->prepare(
+            'UPDATE `plants`
+            SET `english_name` = :english_name,
+            `latin_name` = :latin_name,
+            `image_link` = :image_link
+            WHERE `id` = :id
+            AND `user_id` = :user_id;'
+        );
+
+        $this->repository->execute(
+            [
+                'id' => $plant->getId(),
+                'user_id' => $this->id,
+                'english_name' => $plant->getEnglishName(),
+                'latin_name' => $plant->getLatinName(),
+                'image_link' => $plant->getImageLink(),
+            ],
+            $stmt,
+            function ($rowCount){ return $rowCount > 1; }
+        );
+
+        if(
+            $stmt->rowCount() < 1
+        ){
+            //throws Not Found
+            $this->getPlant($plant->getId());
         }
     }
 }

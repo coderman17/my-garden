@@ -5,8 +5,6 @@ declare(strict_types = 1);
 namespace MyGarden\Responses;
 
 use MyGarden\Models\Model;
-use TypedArrays\IntToValueArrays\IntToClassArray;
-use TypedArrays\StringToValueArrays\StringToClassArray;
 
 class JsonMappedResponse implements ResponseInterface
 {

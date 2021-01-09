@@ -7,14 +7,11 @@ namespace MyGarden;
 use MyGarden\Controllers\ControllerCollection;
 use MyGarden\Database\DatabaseConnection;
 use MyGarden\Factories\SimpleControllerCollectionFactory;
-use MyGarden\Repositories\RepositoryCollection;
 use MyGarden\Request\Request;
 
 class App
 {
     protected DatabaseConnection $databaseConnection;
-
-    protected RepositoryCollection $repositoryCollection;
 
     protected Request $request;
 
@@ -31,13 +28,9 @@ class App
     {
         $this->databaseConnection = new DatabaseConnection();
 
-        $this->repositoryCollection = new RepositoryCollection();
-
-        $this->repositoryCollection->databaseConnection = $this->databaseConnection;
-
         $this->request = new Request();
 
-        $this->controllerFactory = new SimpleControllerCollectionFactory($this->repositoryCollection);
+        $this->controllerFactory = new SimpleControllerCollectionFactory();
 
         $this->controllerCollection = $this->controllerFactory->create($this->request);
 

@@ -8,16 +8,10 @@ use MyGarden\Database\DatabaseConnection;
 
 class Repository
 {
-    protected RepositoryCollection $repositoryCollection;
-
     protected DatabaseConnection $databaseConnection;
 
-    public function __construct (RepositoryCollection $repositoryCollection = null)
+    public function __construct()
     {
-        if ($repositoryCollection !== null){
-            $this->repositoryCollection = $repositoryCollection;
-        }
-
         $this->databaseConnection = new DatabaseConnection();
     }
 
