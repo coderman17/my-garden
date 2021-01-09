@@ -29,11 +29,11 @@ class PlantController extends Controller
      */
     public function getAll(): void
     {
-        $plantArray = $this->repositoryCollection->plantRepository->getUserPlants($this->user->getId());
+        $plantArray = $this->user->getPlants();
 
         $this->response->setCode(200);
 
-        $this->response->setBodyCollectionResource($plantArray);
+        $this->response->setBodyCollectionResource($plantArray->getItems());
 
         $this->view->display($this->response);
     }
@@ -50,10 +50,7 @@ class PlantController extends Controller
     {
         $this->validator->validateRequestId($request);
 
-        $plant = $this->repositoryCollection->plantRepository->getUserPlant(
-            $this->user->getId(),
-            $request->params['id']
-        );
+        $plant = $this->user->getPlant($request->params['id']);
 
         $this->response->setCode(200);
 

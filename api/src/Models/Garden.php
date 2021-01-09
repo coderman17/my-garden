@@ -89,16 +89,24 @@ class Garden extends Model
 
     /**
      * @param Plant $plant
-     * @param int $coordinateX
-     * @param int $coordinateY
+     * @param PlantLocation $plantLocation
      * @throws OutOfRangeInt
      */
-    public function setPlantLocation(Plant $plant, int $coordinateX, int $coordinateY): void
+    public function setPlantLocation(Plant $plant, PlantLocation $plantLocation): void
     {
         if($plant->getUserId() !== $this->userId){
             //logic exception?
             throw new \InvalidArgumentException('The User associated with the plant does not match the User associated with the garden');
         }
+
+        if($plant->getId() !== $plantLocation->getPlantId()){
+            //logic exception?
+            throw new \InvalidArgumentException('The plant provided does not have the same id as the plant location');
+        }
+
+        $coordinateX = $plantLocation->getCoordinateX();
+
+        $coordinateY = $plantLocation->getCoordinateY();
 
         $this->validateParamIntRange('coordinateX for ' . $plant->getId(), $coordinateX, 1, $this->dimensionX);
 
@@ -109,7 +117,7 @@ class Garden extends Model
             throw new \LogicException('There is already a plant at that location in the garden', 400);
         }
 
-        $this->plantLocations[$coordinateX][$coordinateY] = new PlantLocation($plant->getId(), $coordinateX, $coordinateY);
+        $this->plantLocations[$coordinateX][$coordinateY] = $plantLocation;
     }
 
     public function mapJson(): array

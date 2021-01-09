@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace MyGarden\Responses;
 
 use MyGarden\Models\Model;
-use TypedArrays\IntToValueArrays\IntToClassArray;
 
 interface ResponseInterface
 {
@@ -15,7 +14,10 @@ interface ResponseInterface
 
     public function setBodySingleResource(Model $model): void;
 
-    public function setBodyCollectionResource(IntToClassArray $array): void;
+    /**
+     * @param array<mixed, Model> $array
+     */
+    public function setBodyCollectionResource(array $array): void;
 
     /**
      * @return array<string, int|string>|array<array<string, int|string>>

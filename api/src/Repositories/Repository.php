@@ -4,13 +4,21 @@ declare(strict_types = 1);
 
 namespace MyGarden\Repositories;
 
-abstract class Repository
+use MyGarden\Database\DatabaseConnection;
+
+class Repository
 {
     protected RepositoryCollection $repositoryCollection;
 
-    public function __construct (RepositoryCollection $repositoryCollection)
+    protected DatabaseConnection $databaseConnection;
+
+    public function __construct (RepositoryCollection $repositoryCollection = null)
     {
-        $this->repositoryCollection = $repositoryCollection;
+        if ($repositoryCollection !== null){
+            $this->repositoryCollection = $repositoryCollection;
+        }
+
+        $this->databaseConnection = new DatabaseConnection();
     }
 
     /**
@@ -18,12 +26,12 @@ abstract class Repository
      * @return \PDOStatement
      * @throws \Exception
      */
-    protected function prepare(string $query): \PDOStatement
+    public function prepare(string $query): \PDOStatement
     {
-        $stmt = $this->repositoryCollection->databaseConnection->dbh->prepare($query);
+        $stmt = $this->databaseConnection->dbh->prepare($query);
 
         if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement. ' . $this->repositoryCollection->databaseConnection->dbh->errorInfo()[2]);
+            throw new \Exception('Could not prepare database statement. ' . $this->databaseConnection->dbh->errorInfo()[2]);
         }
 
         return $stmt;
@@ -35,7 +43,7 @@ abstract class Repository
      * @param callable $unexpectedRowCount
      * @throws \Exception
      */
-    protected function execute(array $mapping, \PDOStatement $stmt, callable $unexpectedRowCount): void
+    public function execute(array $mapping, \PDOStatement $stmt, callable $unexpectedRowCount): void
     {
         $stmt->execute($mapping);
 
