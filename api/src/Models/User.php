@@ -4,14 +4,13 @@ declare(strict_types = 1);
 
 namespace MyGarden\Models;
 
-use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Helpers\Helper;
 
 class User extends Model
 {
-    protected ?int $id;
+    protected string $id;
 
     protected string $username;
 
@@ -20,22 +19,23 @@ class User extends Model
     protected string $password;
 
     /**
-     * @param int|null $id
+     * @param string|null $id
      * @param string $username
      * @param string $email
      * @param string $password
-     * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws \Exception
      */
-    public function __construct(?int $id, string $username, string $email, string $password)
+    public function __construct(?string $id, string $username, string $email, string $password)
     {
         if ($id !== null) {
-            $this->validateParamIntRange('id', $id, 0, Model::UNSIGNED_INT_MAX);
-        }
+            $this->validateParamStringLength('id', $id, Model::UUID_LENGTH, Model::UUID_LENGTH);
 
-        $this->id = $id;
+            $this->id = $id;
+        } else {
+            $this->id = uniqid();
+        }
 
         $this->validateParamStringLength('username', $username, 1, 30);
 
@@ -52,9 +52,9 @@ class User extends Model
     }
 
     /**
-     * @return int|null
+     * @return string
      */
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }

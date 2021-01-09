@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace MyGarden\Controllers;
 
-use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Models\User;
@@ -29,7 +28,6 @@ abstract class Controller
      * @param RepositoryCollection $repositoryCollection
      * @param ResponseInterface $response
      * @param ViewInterface $view
-     * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws \Exception
@@ -53,7 +51,6 @@ abstract class Controller
 
     /**
      * @return User
-     * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws \Exception

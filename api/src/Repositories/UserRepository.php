@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace MyGarden\Repositories;
 
-use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Helpers\Helper;
@@ -16,7 +15,6 @@ class UserRepository extends Repository
      * @param string $email
      * @param string $password
      * @return User
-     * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws \Exception

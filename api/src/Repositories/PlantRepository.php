@@ -13,13 +13,13 @@ class PlantRepository extends Repository
 {
 
     /**
-     * @param int $userId
+     * @param string $userId
      * @return IntToPlantArray
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws ConstructionFailure
      */
-    public function getUserPlants(int $userId): IntToPlantArray
+    public function getUserPlants(string $userId): IntToPlantArray
     {
         $intToPlantArray = new IntToPlantArray();
 
@@ -119,14 +119,14 @@ class PlantRepository extends Repository
     }
 
     /**
-     * @param int $userId
+     * @param string $userId
      * @param string $plantId
      * @return Plant
      * @throws NotFound
      * @throws \Exception
      * @throws ConstructionFailure
      */
-    public function getUserPlant(int $userId, string $plantId): Plant
+    public function getUserPlant(string $userId, string $plantId): Plant
     {
         $stmt = $this->prepare(
             'SELECT *
@@ -166,12 +166,12 @@ class PlantRepository extends Repository
     }
 
     /**
-     * @param int $userId
+     * @param string $userId
      * @param string $plantId
      * @throws NotFound
      * @throws \Exception
      */
-    public function deleteUserPlant(int $userId, string $plantId): void
+    public function deleteUserPlant(string $userId, string $plantId): void
     {
         $stmt = $this->prepare(
             'DELETE

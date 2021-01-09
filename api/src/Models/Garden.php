@@ -12,7 +12,7 @@ class Garden extends Model
 {
     protected string $id;
 
-    protected int $userId;
+    protected string $userId;
 
     protected string $name;
 
@@ -27,7 +27,7 @@ class Garden extends Model
 
     /**
      * @param string|null $id
-     * @param int $userId
+     * @param string $userId
      * @param string $name
      * @param int $dimensionX
      * @param int $dimensionY
@@ -35,7 +35,7 @@ class Garden extends Model
      * @throws OverMaxChars
      * @throws UnderMinChars
      */
-    public function __construct(?string $id, int $userId, string $name, int $dimensionX, int $dimensionY)
+    public function __construct(?string $id, string $userId, string $name, int $dimensionX, int $dimensionY)
     {
         if ($id !== null) {
             $this->validateParamStringLength('id', $id, Model::UUID_LENGTH, Model::UUID_LENGTH);
@@ -45,7 +45,7 @@ class Garden extends Model
             $this->id = uniqid();
         }
 
-        $this->validateParamIntRange('userId', $userId, 0, Model::UNSIGNED_INT_MAX);
+        $this->validateParamStringLength('userId', $userId, Model::UUID_LENGTH, Model::UUID_LENGTH);
 
         $this->userId = $userId;
 
@@ -67,7 +67,7 @@ class Garden extends Model
         return $this->id;
     }
 
-    public function getUserId(): int
+    public function getUserId(): string
     {
         return $this->userId;
     }

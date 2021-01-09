@@ -9,7 +9,7 @@ use TypedArrays\IntToValueArrays\IntToClassArray;
 
 class JsonMappedResponse implements ResponseInterface
 {
-    protected int $code;
+    protected int $code = 0;
 
     /**
      * @var array<string, int|string>|array<array<string, int|string>>

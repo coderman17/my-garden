@@ -7,7 +7,6 @@ namespace MyGarden\Factories;
 use MyGarden\Controllers\ControllerCollection;
 use MyGarden\Controllers\GardenController;
 use MyGarden\Controllers\PlantController;
-use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Repositories\RepositoryCollection;
@@ -29,12 +28,17 @@ class SimpleControllerCollectionFactory
     public function __construct(RepositoryCollection $repositoryCollection)
     {
         $this->repositoryCollection = $repositoryCollection;
+
+        //default view
+        $this->view = new JsonView();
+
+        //default response
+        $this->response = new JsonMappedResponse();
     }
 
     /**
      * @param Request $request
      * @return ControllerCollection
-     * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws \Exception
@@ -44,13 +48,9 @@ class SimpleControllerCollectionFactory
         $acceptHeader = $request->acceptHeader;
 
         if (
-            $acceptHeader == null ||
-            in_array('application/json', $acceptHeader)
+            $acceptHeader === [] ||
+            !in_array('application/json', $acceptHeader)
         ){
-            $this->view = new JsonView();
-
-            $this->response = new JsonMappedResponse();
-        } else {
             $this->view = new HtmlView();
 
             $this->response = new JsonMappedResponse();

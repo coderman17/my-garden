@@ -13,12 +13,24 @@ Class DatabaseConnection
      */
     public function __construct()
     {
-            $this->dbh = new \PDO(
-                'mysql:host=' . getenv('DB_HOST') . ';dbname=' . getenv('DB_NAME'),
-                getenv('DB_USERNAME'),
-                getenv('DB_PASSWORD')
-            );
+        $dbHost = getenv('DB_HOST');
 
-            $this->dbh->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
+        $dbName = getenv("DB_NAME");
+
+        $dbUsername = getenv("DB_USERNAME");
+
+        $dbPassword = getenv("DB_PASSWORD");
+
+        if (!$dbHost || !$dbName || !$dbUsername || !$dbPassword){
+            throw new \Exception('Some environment configuration was not found');
+        }
+
+        $this->dbh = new \PDO(
+            'mysql:host=' . $dbHost . ';dbname=' . $dbName,
+            $dbUsername,
+            $dbPassword
+        );
+
+        $this->dbh->setAttribute(\PDO::ATTR_EMULATE_PREPARES, false);
     }
 }

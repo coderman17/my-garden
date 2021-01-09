@@ -7,7 +7,6 @@ namespace MyGarden\Controllers;
 use MyGarden\Exceptions\ConstructionFailure;
 use MyGarden\Exceptions\MissingParameter;
 use MyGarden\Exceptions\NotFound;
-use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
@@ -87,7 +86,6 @@ class PlantController extends Controller
     /**
      * @param Request $request
      * @throws MissingParameter
-     * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws WrongTypeParameter
@@ -119,7 +117,6 @@ class PlantController extends Controller
      * @throws \Exception
      * @throws MissingParameter
      * @throws WrongTypeParameter
-     * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      */

@@ -14,13 +14,13 @@ class GardenRepository extends Repository
 {
 
     /**
-     * @param int $userId
+     * @param string $userId
      * @return IntToGardenArray
      * @throws \Exception
      * @throws ConstructionFailure
      * @throws \InvalidArgumentException
      */
-    public function getUserGardens(int $userId): IntToGardenArray
+    public function getUserGardens(string $userId): IntToGardenArray
     {
         $intToGardenArray = new IntToGardenArray();
 
@@ -229,14 +229,14 @@ class GardenRepository extends Repository
     }
 
     /**
-     * @param int $userId
+     * @param string $userId
      * @param string $gardenId
      * @return Garden
      * @throws NotFound
      * @throws \Exception
      * @throws ConstructionFailure
      */
-    public function getUserGarden(int $userId, string $gardenId): Garden
+    public function getUserGarden(string $userId, string $gardenId): Garden
     {
         $stmt = $this->prepare(
             'SELECT gardens.id as gardenId,
@@ -314,12 +314,12 @@ class GardenRepository extends Repository
     }
 //
     /**
-     * @param int $userId
+     * @param string $userId
      * @param string $gardenId
      * @throws NotFound
      * @throws \Exception
      */
-    public function deleteUserGarden(int $userId, string $gardenId): void
+    public function deleteUserGarden(string $userId, string $gardenId): void
     {
         $stmt1 = $this->prepare(
             'DELETE
