@@ -321,11 +321,17 @@ class GardenRepository extends Repository
      */
     public function deleteUserGarden(int $userId, string $gardenId): void
     {
-        $stmt = $this->prepare(
+        $stmt1 = $this->prepare(
             'DELETE
             FROM `gardens`
             WHERE `user_id` = :user_id
             AND `id` = :id;'
+        );
+
+        $stmt2 = $this->prepare(
+            'DELETE
+            FROM `gardens_plants`
+            WHERE `garden_id` = :id;'
         );
 
         $this->execute(
@@ -333,12 +339,20 @@ class GardenRepository extends Repository
                'user_id' => $userId,
                'id' => $gardenId
             ],
-            $stmt,
+            $stmt1,
             function ($rowCount){ return $rowCount > 1; }
         );
 
-        if($stmt->rowCount() < 1){
+        if($stmt1->rowCount() < 1){
             throw new NotFound($gardenId);
         }
+
+        $this->execute(
+            [
+                'id' => $gardenId
+            ],
+            $stmt2,
+            function (){ return false; }
+        );
     }
 }
