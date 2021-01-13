@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace MyGarden;
 
 use MyGarden\Controllers\ControllerCollection;
-use MyGarden\Database\DatabaseConnection;
 use MyGarden\Factories\SimpleControllerCollectionFactory;
 use MyGarden\Request\Request;
 
