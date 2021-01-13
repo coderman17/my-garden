@@ -11,8 +11,6 @@ use MyGarden\Request\Request;
 
 class App
 {
-    protected DatabaseConnection $databaseConnection;
-
     protected Request $request;
 
     protected Router $router;
@@ -26,8 +24,6 @@ class App
      */
     public function __construct()
     {
-        $this->databaseConnection = new DatabaseConnection();
-
         $this->request = new Request();
 
         $this->controllerFactory = new SimpleControllerCollectionFactory();
