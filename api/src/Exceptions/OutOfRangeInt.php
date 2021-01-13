@@ -6,7 +6,7 @@ namespace MyGarden\Exceptions;
 
 class OutOfRangeInt extends \Exception
 {
-    public function __construct(string $parameter, ?int $min = null, ?int $max = null, \Exception $previous = null)
+    public function __construct(string $parameter, ?int $min = null, ?int $max = null, \Throwable $previous = null)
     {
         $minClause = '';
 
