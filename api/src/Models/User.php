@@ -99,30 +99,22 @@ class User extends Model
         $intToGardenArray = new IntToGardenArray();
 
         $stmt = $this->repository->prepare(
-            'SELECT
-                gardens.id as gardenId,
-                gardens.user_id as gardenUserId,
-                gardens.name,
-                gardens.dimension_x,
-                gardens.dimension_y,
-                gardens_plants.coordinate_x,
-                gardens_plants.coordinate_y,
-                plants.id as plantId,
-                plants.english_name,
-                plants.latin_name,
-                plants.image_link
-            FROM
+            'SELECT '
+                . $this->repository->constructQueryFromAliases(Garden::COLUMN_ALIASES) . ', '
+                . $this->repository->constructQueryFromAliases(PlantLocation::COLUMN_ALIASES) . ', '
+                . $this->repository->constructQueryFromAliases(Plant::COLUMN_ALIASES) .
+            ' FROM
                 `gardens`
             LEFT JOIN
                 gardens_plants
-                ON gardens.id=gardens_plants.garden_id
+                ON gardens.id = gardens_plants.garden_id
             LEFT JOIN
                 plants
-                ON gardens_plants.plant_id=plants.id
+                ON gardens_plants.plant_id = plants.id
             WHERE
                 gardens.user_id = :user_id
             ORDER BY
-                gardenId, gardens_plants.coordinate_x, gardens_plants.coordinate_y;'
+                gardens.id, gardens_plants.coordinate_x, gardens_plants.coordinate_y;'
         );
 
         $this->repository->execute(
@@ -137,56 +129,32 @@ class User extends Model
 
         $garden = null;
 
-        while($row = $stmt->fetch(\PDO::FETCH_OBJ)) {
-            if($row->gardenId !== $previousGardenId) {
-                if($garden !== null){
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            if ($row[Garden::COLUMN_ALIASES['gardens.id']] !== $previousGardenId) {
+                if ($garden !== null){
                     $intToGardenArray->pushItem($garden);
                 }
 
-                try {
-                    $garden = new Garden(
-                        $row->gardenId,
-                        $row->gardenUserId,
-                        $row->name,
-                        $row->dimension_x,
-                        $row->dimension_y
-                    );
+                $garden = $this->repository->gardenFromRow($row);
 
-                } catch (\Exception $e){
-                    throw new ConstructionFailure($e);
-                }
+                $previousGardenId = $garden->getId();
             }
 
-            if ($row->plantId !== null){
-                try {
-                    $plant = new Plant(
-                        $row->plantId,
-                        $row->gardenUserId,
-                        $row->english_name,
-                        $row->latin_name,
-                        $row->image_link
-                    );
-
-                    $plantLocation = new PlantLocation(
-                        $row->plantId,
-                        $row->coordinate_x,
-                        $row->coordinate_y
-                    );
-
-                    $garden->setPlantLocation(
-                        $plant,
-                        $plantLocation
-                    );
-
-                } catch (\Exception $e){
-                    throw new ConstructionFailure($e);
+            if ($row[PlantLocation::COLUMN_ALIASES['gardens_plants.plant_id']] !== null){
+                if ($garden === null){
+                    throw new \Exception('Found pivot table entry without garden table entry');
                 }
-            }
 
-            $previousGardenId = $garden->getId();
+                $garden->setPlantLocation(
+                    $this->repository->plantFromRow($row),
+                    $this->repository->plantLocationFromRow($row)
+                );
+            }
         }
 
-        $intToGardenArray->pushItem($garden);
+        if ($garden !== null){
+            $intToGardenArray->pushItem($garden);
+        }
 
         return $intToGardenArray;
     }
@@ -201,22 +169,21 @@ class User extends Model
     public function getGarden(string $gardenId): Garden
     {
         $stmt = $this->repository->prepare(
-            'SELECT gardens.id as gardenId,
-                gardens.user_id as gardenUserId,
-                gardens.name,
-                gardens.dimension_x,
-                gardens.dimension_y,
-                gardens_plants.coordinate_x,
-                gardens_plants.coordinate_y,
-                plants.id as plantId,
-                plants.english_name,
-                plants.latin_name,
-                plants.image_link
-            FROM `gardens`
-            LEFT JOIN gardens_plants ON gardens.id=gardens_plants.garden_id
-            LEFT JOIN plants ON gardens_plants.plant_id=plants.id
-            WHERE gardens.user_id = :user_id
-            AND gardens.id = :id;'
+            'SELECT '
+                . $this->repository->constructQueryFromAliases(Garden::COLUMN_ALIASES) . ', '
+                . $this->repository->constructQueryFromAliases(PlantLocation::COLUMN_ALIASES) . ', '
+                . $this->repository->constructQueryFromAliases(Plant::COLUMN_ALIASES) .
+            ' FROM
+                `gardens`
+            LEFT JOIN
+                gardens_plants
+                ON gardens.id = gardens_plants.garden_id
+            LEFT JOIN
+                plants
+                ON gardens_plants.plant_id = plants.id
+            WHERE
+                gardens.user_id = :user_id
+                AND gardens.id = :id;'
         );
 
         $this->repository->execute(
@@ -228,53 +195,23 @@ class User extends Model
             function (){ return false; }
         );
 
-        $row = $stmt->fetch(\PDO::FETCH_OBJ);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if(!$row){
             throw new NotFound($gardenId);
         }
 
-        try {
-            $garden = new Garden(
-                $row->gardenId,
-                $row->gardenUserId,
-                $row->name,
-                $row->dimension_x,
-                $row->dimension_y
-            );
-
-        } catch (\Exception $e){
-            throw new ConstructionFailure($e);
-        }
+        $garden = $this->repository->gardenFromRow($row);
 
         while($row) {
-            if ($row->plantId !== null){
-                try {
-                    $plant = new Plant(
-                        $row->plantId,
-                        $row->gardenUserId,
-                        $row->english_name,
-                        $row->latin_name,
-                        $row->image_link
-                    );
-
-                    $plantLocation = new PlantLocation(
-                        $row->plantId,
-                        $row->coordinate_x,
-                        $row->coordinate_y
-                    );
-
+            if ($row[PlantLocation::COLUMN_ALIASES['gardens_plants.plant_id']] !== null){
                     $garden->setPlantLocation(
-                        $plant,
-                        $plantLocation
+                        $this->repository->plantFromRow($row),
+                        $this->repository->plantLocationFromRow($row)
                     );
-
-                } catch (\Exception $e){
-                    throw new ConstructionFailure($e);
-                }
             }
 
-            $row = $stmt->fetch(\PDO::FETCH_OBJ);
+            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         }
 
         return $garden;
@@ -449,8 +386,8 @@ class User extends Model
         $stringToPlantArray = new StringToPlantArray();
 
         $stmt = $this->repository->prepare(
-            'SELECT *
-            FROM `plants`
+            'SELECT ' . $this->repository->constructQueryFromAliases(Plant::COLUMN_ALIASES) .
+            ' FROM `plants`
             WHERE `user_id` = :user_id;'
         );
 
@@ -462,19 +399,8 @@ class User extends Model
             function (){ return false; }
         );
 
-        while($row = $stmt->fetch(\PDO::FETCH_OBJ)) {
-            try {
-                $plant = new Plant(
-                    $row->id,
-                    $row->user_id,
-                    $row->english_name,
-                    $row->latin_name,
-                    $row->image_link
-                );
-
-            } catch (\Exception $e){
-                throw new ConstructionFailure($e);
-            }
+        while($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+            $plant = $this->repository->plantFromRow($row);
 
             $stringToPlantArray->setItem($plant->getId(), $plant);
         }
@@ -492,8 +418,9 @@ class User extends Model
     public function getPlant(string $plantId): Plant
     {
         $stmt = $this->repository->prepare(
-            'SELECT *
-            FROM `plants`
+            'SELECT '
+            . $this->repository->constructQueryFromAliases(Plant::COLUMN_ALIASES) .
+            ' FROM `plants`
             WHERE `user_id` = :user_id
             AND `id` = :id;'
         );
@@ -507,25 +434,13 @@ class User extends Model
             function ($rowCount){ return $rowCount > 1; }
         );
 
-        $row = $stmt->fetch(\PDO::FETCH_OBJ);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if(!$row){
             throw new NotFound($plantId);
         }
 
-        try {
-            $plant = new Plant(
-                $row->id,
-                $row->user_id,
-                $row->english_name,
-                $row->latin_name,
-                $row->image_link
-            );
-        } catch (\Exception $e){
-            throw new ConstructionFailure($e);
-        }
-
-        return $plant;
+        return $this->repository->plantFromRow($row);
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnused */ //will be used in future, TODO - instantiate proper login and auth
 
 declare(strict_types = 1);
 

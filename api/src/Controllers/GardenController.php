@@ -103,6 +103,28 @@ class GardenController extends Controller
             $request->params['dimensionY']
         );
 
+        $this->populateGardenWithLocations($garden, $request);
+
+        $this->user->saveGarden($garden);
+
+        $this->response->setCode(201);
+
+        $this->response->setBodySingleResource($garden);
+
+        $this->view->display($this->response);
+    }
+
+    /**
+     * @param Garden $garden
+     * @param Request $request
+     * @throws ConstructionFailure
+     * @throws NotFound
+     * @throws OutOfRangeInt
+     * @throws \InvalidArgumentException
+     * @throws \Exception
+     */
+    protected function populateGardenWithLocations(Garden $garden, Request $request): void
+    {
         $plantLocations = [];
 
         foreach($request->params['plantLocations'] as $plantLocation) {
@@ -117,14 +139,6 @@ class GardenController extends Controller
         }
 
         $this->user->setPlantLocations($garden, $plantLocations);
-
-        $this->user->saveGarden($garden);
-
-        $this->response->setCode(201);
-
-        $this->response->setBodySingleResource($garden);
-
-        $this->view->display($this->response);
     }
 
     /**
@@ -150,20 +164,7 @@ class GardenController extends Controller
             $request->params['dimensionY']
         );
 
-        $plantLocations = [];
-
-        foreach($request->params['plantLocations'] as $plantLocation) {
-            array_push(
-                $plantLocations,
-                new PlantLocation(
-                    $plantLocation['id'],
-                    $plantLocation['coordinateX'],
-                    $plantLocation['coordinateY']
-                )
-            );
-        }
-
-        $this->user->setPlantLocations($garden, $plantLocations);
+        $this->populateGardenWithLocations($garden, $request);
 
         $this->response->setCode(200);
 

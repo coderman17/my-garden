@@ -9,6 +9,14 @@ use MyGarden\Exceptions\UnderMinChars;
 
 class Plant extends Model
 {
+    public const COLUMN_ALIASES = [
+        'plants.id'             =>  'plantsId',
+        'plants.user_id'        =>  'plantsUserId',
+        'plants.english_name'   =>  'plantsEnglishName',
+        'plants.latin_name'     =>  'plantsLatinName',
+        'plants.image_link'     =>  'plantsImageLink'
+    ];
+
     protected string $id;
 
     protected string $userId;

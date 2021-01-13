@@ -5,6 +5,10 @@ declare(strict_types = 1);
 namespace MyGarden\Repositories;
 
 use MyGarden\Database\DatabaseConnection;
+use MyGarden\Exceptions\ConstructionFailure;
+use MyGarden\Models\Garden;
+use MyGarden\Models\Plant;
+use MyGarden\Models\PlantLocation;
 
 class Repository
 {
@@ -43,6 +47,88 @@ class Repository
 
         if ($unexpectedRowCount($stmt->rowCount()) === true){
             throw new \Exception('An unexpected number of database rows were affected. Number actually affected: ' . $stmt->rowCount());
+        }
+    }
+
+    /**
+     * @param array<string, string> $columnAliases
+     * @return string
+     */
+    public function constructQueryFromAliases(array $columnAliases): string
+    {
+        $string = '';
+
+        foreach ($columnAliases as $column => $alias){
+            $string = $string . $column . ' as ' . $alias . ', ';
+        }
+
+        return substr($string, 0, -2);
+    }
+
+    /**
+     * @param array $row
+     * @return Garden
+     * @throws ConstructionFailure
+     *
+     * @phpstan-ignore-next-line    //haven't specified types of $row because they are various, and we catch Throwable from constructor anyway
+     */
+    public function gardenFromRow(array $row): Garden
+    {
+        try {
+            return new Garden(
+                $row[Garden::COLUMN_ALIASES['gardens.id']],
+                $row[Garden::COLUMN_ALIASES['gardens.user_id']],
+                $row[Garden::COLUMN_ALIASES['gardens.name']],
+                $row[Garden::COLUMN_ALIASES['gardens.dimension_x']],
+                $row[Garden::COLUMN_ALIASES['gardens.dimension_y']]
+            );
+
+        } catch (\Throwable $e){
+            throw new ConstructionFailure($e);
+        }
+    }
+
+    /**
+     * @param array $row
+     * @return Plant
+     * @throws ConstructionFailure
+     *
+     * @phpstan-ignore-next-line    //haven't specified types of $row because they are various, and we catch Throwable from constructor anyway
+     */
+    public function plantFromRow(array $row): Plant
+    {
+        try {
+            return new Plant(
+                $row[Plant::COLUMN_ALIASES['plants.id']],
+                $row[Plant::COLUMN_ALIASES['plants.user_id']],
+                $row[Plant::COLUMN_ALIASES['plants.english_name']],
+                $row[Plant::COLUMN_ALIASES['plants.latin_name']],
+                $row[Plant::COLUMN_ALIASES['plants.image_link']]
+            );
+
+        } catch (\Exception $e){
+            throw new ConstructionFailure($e);
+        }
+    }
+
+    /**
+     * @param array $row
+     * @return PlantLocation
+     * @throws ConstructionFailure
+     *
+     * @phpstan-ignore-next-line    //haven't specified types of $row because they are various, and we catch Throwable from constructor anyway
+     */
+    public function plantLocationFromRow(array $row): PlantLocation
+    {
+        try {
+            return new PlantLocation(
+                $row[PlantLocation::COLUMN_ALIASES['gardens_plants.plant_id']],
+                $row[PlantLocation::COLUMN_ALIASES['gardens_plants.coordinate_x']],
+                $row[PlantLocation::COLUMN_ALIASES['gardens_plants.coordinate_y']]
+            );
+
+        } catch (\Exception $e){
+            throw new ConstructionFailure($e);
         }
     }
 }

@@ -6,6 +6,13 @@ namespace MyGarden\Models;
 
 class PlantLocation extends Model
 {
+    public const COLUMN_ALIASES = [
+        'gardens_plants.garden_id'      =>  'gardensPlantsGardenId',
+        'gardens_plants.plant_id'       =>  'gardensPlantsPlantId',
+        'gardens_plants.coordinate_x'   =>  'gardensPlantsCoordinateX',
+        'gardens_plants.coordinate_y'   =>  'gardensPlantsCoordinateY'
+    ];
+
     protected string $plantId;
 
     protected int $coordinateX;

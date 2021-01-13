@@ -61,8 +61,8 @@ VALUES
 
 INSERT INTO gardens (id, user_id, name, dimension_x, dimension_y)
 VALUES
-    ('5ff3be4703a1d', 1, 'Show Garden', 9, 10),
-    ('6fed05c8c6423', 1, 'Vegetable Patch', 4, 8);
+    ('5ff3be4703a1d', '21ea8ea135b2g', 'Show Garden', 9, 10),
+    ('6fed05c8c6423', '21ea8ea135b2g', 'Vegetable Patch', 4, 8);
 
 INSERT INTO gardens_plants (garden_id, plant_id, coordinate_x, coordinate_y)
 VALUES
