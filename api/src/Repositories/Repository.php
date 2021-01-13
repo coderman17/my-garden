@@ -106,7 +106,7 @@ class Repository
                 $row[Plant::COLUMN_ALIASES['plants.image_link']]
             );
 
-        } catch (\Exception $e){
+        } catch (\Throwable $e){
             throw new ConstructionFailure($e);
         }
     }
@@ -127,7 +127,7 @@ class Repository
                 $row[PlantLocation::COLUMN_ALIASES['gardens_plants.coordinate_y']]
             );
 
-        } catch (\Exception $e){
+        } catch (\Throwable $e){
             throw new ConstructionFailure($e);
         }
     }
