@@ -6,7 +6,7 @@ namespace MyGarden\Exceptions;
 
 class WrongTypeParameter extends \Exception
 {
-    public function __construct(string $parameter, string $expectedType, \Exception $previous = null)
+    public function __construct(string $parameter, string $expectedType, \Throwable $previous = null)
     {
         $message = "Parameter '" . $parameter . "' should be of type " . $expectedType;
 

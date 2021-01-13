@@ -130,7 +130,7 @@ class FeatureContext implements Context
     {
         $options = [
             'http' => [
-                'header'  => "Content-type: application/json",
+                'header'  => ["Accept: application/json", "Content-type: application/json"],
                 'method'  => $method,
                 'content' => json_encode($this->requestBody)
             ]

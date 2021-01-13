@@ -7,7 +7,6 @@ namespace MyGarden\Controllers;
 use MyGarden\Exceptions\ConstructionFailure;
 use MyGarden\Exceptions\MissingParameter;
 use MyGarden\Exceptions\NotFound;
-use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
@@ -30,11 +29,11 @@ class PlantController extends Controller
      */
     public function getAll(): void
     {
-        $plantArray = $this->repositoryCollection->plantRepository->getUserPlants($this->user->getId());
+        $plantArray = $this->user->getPlants();
 
         $this->response->setCode(200);
 
-        $this->response->setBodyCollectionResource($plantArray);
+        $this->response->setBodyCollectionResource($plantArray->getItems());
 
         $this->view->display($this->response);
     }
@@ -51,10 +50,7 @@ class PlantController extends Controller
     {
         $this->validator->validateRequestId($request);
 
-        $plant = $this->repositoryCollection->plantRepository->getUserPlant(
-            $this->user->getId(),
-            $request->params['id']
-        );
+        $plant = $this->user->getPlant($request->params['id']);
 
         $this->response->setCode(200);
 
@@ -74,10 +70,7 @@ class PlantController extends Controller
     {
         $this->validator->validateRequestId($request);
 
-        $this->repositoryCollection->plantRepository->deleteUserPlant(
-            $this->user->getId(),
-            $request->params['id']
-        );
+        $this->user->deletePlant($request->params['id']);
 
         $this->response->setCode(204);
 
@@ -87,7 +80,6 @@ class PlantController extends Controller
     /**
      * @param Request $request
      * @throws MissingParameter
-     * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws WrongTypeParameter
@@ -105,7 +97,7 @@ class PlantController extends Controller
             $request->params['imageLink']
         );
 
-        $this->repositoryCollection->plantRepository->saveUserPlant($plant);
+        $this->user->savePlant($plant);
 
         $this->response->setCode(201);
 
@@ -119,7 +111,6 @@ class PlantController extends Controller
      * @throws \Exception
      * @throws MissingParameter
      * @throws WrongTypeParameter
-     * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
      */
@@ -138,9 +129,9 @@ class PlantController extends Controller
         $this->response->setCode(200);
 
         try {
-            $this->repositoryCollection->plantRepository->updateUserPlant($plant);
+            $this->user->updatePlant($plant);
         } catch (NotFound $e) {
-            $this->repositoryCollection->plantRepository->saveUserPlant($plant);
+            $this->user->savePlant($plant);
 
             $this->response->setCode(201);
         }

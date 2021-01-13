@@ -5,11 +5,10 @@ declare(strict_types = 1);
 namespace MyGarden\Responses;
 
 use MyGarden\Models\Model;
-use TypedArrays\IntToValueArrays\IntToClassArray;
 
 class JsonMappedResponse implements ResponseInterface
 {
-    protected int $code;
+    protected int $code = 0;
 
     /**
      * @var array<string, int|string>|array<array<string, int|string>>
@@ -39,7 +38,10 @@ class JsonMappedResponse implements ResponseInterface
         $this->body = $model->mapJson();
     }
 
-    public function setBodyCollectionResource(IntToClassArray $array): void
+    /**
+     * @inheritDoc
+     */
+    public function setBodyCollectionResource(array $array): void
     {
         foreach ($array as $model){
             array_push(

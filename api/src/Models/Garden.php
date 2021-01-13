@@ -10,9 +10,17 @@ use MyGarden\Exceptions\UnderMinChars;
 
 class Garden extends Model
 {
+    public const COLUMN_ALIASES = [
+        'gardens.id'            =>  'gardensId',
+        'gardens.user_id'       =>  'gardensUserId',
+        'gardens.name'          =>  'gardensName',
+        'gardens.dimension_x'   =>  'gardensDimensionX',
+        'gardens.dimension_y'   =>  'gardensDimensionY'
+    ];
+
     protected string $id;
 
-    protected int $userId;
+    protected string $userId;
 
     protected string $name;
 
@@ -27,7 +35,7 @@ class Garden extends Model
 
     /**
      * @param string|null $id
-     * @param int $userId
+     * @param string $userId
      * @param string $name
      * @param int $dimensionX
      * @param int $dimensionY
@@ -35,7 +43,7 @@ class Garden extends Model
      * @throws OverMaxChars
      * @throws UnderMinChars
      */
-    public function __construct(?string $id, int $userId, string $name, int $dimensionX, int $dimensionY)
+    public function __construct(?string $id, string $userId, string $name, int $dimensionX, int $dimensionY)
     {
         if ($id !== null) {
             $this->validateParamStringLength('id', $id, Model::UUID_LENGTH, Model::UUID_LENGTH);
@@ -45,7 +53,7 @@ class Garden extends Model
             $this->id = uniqid();
         }
 
-        $this->validateParamIntRange('userId', $userId, 0, Model::UNSIGNED_INT_MAX);
+        $this->validateParamStringLength('userId', $userId, Model::UUID_LENGTH, Model::UUID_LENGTH);
 
         $this->userId = $userId;
 
@@ -67,7 +75,7 @@ class Garden extends Model
         return $this->id;
     }
 
-    public function getUserId(): int
+    public function getUserId(): string
     {
         return $this->userId;
     }
@@ -89,16 +97,24 @@ class Garden extends Model
 
     /**
      * @param Plant $plant
-     * @param int $coordinateX
-     * @param int $coordinateY
+     * @param PlantLocation $plantLocation
      * @throws OutOfRangeInt
      */
-    public function setPlantLocation(Plant $plant, int $coordinateX, int $coordinateY): void
+    public function setPlantLocation(Plant $plant, PlantLocation $plantLocation): void
     {
         if($plant->getUserId() !== $this->userId){
             //logic exception?
             throw new \InvalidArgumentException('The User associated with the plant does not match the User associated with the garden');
         }
+
+        if($plant->getId() !== $plantLocation->getPlantId()){
+            //logic exception?
+            throw new \InvalidArgumentException('The plant provided does not have the same id as the plant location');
+        }
+
+        $coordinateX = $plantLocation->getCoordinateX();
+
+        $coordinateY = $plantLocation->getCoordinateY();
 
         $this->validateParamIntRange('coordinateX for ' . $plant->getId(), $coordinateX, 1, $this->dimensionX);
 
@@ -109,7 +125,7 @@ class Garden extends Model
             throw new \LogicException('There is already a plant at that location in the garden', 400);
         }
 
-        $this->plantLocations[$coordinateX][$coordinateY] = new PlantLocation($plant->getId(), $coordinateX, $coordinateY);
+        $this->plantLocations[$coordinateX][$coordinateY] = $plantLocation;
     }
 
     public function mapJson(): array

@@ -6,7 +6,7 @@ namespace MyGarden\Exceptions;
 
 class OverMaxChars extends \Exception
 {
-    public function __construct(string $parameter, int $maxChars, \Exception $previous = null)
+    public function __construct(string $parameter, int $maxChars, \Throwable $previous = null)
     {
         $message = 'Parameter \'' . $parameter . '\' should have no more than ' . strval($maxChars) . ' character(s)';
 

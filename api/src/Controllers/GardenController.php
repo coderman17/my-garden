@@ -12,6 +12,7 @@ use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
 use MyGarden\Models\Garden;
+use MyGarden\Models\PlantLocation;
 use MyGarden\Request\Request;
 use MyGarden\Validators\GardenValidator;
 use MyGarden\Validators\Validator;
@@ -30,11 +31,11 @@ class GardenController extends Controller
      */
     public function getAll(): void
     {
-        $gardenArray = $this->repositoryCollection->gardenRepository->getUserGardens($this->user->getId());
+        $gardenArray = $this->user->getGardens();
 
         $this->response->setCode(200);
 
-        $this->response->setBodyCollectionResource($gardenArray);
+        $this->response->setBodyCollectionResource($gardenArray->getItems());
 
         $this->view->display($this->response);
     }
@@ -51,10 +52,7 @@ class GardenController extends Controller
     {
         $this->validator->validateRequestId($request);
 
-        $garden = $this->repositoryCollection->gardenRepository->getUserGarden(
-            $this->user->getId(),
-            $request->params['id']
-        );
+        $garden = $this->user->getGarden($request->params['id']);
 
         $this->response->setCode(200);
 
@@ -75,10 +73,7 @@ class GardenController extends Controller
     {
         $this->validator->validateRequestId($request);
 
-        $this->repositoryCollection->gardenRepository->deleteUserGarden(
-            $this->user->getId(),
-            $request->params['id']
-        );
+        $this->user->deleteGarden($request->params['id']);
 
         $this->response->setCode(204);
 
@@ -108,27 +103,42 @@ class GardenController extends Controller
             $request->params['dimensionY']
         );
 
-        foreach($request->params['plantLocations'] as $plantLocation){
-            //TODO perhaps this should be one call to get them in bulk or get all user plants then select relevant ones
-            $plant = $this->repositoryCollection->plantRepository->getUserPlant(
-                $this->user->getId(),
-                $plantLocation['id']
-            );
+        $this->populateGardenWithLocations($garden, $request);
 
-            $garden->setPlantLocation(
-                $plant,
-                $plantLocation['coordinateX'],
-                $plantLocation['coordinateY']
-            );
-        }
-
-        $this->repositoryCollection->gardenRepository->saveUserGarden($garden);
+        $this->user->saveGarden($garden);
 
         $this->response->setCode(201);
 
         $this->response->setBodySingleResource($garden);
 
         $this->view->display($this->response);
+    }
+
+    /**
+     * @param Garden $garden
+     * @param Request $request
+     * @throws ConstructionFailure
+     * @throws NotFound
+     * @throws OutOfRangeInt
+     * @throws \InvalidArgumentException
+     * @throws \Exception
+     */
+    protected function populateGardenWithLocations(Garden $garden, Request $request): void
+    {
+        $plantLocations = [];
+
+        foreach($request->params['plantLocations'] as $plantLocation) {
+            array_push(
+                $plantLocations,
+                new PlantLocation(
+                    $plantLocation['id'],
+                    $plantLocation['coordinateX'],
+                    $plantLocation['coordinateY']
+                )
+            );
+        }
+
+        $this->user->setPlantLocations($garden, $plantLocations);
     }
 
     /**
@@ -154,26 +164,14 @@ class GardenController extends Controller
             $request->params['dimensionY']
         );
 
-        foreach($request->params['plantLocations'] as $plantLocation){
-            //TODO perhaps this should be one call to get them in bulk or get all user plants then select relevant ones
-            $plant = $this->repositoryCollection->plantRepository->getUserPlant(
-                $this->user->getId(),
-                $plantLocation['id']
-            );
-
-            $garden->setPlantLocation(
-                $plant,
-                $plantLocation['coordinateX'],
-                $plantLocation['coordinateY']
-            );
-        }
+        $this->populateGardenWithLocations($garden, $request);
 
         $this->response->setCode(200);
 
         try {
-            $this->repositoryCollection->gardenRepository->updateUserGarden($garden);
+            $this->user->updateGarden($garden);
         } catch (NotFound $e) {
-            $this->repositoryCollection->gardenRepository->saveUserGarden($garden);
+            $this->user->saveGarden($garden);
 
             $this->response->setCode(201);
         }

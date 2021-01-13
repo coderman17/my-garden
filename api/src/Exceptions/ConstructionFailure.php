@@ -6,7 +6,7 @@ namespace MyGarden\Exceptions;
 
 class ConstructionFailure extends \Exception
 {
-    public function __construct(\Exception $previous = null)
+    public function __construct(\Throwable $previous = null)
     {
         $message = 'Could not construct a class from database data';
 

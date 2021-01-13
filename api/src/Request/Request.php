@@ -27,8 +27,10 @@ class Request
         if ($this->method === 'POST' || $this->method === 'PUT') {
             $inputJSON = file_get_contents('php://input');
 
-            foreach (json_decode($inputJSON, true) as $k => $v) {
-                $this->params[$k] = $v;
+            if ($inputJSON !== false) {
+                foreach (json_decode($inputJSON, true) as $k => $v) {
+                    $this->params[$k] = $v;
+                }
             }
         }
 

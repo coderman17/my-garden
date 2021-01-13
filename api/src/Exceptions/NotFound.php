@@ -6,7 +6,7 @@ namespace MyGarden\Exceptions;
 
 class NotFound extends \Exception
 {
-    public function __construct(string $resourceId = null, \Exception $previous = null)
+    public function __construct(string $resourceId = null, \Throwable $previous = null)
     {
         $parentheses = '';
 

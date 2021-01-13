@@ -6,7 +6,7 @@ namespace MyGarden\Exceptions;
 
 class MissingParameter extends \Exception
 {
-    public function __construct(string $parameter, \Exception $previous = null)
+    public function __construct(string $parameter, \Throwable $previous = null)
     {
         $message = "Parameter '" . $parameter . "' is required";
 

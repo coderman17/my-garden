@@ -71,61 +71,71 @@ class Router
     protected function populateRoutes(): void
     {
         $this->routes['GET']['plant'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->plantController->get($this->request);
             }
         ];
 
         $this->routes['GET']['plants'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->plantController->getAll();
             }
         ];
 
         $this->routes['DELETE']['plant'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->plantController->delete($this->request);
             }
         ];
 
         $this->routes['PUT']['plant'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->plantController->update($this->request);
             }
         ];
 
         $this->routes['POST']['plant'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->plantController->store($this->request);
             }
         ];
 
         $this->routes['GET']['garden'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->gardenController->get($this->request);
             }
         ];
 
         $this->routes['GET']['gardens'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->gardenController->getAll();
             }
         ];
 
         $this->routes['DELETE']['garden'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->gardenController->delete($this->request);
             }
         ];
 
         $this->routes['PUT']['garden'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->gardenController->update($this->request);
             }
         ];
 
         $this->routes['POST']['garden'] = [
-            'method' => function(){
+            'method' => function(): void
+            {
                 $this->gardenController->store($this->request);
             }
         ];

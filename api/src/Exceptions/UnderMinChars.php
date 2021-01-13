@@ -6,7 +6,7 @@ namespace MyGarden\Exceptions;
 
 class UnderMinChars extends \Exception
 {
-    public function __construct(string $parameter, int $minChars, \Exception $previous = null)
+    public function __construct(string $parameter, int $minChars, \Throwable $previous = null)
     {
         $message = 'Parameter \'' . $parameter . '\' should have no fewer than ' . strval($minChars) . ' character(s)';
 

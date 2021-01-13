@@ -6,9 +6,21 @@ namespace MyGarden\Exceptions;
 
 class OutOfRangeInt extends \Exception
 {
-    public function __construct(string $parameter, int $min, int $max, \Exception $previous = null)
+    public function __construct(string $parameter, ?int $min = null, ?int $max = null, \Throwable $previous = null)
     {
-        $message = 'Parameter \'' . $parameter . '\' should be between ' . strval($min) . ' and ' . strval($max);
+        $minClause = '';
+
+        $maxClause = '';
+
+        if ($min !== null){
+            $minClause = ' The minimum value is ' . strval($min) . '.';
+        }
+
+        if ($max !== null){
+            $maxClause = ' The maximum value is ' . strval($max) . '.';
+        }
+
+        $message = 'Parameter \'' . $parameter . '\' is out of range.' . $minClause . $maxClause;
 
         parent::__construct($message, 400, $previous);
     }
