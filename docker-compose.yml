@@ -8,14 +8,14 @@ services:
       dockerfile: api/Dockerfile
     image: php-image
     container_name: app
-    restart: unless-stopped
+    restart: "on-failure"
     tty: true
     volumes:
-      - ./api/:/var/www/my-garden/api/
+      - ./api/features:/var/www/my-garden/api/features
+      - ./api/src:/var/www/my-garden/api/src
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
-    working_dir: /var/www
     networks:
       - app-network
 
