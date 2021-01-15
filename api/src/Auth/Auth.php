@@ -23,7 +23,7 @@ class Auth
     {
         /** @noinspection SpellCheckingInspection */
         return new User(
-            '21ea8ea135b2g',
+            'MG21ea8ea135b2g',
             'dan',
             'dan@email.com',
             '$2y$10$W4ixd.rF03iRVuECIP1Hu.yVH/eyStgiKgTmOqqEHBI9vuSoYnxvi' // = 'password'

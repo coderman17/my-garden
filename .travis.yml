@@ -12,6 +12,7 @@ install:
 
 before_script:
   - cd ../../
+  - docker-compose build
   - docker-compose up -d
   - sleep 15
   - docker exec -u root mysql chmod 777 /etc/mysql/scripts/migrate.sh

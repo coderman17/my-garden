@@ -41,7 +41,7 @@ class User extends Model
 
             $this->id = $id;
         } else {
-            $this->id = uniqid();
+            $this->id = uniqid('MG');
         }
 
         $this->validateParamStringLength('username', $username, 1, 30);
