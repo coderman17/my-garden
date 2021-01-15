@@ -233,7 +233,7 @@ class FeatureContext implements Context
      */
     public function iGenerateAndSaveARandom(string $param): void
     {
-        $this->savedParams[$param] = uniqid();
+        $this->savedParams[$param] = uniqid('MG');
     }
 
 

@@ -50,7 +50,7 @@ class Garden extends Model
 
             $this->id = $id;
         } else {
-            $this->id = uniqid();
+            $this->id = uniqid('MG');
         }
 
         $this->validateParamStringLength('userId', $userId, Model::UUID_LENGTH, Model::UUID_LENGTH);
