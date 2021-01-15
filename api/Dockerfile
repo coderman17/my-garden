@@ -9,7 +9,8 @@ RUN apt-get update
 
 # Copy composer.lock and composer.json
 #doubt this is needed, and it's ugly
-COPY api/composer.lock api/composer.json /var/www/
+#COPY api/composer.lock api/composer.json /var/www/my-garden/api/
+COPY api/ /var/www/my-garden/api/
 
 # Set working directory
 WORKDIR /var/www
@@ -27,6 +28,10 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+WORKDIR /var/www/my-garden/api/
+
+RUN composer install
 
 # Set working directory
 WORKDIR /var
