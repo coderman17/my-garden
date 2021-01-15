@@ -4,12 +4,6 @@ dist: xenial
 php:
   - 7.4.11
 
-install:
-  - cd api
-  - composer install
-  - cd ../ui/my-garden
-  - npm install
-
 before_script:
   - cd ../../
   - docker-compose build
