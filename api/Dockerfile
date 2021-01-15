@@ -17,6 +17,9 @@ WORKDIR /var/www
 # Install dependencies (slim this down in future, many are unnecessary)
 RUN apt-get update && apt-get install -y \
     curl \
+    libzip-dev \
+    zip \
+    && docker-php-ext-install zip \
     && docker-php-ext-install pdo_mysql
 
 # Clear cache
