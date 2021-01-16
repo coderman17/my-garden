@@ -18,6 +18,8 @@ class App
 
     protected ControllerCollection $controllerCollection;
 
+    protected Routes $routes;
+
     /**
      * @throws \Exception
      */
@@ -29,7 +31,9 @@ class App
 
         $this->controllerCollection = $this->controllerFactory->create($this->request);
 
-        $this->router = new Router($this->controllerCollection);
+        $this->routes = new Routes($this->controllerCollection, $this->request);
+
+        $this->router = new Router($this->routes, $this->request);
     }
 
     /**
@@ -39,7 +43,7 @@ class App
     {
 //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
 
-        $this->router->handle($this->request);
+        $this->router->handleRequest();
 
 //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
     }
