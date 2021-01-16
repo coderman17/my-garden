@@ -29,13 +29,13 @@
 		}
 	},
 	"require-dev": {
-		"behat/behat": "~3.8.0",
+		"behat/behat": "^3",
 		"phpunit/phpunit": "^9",
-		"phpstan/phpstan": "^0.12.63",
-		"vimeo/psalm": "^4.3"
+		"phpstan/phpstan": "^0",
+		"vimeo/psalm": "^4"
 	},
 	"require": {
-		"coderman17/typed-arrays": "0.3.*",
+		"coderman17/typed-arrays": "dev-master",
 		"ext-json": "*",
 		"ext-pdo": "*"
     },

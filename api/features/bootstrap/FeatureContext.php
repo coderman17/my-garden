@@ -217,9 +217,15 @@ class FeatureContext implements Context
 
     /**
      * @Then the response body should contain what is expected
+     *
+     * @throws \Exception
      */
     public function theResponseBodyShouldContainWhatIsExpected(): void
     {
+        if (!is_iterable($this->actualResponseBody)){
+            throw new \Exception('Response body needs to be an iterable');
+        }
+
         Assert::assertContainsEquals(
             $this->expectedResponseBody,
             $this->actualResponseBody
