@@ -6,7 +6,7 @@ declare(strict_types = 1);
 namespace MyGarden\TypedArrays;
 
 use MyGarden\Models\Plant;
-use TypedArrays\StringToValueArrays\StringToClassArray;
+use TypedArrays\StringToClassArray;
 
 class StringToPlantArray extends StringToClassArray
 {

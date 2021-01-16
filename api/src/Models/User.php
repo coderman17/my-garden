@@ -243,7 +243,7 @@ class User extends Model
                 'id' => $gardenId
             ],
             $stmt1,
-            function ($rowCount){ return $rowCount > 1; }
+            function (int $rowCount){ return $rowCount > 1; }
         );
 
         if($stmt1->rowCount() < 1){
@@ -288,7 +288,7 @@ class User extends Model
                 'dimension_y' => $garden->getDimensionY(),
             ],
             $stmtGardens,
-            function ($rowCount){ return $rowCount !== 1; }
+            function (int $rowCount){ return $rowCount !== 1; }
         );
 
         foreach($plantLocations as $plantLocation) {
@@ -300,7 +300,7 @@ class User extends Model
                     'coordinate_y' => $plantLocation->getCoordinateY(),
                 ],
                 $stmtGardenPlants,
-                function ($rowCount){ return $rowCount !== 1; }
+                function (int $rowCount){ return $rowCount !== 1; }
             );
         }
     }
@@ -330,7 +330,7 @@ class User extends Model
                 'dimension_y' => $garden->getDimensionY(),
             ],
             $stmt,
-            function ($rowCount){ return $rowCount > 1; }
+            function (int $rowCount){ return $rowCount > 1; }
         );
 
         if(
@@ -370,7 +370,7 @@ class User extends Model
                     'coordinate_y' => $plantLocation->getCoordinateY(),
                 ],
                 $stmtGardenPlants,
-                function ($rowCount){ return $rowCount !== 1; }
+                function (int $rowCount){ return $rowCount !== 1; }
             );
         }
     }
@@ -431,7 +431,7 @@ class User extends Model
                 'id' => $plantId
             ],
             $stmt,
-            function ($rowCount){ return $rowCount > 1; }
+            function (int $rowCount){ return $rowCount > 1; }
         );
 
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -491,7 +491,7 @@ class User extends Model
                 'id' => $plantId
             ],
             $stmt,
-            function ($rowCount){ return $rowCount > 1; }
+            function (int $rowCount){ return $rowCount > 1; }
         );
 
         if($stmt->rowCount() < 1){
@@ -520,7 +520,7 @@ class User extends Model
                 'image_link' => $plant->getImageLink(),
             ],
             $stmt,
-            function ($rowCount){ return $rowCount !== 1; }
+            function (int $rowCount){ return $rowCount !== 1; }
         );
     }
 
@@ -549,7 +549,7 @@ class User extends Model
                 'image_link' => $plant->getImageLink(),
             ],
             $stmt,
-            function ($rowCount){ return $rowCount > 1; }
+            function (int $rowCount){ return $rowCount > 1; }
         );
 
         if(

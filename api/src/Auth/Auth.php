@@ -51,7 +51,7 @@ class Auth
                 'email' => $email
             ],
             $stmt,
-            function ($rowCount){ return $rowCount > 1; }
+            function (int $rowCount){ return $rowCount > 1; }
         );
 
         $row = $stmt->fetch(\PDO::FETCH_OBJ);

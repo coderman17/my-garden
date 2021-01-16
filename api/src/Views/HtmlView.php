@@ -55,6 +55,8 @@ class HtmlView implements ViewInterface
     /**
      * @param array<string, int|string>|array<array<string, int|string>> $multilevelArray
      * @param array<int, string> $pushArray
+     *
+     * @psalm-suppress PossiblyInvalidArgument //this class is only a quick exercise as above
      */
     protected function makeRow(array $multilevelArray, array &$pushArray): void
     {

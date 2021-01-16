@@ -14,23 +14,30 @@ class FeatureContext implements Context
     /**
      * @var array<\stdClass>|\stdClass
      */
-    protected $actualResponseBody;
+    protected $actualResponseBody = [];
 
     /**
      * @var array<mixed, mixed>
      */
-    protected array $responseHeaders;
+    protected array $responseHeaders = [];
 
     /**
      * @var array<string, mixed>
      */
-    protected array $savedParams;
+    protected array $savedParams = [];
 
-    protected string $generatedParameter;
+    protected string $generatedParameter = '';
 
     protected \stdClass $requestBody;
 
     protected \stdClass $expectedResponseBody;
+
+    public function __construct()
+    {
+        $this->requestBody = new \stdClass();
+
+        $this->expectedResponseBody = new \stdClass();
+    }
 
     /**
      * @Given I have a request body:
@@ -217,9 +224,15 @@ class FeatureContext implements Context
 
     /**
      * @Then the response body should contain what is expected
+     *
+     * @throws \Exception
      */
     public function theResponseBodyShouldContainWhatIsExpected(): void
     {
+        if (!is_iterable($this->actualResponseBody)){
+            throw new \Exception('Response body needs to be an iterable');
+        }
+
         Assert::assertContainsEquals(
             $this->expectedResponseBody,
             $this->actualResponseBody

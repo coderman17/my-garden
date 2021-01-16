@@ -6,7 +6,7 @@ declare(strict_types = 1);
 namespace MyGarden\TypedArrays;
 
 use MyGarden\Models\Garden;
-use TypedArrays\IntToValueArrays\IntToClassArray;
+use TypedArrays\IntToClassArray;
 
 class IntToGardenArray extends IntToClassArray
 {
