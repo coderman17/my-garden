@@ -14,23 +14,30 @@ class FeatureContext implements Context
     /**
      * @var array<\stdClass>|\stdClass
      */
-    protected $actualResponseBody;
+    protected $actualResponseBody = [];
 
     /**
      * @var array<mixed, mixed>
      */
-    protected array $responseHeaders;
+    protected array $responseHeaders = [];
 
     /**
      * @var array<string, mixed>
      */
-    protected array $savedParams;
+    protected array $savedParams = [];
 
-    protected string $generatedParameter;
+    protected string $generatedParameter = '';
 
     protected \stdClass $requestBody;
 
     protected \stdClass $expectedResponseBody;
+
+    public function __construct()
+    {
+        $this->requestBody = new \stdClass();
+
+        $this->expectedResponseBody = new \stdClass();
+    }
 
     /**
      * @Given I have a request body:

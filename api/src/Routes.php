@@ -28,7 +28,7 @@ class Routes
 
         $this->gardenController = $controllerCollection->gardenController;
 
-        $this->populateRoutes();
+        $this->routes = $this->createRoutes();
 
         $this->request = $request;
     }
@@ -41,76 +41,83 @@ class Routes
         return $this->routes;
     }
 
-    protected function populateRoutes(): void
+    /**
+     * @return array<string, array>
+     */
+    protected function createRoutes(): array
     {
-        $this->routes['GET']['plant'] = [
+        $routes = [];
+
+        $routes['GET']['plant'] = [
             'method' => function(): void
             {
                 $this->plantController->get($this->request);
             }
         ];
 
-        $this->routes['GET']['plants'] = [
+        $routes['GET']['plants'] = [
             'method' => function(): void
             {
                 $this->plantController->getAll();
             }
         ];
 
-        $this->routes['DELETE']['plant'] = [
+        $routes['DELETE']['plant'] = [
             'method' => function(): void
             {
                 $this->plantController->delete($this->request);
             }
         ];
 
-        $this->routes['PUT']['plant'] = [
+        $routes['PUT']['plant'] = [
             'method' => function(): void
             {
                 $this->plantController->update($this->request);
             }
         ];
 
-        $this->routes['POST']['plant'] = [
+        $routes['POST']['plant'] = [
             'method' => function(): void
             {
                 $this->plantController->store($this->request);
             }
         ];
 
-        $this->routes['GET']['garden'] = [
+        $routes['GET']['garden'] = [
             'method' => function(): void
             {
                 $this->gardenController->get($this->request);
             }
         ];
 
-        $this->routes['GET']['gardens'] = [
+        $routes['GET']['gardens'] = [
             'method' => function(): void
             {
                 $this->gardenController->getAll();
             }
         ];
 
-        $this->routes['DELETE']['garden'] = [
+        $routes['DELETE']['garden'] = [
             'method' => function(): void
             {
                 $this->gardenController->delete($this->request);
             }
         ];
 
-        $this->routes['PUT']['garden'] = [
+        $routes['PUT']['garden'] = [
             'method' => function(): void
             {
                 $this->gardenController->update($this->request);
             }
         ];
 
-        $this->routes['POST']['garden'] = [
+        $routes['POST']['garden'] = [
             'method' => function(): void
             {
                 $this->gardenController->store($this->request);
             }
         ];
+
+        return $routes;
     }
 }
