@@ -16,10 +16,7 @@ class FeatureContext implements Context
      */
     protected $actualResponseBody;
 
-    /**
-     * @var array<mixed, mixed>
-     */
-    protected array $responseHeaders;
+    protected int $responseStatus = 0;
 
     /**
      * @var array<string, mixed>
@@ -128,27 +125,25 @@ class FeatureContext implements Context
      */
     public function iCall(string $method, string $url): void
     {
-        $options = [
-            'http' => [
-                'header'  => ["Accept: application/json", "Content-type: application/json"],
-                'method'  => $method,
-                'content' => json_encode($this->requestBody)
-            ]
-        ];
+        $url = 'webserver' . $url;
 
-        $context  = stream_context_create($options);
+        $ch = curl_init($url);
 
-        try {
-            $body = file_get_contents($url, false, $context);
-            $this->actualResponseBody = json_decode($body);
-
-        } catch (Throwable $e){
-            $this->actualResponseBody = new \stdClass();
-
+        if ($this->requestBody) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->requestBody));
         }
 
-        /** @phpstan-ignore-next-line too magical for stan I think*/
-        $this->responseHeaders = $http_response_header;
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json", "Content-type: application/json"]);
+
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $body = curl_exec($ch);
+
+        $this->actualResponseBody = json_decode($body);
+
+        $this->responseStatus = curl_getinfo($ch,  CURLINFO_RESPONSE_CODE);
     }
 
     /**
@@ -187,8 +182,8 @@ class FeatureContext implements Context
     public function theResponseHasAStatusOf(string $status): void
     {
         Assert::assertSame(
-            $status,
-            $this->responseHeaders[0],
+            intval($status),
+            $this->responseStatus,
         );
     }
 

@@ -12,9 +12,9 @@ Background: I have a garden with two plants
 		"imageLink": "www..."
 	}
 	"""
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantOneId'
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantTwoId'
 		And I have a request body:
 		"""
@@ -37,7 +37,7 @@ Background: I have a garden with two plants
 		}
 		"""
 		And I replace variables in the request body with the saved value
-		And I call 'POST' 'http://localhost/api/garden'
+		And I call 'POST' '/api/garden'
 		And I save 'id' from the response
 
 Scenario: update a garden adding a new plant
@@ -49,7 +49,7 @@ Scenario: update a garden adding a new plant
 		"imageLink": "www..."
 	}
 	"""
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantThreeId'
 		And I have a request body:
 		"""
@@ -77,10 +77,10 @@ Scenario: update a garden adding a new plant
 		}
 		"""
 		And I replace variables in the request body with the saved value
-	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 200 OK'
+	When I call 'PUT' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '200'
 		And I expect the same as the request body but with the saved 'id'
-	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	When I call 'GET' '/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected
 
 Scenario: update a garden replacing a plant
@@ -92,7 +92,7 @@ Scenario: update a garden replacing a plant
 		"imageLink": "www..."
 	}
 	"""
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantThreeId'
 		And I have a request body:
 		"""
@@ -115,10 +115,10 @@ Scenario: update a garden replacing a plant
 		}
 		"""
 		And I replace variables in the request body with the saved value
-	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 200 OK'
+	When I call 'PUT' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '200'
 		And I expect the same as the request body but with the saved 'id'
-	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	When I call 'GET' '/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected
 
 Scenario: update a garden, removing a plant
@@ -138,24 +138,24 @@ Scenario: update a garden, removing a plant
 	}
 	"""
 		And I replace variables in the request body with the saved value
-	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 200 OK'
+	When I call 'PUT' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '200'
 		And I expect the same as the request body but with the saved 'id'
-	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	When I call 'GET' '/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected
 
 Scenario: Update a garden containing plants, which doesn't exist
 	Given I generate and save a random 'id'
 		And I expect the same as the request body but with the saved 'id'
-	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 201 Created'
-	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	When I call 'PUT' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '201'
+	When I call 'GET' '/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected
 
 Scenario: Update a garden with plants without altering anything
 	Given I expect the same as the request body but with the saved 'id'
-	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 200 OK'
+	When I call 'PUT' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '200'
 		And the response body should be as expected
 
 Scenario: Update a garden with a plant which doesn't exist
@@ -176,8 +176,8 @@ Scenario: Update a garden with a plant which doesn't exist
 	"""
 	Given I generate and save a random 'plantOneId'
 		And I replace variables in the request body with the saved value
-	When I call 'PUT' 'http://localhost/api/plant?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'PUT' '/api/plant?id=' appending the saved 'id'
+	Then the response has a status of '400'
 
 Scenario Outline: Update a garden with a plant location parameter of the wrong type
 	Given I have a request body:
@@ -196,8 +196,8 @@ Scenario Outline: Update a garden with a plant location parameter of the wrong t
 	}
 	"""
 		And I replace variables in the request body with the saved value
-	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'PUT' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '400'
 
 	Examples:
 		| coordinateX	| coordinateY	|
@@ -226,8 +226,8 @@ Scenario: Update a garden with two plants in the same location
 	}
 	"""
 		And I replace variables in the request body with the saved value
-	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'PUT' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '400'
 
 Scenario Outline: Update a garden with a plant in a location outside of the garden's dimensions
 	Given I have a request body:
@@ -246,8 +246,8 @@ Scenario Outline: Update a garden with a plant in a location outside of the gard
 	}
 	"""
 		And I replace variables in the request body with the saved value
-	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'PUT' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '400'
 
 	Examples:
 		| coordinateX	| coordinateY	|
@@ -274,8 +274,8 @@ Scenario Outline: Update a garden with a plant but without a parameter
 	"""
 		And I replace variables in the request body with the saved value
 		And I remove '<parameter>' from the first 'plantLocations' object in the request body
-	When I call 'PUT' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'PUT' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '400'
 
 	Examples:
 		| parameter		|

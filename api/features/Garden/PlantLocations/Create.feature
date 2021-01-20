@@ -12,9 +12,9 @@ Scenario: Create a garden with two plants
 		"imageLink": "www..."
 	}
 	"""
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantOneId'
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantTwoId'
 		And I have a request body:
 		"""
@@ -37,10 +37,10 @@ Scenario: Create a garden with two plants
 		}
 		"""
 		And I replace variables in the request body with the saved value
-		And I call 'POST' 'http://localhost/api/garden'
+		And I call 'POST' '/api/garden'
 		And I save 'id' from the response
 		And I expect the same as the request body but with the saved 'id'
-	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	When I call 'GET' '/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected
 
 Scenario: Create a garden with a plant which doesn't exist
@@ -61,8 +61,8 @@ Scenario: Create a garden with a plant which doesn't exist
 	"""
 	Given I generate and save a random 'plantOneId'
 		And I replace variables in the request body with the saved value
-	When I call 'POST' 'http://localhost/api/plant'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' '/api/plant'
+	Then the response has a status of '400'
 
 Scenario Outline: Create a garden with a plant location parameter of the wrong type
 	Given I have a request body:
@@ -73,7 +73,7 @@ Scenario Outline: Create a garden with a plant location parameter of the wrong t
 		"imageLink": "www..."
 	}
 	"""
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantOneId'
 		And I have a request body:
 		"""
@@ -91,8 +91,8 @@ Scenario Outline: Create a garden with a plant location parameter of the wrong t
 		}
 		"""
 		And I replace variables in the request body with the saved value
-	When I call 'POST' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' '/api/garden'
+	Then the response has a status of '400'
 
 	Examples:
 		| coordinateX	| coordinateY	|
@@ -108,9 +108,9 @@ Scenario: Create a garden with two plants in the same location
 		"imageLink": "www..."
 	}
 	"""
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantOneId'
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantTwoId'
 		And I have a request body:
 		"""
@@ -133,8 +133,8 @@ Scenario: Create a garden with two plants in the same location
 		}
 		"""
 		And I replace variables in the request body with the saved value
-	When I call 'POST' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' '/api/garden'
+	Then the response has a status of '400'
 
 Scenario Outline: Create a garden with a plant in a location outside of the garden's dimensions
 	Given I have a request body:
@@ -145,7 +145,7 @@ Scenario Outline: Create a garden with a plant in a location outside of the gard
 		"imageLink": "www..."
 	}
 	"""
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantOneId'
 		And I have a request body:
 		"""
@@ -163,8 +163,8 @@ Scenario Outline: Create a garden with a plant in a location outside of the gard
 		}
 		"""
 		And I replace variables in the request body with the saved value
-	When I call 'POST' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' '/api/garden'
+	Then the response has a status of '400'
 
 	Examples:
 		| coordinateX	| coordinateY	|
@@ -182,7 +182,7 @@ Scenario Outline: Create a garden with a plant but without a parameter
 		"imageLink": "www..."
 	}
 	"""
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantOneId'
 		And I have a request body:
 		"""
@@ -201,8 +201,8 @@ Scenario Outline: Create a garden with a plant but without a parameter
 		"""
 		And I replace variables in the request body with the saved value
 		And I remove '<parameter>' from the first 'plantLocations' object in the request body
-	When I call 'POST' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' '/api/garden'
+	Then the response has a status of '400'
 
 	Examples:
 		| parameter		|

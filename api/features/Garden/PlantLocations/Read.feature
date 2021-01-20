@@ -12,9 +12,9 @@ Background: Given I have the payload to create a garden with plants
 		"imageLink": "www..."
 	}
 	"""
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantOneId'
-		And I call 'POST' 'http://localhost/api/plant'
+		And I call 'POST' '/api/plant'
 		And I save 'id' from the response as 'plantTwoId'
 		And I have a request body:
 		"""
@@ -39,15 +39,15 @@ Background: Given I have the payload to create a garden with plants
 		And I replace variables in the request body with the saved value
 
 Scenario: Get gardens with plants
-	Given I call 'POST' 'http://localhost/api/garden'
+	Given I call 'POST' '/api/garden'
 		And I save 'id' from the response
 		And I expect the same as the request body but with the saved 'id'
-	When I call 'GET' 'http://localhost/api/gardens'
+	When I call 'GET' '/api/gardens'
 	Then the response body should contain what is expected
 
 Scenario: Get a specific garden with plants
-	Given I call 'POST' 'http://localhost/api/garden'
+	Given I call 'POST' '/api/garden'
 		And I save 'id' from the response
 		And I expect the same as the request body but with the saved 'id'
-	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	When I call 'GET' '/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected

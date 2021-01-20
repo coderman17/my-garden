@@ -15,13 +15,13 @@ Background: A valid request body
 	"""
 
 Scenario: Create a garden with a valid request body
-	When I call 'POST' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 201 Created'
+	When I call 'POST' '/api/garden'
+	Then the response has a status of '201'
 
 Scenario Outline: Create a garden without a parameter
 	Given I remove '<parameter>' from the root of the request body
-	When I call 'POST' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' '/api/garden'
+	Then the response has a status of '400'
 
 	Examples:
 		| parameter		|
@@ -37,8 +37,8 @@ Scenario Outline: Create a garden with a value of incorrect type
 		"<parameter>": <value>
 	}
 	"""
-	When I call 'POST' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' '/api/garden'
+	Then the response has a status of '400'
 
 	Examples:
 		| parameter		| value	|
@@ -49,28 +49,28 @@ Scenario Outline: Create a garden with a value of incorrect type
 
 Scenario Outline: Create a garden with strings of boundary correct/incorrect length
 	Given I upsert to the root of the request body, a string of key '<key>' and length '<length>'
-	When I call 'POST' 'http://localhost/api/garden'
+	When I call 'POST' '/api/garden'
 	Then the response has a status of '<status>'
 
 	Examples:
 		| key			| length	| status			|
-		| name			| 0		| HTTP/1.1 400 Bad Request	|
-		| name			| 1		| HTTP/1.1 201 Created		|
-		| name			| 80		| HTTP/1.1 201 Created		|
-		| name			| 81		| HTTP/1.1 400 Bad Request	|
+		| name			| 0		| 400	|
+		| name			| 1		| 201		|
+		| name			| 80		| 201		|
+		| name			| 81		| 400	|
 
 Scenario Outline: Create a garden with integers of boundary correct/incorrect length
 	Given I upsert to the root of the request body, an int of key '<key>' and value '<value>'
-	When I call 'POST' 'http://localhost/api/garden'
+	When I call 'POST' '/api/garden'
 	Then the response has a status of '<status>'
 
 	Examples:
 		| key		| value	| status			|
-		| dimensionX	| 0	| HTTP/1.1 400 Bad Request	|
-		| dimensionX	| 1	| HTTP/1.1 201 Created		|
-		| dimensionX	| 10	| HTTP/1.1 201 Created		|
-		| dimensionX	| 11	| HTTP/1.1 400 Bad Request	|
-		| dimensionY	| 0	| HTTP/1.1 400 Bad Request	|
-		| dimensionY	| 1	| HTTP/1.1 201 Created		|
-		| dimensionY	| 10	| HTTP/1.1 201 Created		|
-		| dimensionY	| 11	| HTTP/1.1 400 Bad Request	|
+		| dimensionX	| 0	| 400	|
+		| dimensionX	| 1	| 201		|
+		| dimensionX	| 10	| 201		|
+		| dimensionX	| 11	| 400	|
+		| dimensionY	| 0	| 400	|
+		| dimensionY	| 1	| 201		|
+		| dimensionY	| 10	| 201		|
+		| dimensionY	| 11	| 400	|

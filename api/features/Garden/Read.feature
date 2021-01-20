@@ -16,26 +16,26 @@ Background: A valid request body
 
 Scenario: Get a garden which doesn't exist
 	Given I generate and save a random 'id'
-	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 404 Not Found'
+	When I call 'GET' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '404'
 
 Scenario: Get a garden which exists
-	Given I call 'POST' 'http://localhost/api/garden'
+	Given I call 'POST' '/api/garden'
 		And I save 'id' from the response
 		And I expect the same as the request body but with the saved 'id'
-	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
+	When I call 'GET' '/api/garden?id=' appending the saved 'id'
 	Then the response body should be as expected
 
 Scenario: Get gardens
-	Given I call 'POST' 'http://localhost/api/garden'
+	Given I call 'POST' '/api/garden'
 		And I save 'id' from the response
 		And I expect the same as the request body but with the saved 'id'
-	When I call 'GET' 'http://localhost/api/gardens'
+	When I call 'GET' '/api/gardens'
 	Then the response body should contain what is expected
 
 Scenario: Get a garden without an id
-	When I call 'GET' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'GET' '/api/garden'
+	Then the response has a status of '400'
 
 Scenario: Get a garden with an id of incorrect type
 	Given I have a request body:
@@ -44,5 +44,5 @@ Scenario: Get a garden with an id of incorrect type
 		"id": 5
 	}
 	"""
-	When I call 'GET' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'GET' '/api/garden'
+	Then the response has a status of '400'
