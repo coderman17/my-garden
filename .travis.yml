@@ -20,4 +20,4 @@ script:
   - cd api
   - bin/phpstan analyse features src
   - bin/psalm
-  - bin/behat
+  - docker exec -it app bash -c "cd /var/www/my-garden/api && bin/behat"

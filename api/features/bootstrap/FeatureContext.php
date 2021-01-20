@@ -139,8 +139,6 @@ class FeatureContext implements Context
 
         $body = curl_exec($ch);
 
-        var_dump($body); exit();
-
         $this->actualResponseBody = json_decode($body);
 
         $this->responseStatus = curl_getinfo($ch,  CURLINFO_RESPONSE_CODE);
