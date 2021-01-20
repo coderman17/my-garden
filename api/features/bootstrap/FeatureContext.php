@@ -129,9 +129,7 @@ class FeatureContext implements Context
 
         $ch = curl_init($url);
 
-        if ($this->requestBody) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->requestBody));
-        }
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->requestBody));
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json", "Content-type: application/json"]);
 
@@ -140,6 +138,8 @@ class FeatureContext implements Context
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $body = curl_exec($ch);
+
+        var_dump($body); exit();
 
         $this->actualResponseBody = json_decode($body);
 
