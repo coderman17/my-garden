@@ -8,12 +8,15 @@ use MyGarden\Responses\ResponseInterface;
 
 class JsonView implements ViewInterface
 {
+    /*
+     * @inheritDoc
+     */
     public function display(ResponseInterface $response): void
     {
         header('content-type: application/json');
 
         http_response_code($response->getCode());
 
-        echo json_encode($response->getBody());
+        echo json_encode($response->getBody(), JSON_THROW_ON_ERROR);
     }
 }

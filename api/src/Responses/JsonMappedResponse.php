@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace MyGarden\Responses;
 
-use MyGarden\Models\Model;
+use MyGarden\Interfaces\PropertyArrayInterface;
 
 class JsonMappedResponse implements ResponseInterface
 {
@@ -33,9 +33,9 @@ class JsonMappedResponse implements ResponseInterface
         $this->code = $code;
     }
 
-    public function setBodySingleResource(Model $model): void
+    public function setBodySingleResource(PropertyArrayInterface $resource): void
     {
-        $this->body = $model->mapJson();
+        $this->body = $resource->getPropertyArray();
     }
 
     /**
@@ -44,10 +44,7 @@ class JsonMappedResponse implements ResponseInterface
     public function setBodyCollectionResource(array $array): void
     {
         foreach ($array as $model){
-            array_push(
-                $this->body,
-                $model->mapJson()
-            );
+            $this->body[] = $model->getPropertyArray();
         }
     }
 }

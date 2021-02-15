@@ -56,21 +56,21 @@ abstract class Validator
                 if ($attributes['optional'] === true) {
                     continue;
                 }
-                throw new MissingParameter(strval($keyName));
+                throw new MissingParameter($keyName);
             }
 
             if(gettype($requestParams[$keyName]) !== $attributes['type']){
-                throw new WrongTypeParameter(strval($keyName), $attributes['type']);
+                throw new WrongTypeParameter($keyName, $attributes['type']);
             }
 
             if($attributes['type'] === 'array'){
-                if ($attributes['arrayType'] == 'indexed'){
+                if ($attributes['arrayType'] === 'indexed'){
                     //If the array is indexed, the spec only needs to list types for the first element.
                     //This foreach uses the spec for that first element to check every subsequent element in the array
                     foreach($requestParams[$keyName] as $item){
                         $this->recursiveParamChecker($attributes['contents'][0]['contents'], $item);
                     }
-                } elseif ($attributes['arrayType'] == 'associative'){
+                } elseif ($attributes['arrayType'] === 'associative'){
                     //If the array is associative, then nothing is assumed and every element in the array
                     //is expected to be listed in the spec
                     $this->recursiveParamChecker($attributes['contents'], $requestParams[$keyName]);

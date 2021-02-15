@@ -40,11 +40,9 @@ class SimpleControllerCollectionFactory
 
         if (
             $acceptHeader === [] ||
-            !in_array('application/json', $acceptHeader)
+            !in_array('application/json', $acceptHeader, true)
         ){
             $this->view = new HtmlView();
-
-            $this->response = new JsonMappedResponse();
         }
 
         $plantController = new PlantController($this->response, $this->view);

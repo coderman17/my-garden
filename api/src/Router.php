@@ -47,16 +47,15 @@ class Router
 
         $response = null;
 
-        preg_match_all('/(?<=api\/)([^\/?]+)(\d+)*/', $request->uri, $matches);
+        preg_match_all('/(?<=api\/)([^\/?]+)(\d+){0,25}/', $request->uri, $matches);
 
         $this->routes = $this->routes[$request->method];
 
         $matches = $matches[0];
 
-        for($i = 0; $i < count($matches); $i++){
-
-            if (isset($this->routes[$matches[$i]])) {
-                $this->routes = $this->routes[$matches[$i]];
+        foreach ($matches as $match){
+            if (isset($this->routes[$match])) {
+                $this->routes = $this->routes[$match];
             }
 
             if (isset($this->routes['method'])) {
