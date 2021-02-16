@@ -1,6 +1,6 @@
 -- noinspection SpellCheckingInspectionForFile
 
-DROP DATABASE `my_garden`;
+DROP DATABASE IF EXISTS `my_garden`;
 
 CREATE database my_garden;
 
