@@ -68,6 +68,10 @@ abstract class Validator
                     //If the array is indexed, the spec only needs to list types for the first element.
                     //This foreach uses the spec for that first element to check every subsequent element in the array
                     foreach($requestParams[$keyName] as $item){
+                        if (!is_array($item)){
+                            throw new WrongTypeParameter($keyName, $attributes['type']);
+                        }
+
                         $this->recursiveParamChecker($attributes['contents'][0]['contents'], $item);
                     }
                 } elseif ($attributes['arrayType'] === 'associative'){

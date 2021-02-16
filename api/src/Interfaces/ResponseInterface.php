@@ -2,9 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace MyGarden\Responses;
-
-use MyGarden\Interfaces\PropertyArrayInterface;
+namespace MyGarden\Interfaces;
 
 interface ResponseInterface
 {

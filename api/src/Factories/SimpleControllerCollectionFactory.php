@@ -9,10 +9,10 @@ use MyGarden\Controllers\GardenController;
 use MyGarden\Controllers\PlantController;
 use MyGarden\Request\Request;
 use MyGarden\Responses\JsonMappedResponse;
-use MyGarden\Responses\ResponseInterface;
+use MyGarden\Interfaces\ResponseInterface;
 use MyGarden\Views\HtmlView;
 use MyGarden\Views\JsonView;
-use MyGarden\Views\ViewInterface;
+use MyGarden\Interfaces\ViewInterface;
 
 class SimpleControllerCollectionFactory
 {

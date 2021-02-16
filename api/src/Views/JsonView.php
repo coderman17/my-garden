@@ -4,7 +4,8 @@ declare(strict_types = 1);
 
 namespace MyGarden\Views;
 
-use MyGarden\Responses\ResponseInterface;
+use MyGarden\Interfaces\ResponseInterface;
+use MyGarden\Interfaces\ViewInterface;
 
 class JsonView implements ViewInterface
 {

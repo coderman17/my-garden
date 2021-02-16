@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace MyGarden\Responses;
 
 use MyGarden\Interfaces\PropertyArrayInterface;
+use MyGarden\Interfaces\ResponseInterface;
 
 class JsonMappedResponse implements ResponseInterface
 {

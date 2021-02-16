@@ -2,9 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace MyGarden\Views;
-
-use MyGarden\Responses\ResponseInterface;
+namespace MyGarden\Interfaces;
 
 interface ViewInterface
 {
