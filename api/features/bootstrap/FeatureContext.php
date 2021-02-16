@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUnused */
+<?php /** @noinspection PhpUnused
+ * @noinspection UnknownInspectionInspection
+ */
 
 declare(strict_types = 1);
 
@@ -36,10 +38,11 @@ class FeatureContext implements Context
      * @Given I have a request body:
      *
      * @param PyStringNode $string
+     * @throws JsonException
      */
     public function iHaveARequestBody(PyStringNode $string): void
     {
-        $this->requestBody = json_decode($string->getRaw());
+        $this->requestBody = json_decode($string->getRaw(), false, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -74,7 +77,7 @@ class FeatureContext implements Context
                 if(!is_string($item)){
                     continue;
                 }
-                if(preg_match('/(?<={{).+(?=}})/', $item, $matches) == 1){
+                if(preg_match('/(?<={{).+(?=}})/', $item, $matches) === 1){
                     $item = $this->savedParams[$matches[0]];
                 }
             }
@@ -95,10 +98,11 @@ class FeatureContext implements Context
      * @When I upsert to the root of the request body:
      *
      * @param PyStringNode $string
+     * @throws JsonException
      */
     public function iUpsertToTheRootOfTheRequestBody(PyStringNode $string): void
     {
-        $incomingArray = json_decode($string->getRaw(), true);
+        $incomingArray = json_decode($string->getRaw(), true, 512, JSON_THROW_ON_ERROR);
 
         foreach ($incomingArray as $k => $v){
             $this->requestBody->$k = $v;
@@ -125,6 +129,9 @@ class FeatureContext implements Context
      *
      * @param string $method
      * @param string $url
+     * @noinspection ForgottenDebugOutputInspection
+     * @throws JsonException
+     * @noinspection BadExceptionsProcessingInspection //todo make this more elegant
      */
     public function iCall(string $method, string $url): void
     {
@@ -132,7 +139,7 @@ class FeatureContext implements Context
             'http' => [
                 'header'  => ["Accept: application/json", "Content-type: application/json"],
                 'method'  => $method,
-                'content' => json_encode($this->requestBody)
+                'content' => json_encode($this->requestBody, JSON_THROW_ON_ERROR)
             ]
         ];
 
@@ -140,9 +147,10 @@ class FeatureContext implements Context
 
         try {
             $body = file_get_contents($url, false, $context);
-            $this->actualResponseBody = json_decode($body);
+            $this->actualResponseBody = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
 
         } catch (Throwable $e){
+            error_log("\tCould not json decode the response contents, assuming it was empty\n");
             $this->actualResponseBody = new \stdClass();
 
         }
@@ -160,7 +168,7 @@ class FeatureContext implements Context
      */
     public function iSaveFromTheResponse($param, string $name = null): void
     {
-        if ($name == null){
+        if ($name === null){
             $name = $param;
         }
         $this->savedParams[$name] = $this->actualResponseBody->$param;
@@ -173,6 +181,7 @@ class FeatureContext implements Context
      * @param string $method
      * @param string $url
      * @param string $param
+     * @throws JsonException
      */
     public function iCallAppendingTheSaved(string $method, string $url, string $param): void
     {
@@ -233,7 +242,7 @@ class FeatureContext implements Context
      */
     public function iGenerateAndSaveARandom(string $param): void
     {
-        $this->savedParams[$param] = uniqid('MG');
+        $this->savedParams[$param] = uniqid('MG', true);
     }
 
 

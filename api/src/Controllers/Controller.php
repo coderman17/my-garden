@@ -6,9 +6,9 @@ namespace MyGarden\Controllers;
 
 use MyGarden\Auth\Auth;
 use MyGarden\Models\User;
-use MyGarden\Responses\ResponseInterface;
+use MyGarden\Interfaces\ResponseInterface;
 use MyGarden\Validators\Validator;
-use MyGarden\Views\ViewInterface;
+use MyGarden\Interfaces\ViewInterface;
 
 abstract class Controller
 {

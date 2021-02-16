@@ -4,7 +4,9 @@ declare(strict_types = 1);
 
 namespace MyGarden\Models;
 
-class PlantLocation extends Model
+use MyGarden\Interfaces\PropertyArrayInterface;
+
+class PlantLocation extends Model implements PropertyArrayInterface
 {
     public const COLUMN_ALIASES = [
         'gardens_plants.garden_id'      =>  'gardensPlantsGardenId',
@@ -48,7 +50,7 @@ class PlantLocation extends Model
         return $this->coordinateY;
     }
 
-    public function mapJson(): array
+    public function getPropertyArray(): array
     {
         return [
             'id' => $this->getPlantId(),

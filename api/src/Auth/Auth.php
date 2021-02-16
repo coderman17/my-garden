@@ -1,5 +1,5 @@
 <?php
-/** @noinspection PhpUnused */ //will be used in future, TODO - instantiate proper login and auth
+//TODO - instantiate proper login and auth
 
 declare(strict_types = 1);
 
@@ -14,16 +14,16 @@ class Auth
 {
     protected Repository $repository;
 
-    public function __construct()
-    {
-        $this->repository = new Repository();
-    }
+//    public function __construct()
+//    {
+//        $this->repository = new Repository();
+//    }
 
     public static function user(): User
     {
         /** @noinspection SpellCheckingInspection */
         return new User(
-            'MG21ea8ea135b2g',
+            'MG21ea8ea135b2g0000000000',
             'dan',
             'dan@email.com',
             '$2y$10$W4ixd.rF03iRVuECIP1Hu.yVH/eyStgiKgTmOqqEHBI9vuSoYnxvi' // = 'password'
@@ -68,21 +68,21 @@ class Auth
         );
     }
 
-    /**
-     * @param string $password
-     * @return string
-     * @throws \Exception
-     */
-    protected function hash(string $password): string
-    {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        if (!is_string($hashedPassword)){
-            throw new \Exception('password could not be hashed');
-        }
-
-        return $hashedPassword;
-    }
+//    /**
+//     * @param string $password
+//     * @return string
+//     * @throws \Exception
+//     */
+//    protected function hash(string $password): string
+//    {
+//        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+//
+//        if (!is_string($hashedPassword)){
+//            throw new \Exception('password could not be hashed');
+//        }
+//
+//        return $hashedPassword;
+//    }
 
     protected function verifyHash(string $password, string $hash): bool
     {

@@ -20,6 +20,9 @@ class Request
      */
     public array $acceptHeader = [];
 
+    /**
+     * @throws \JsonException
+     */
     public function __construct()
     {
         $this->method = $_SERVER['REQUEST_METHOD'];
@@ -28,7 +31,7 @@ class Request
             $inputJSON = file_get_contents('php://input');
 
             if ($inputJSON !== false) {
-                foreach (json_decode($inputJSON, true) as $k => $v) {
+                foreach (json_decode($inputJSON, true, 512, JSON_THROW_ON_ERROR) as $k => $v) {
                     $this->params[$k] = $v;
                 }
             }
@@ -53,8 +56,8 @@ class Request
      */
     protected function identifyInteger(string $value)
     {
-        if (preg_match('/^[1-9][0-9]+$|^[0-9]$/', $value)){
-            return intval($value);
+        if (preg_match('/^[1-9]\d+$|^\d$/', $value)){
+            return (int)$value;
         }
 
         return $value;

@@ -113,6 +113,7 @@ class PlantController extends Controller
      * @throws WrongTypeParameter
      * @throws OverMaxChars
      * @throws UnderMinChars
+     * @noinspection ForgottenDebugOutputInspection
      */
     public function update(Request $request): void
     {
@@ -131,6 +132,8 @@ class PlantController extends Controller
         try {
             $this->user->updatePlant($plant);
         } catch (NotFound $e) {
+            error_log("Plant not found in update, creating it instead\n" . $e);
+
             $this->user->savePlant($plant);
 
             $this->response->setCode(201);

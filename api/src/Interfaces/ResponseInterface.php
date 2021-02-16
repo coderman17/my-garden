@@ -2,9 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace MyGarden\Responses;
-
-use MyGarden\Models\Model;
+namespace MyGarden\Interfaces;
 
 interface ResponseInterface
 {
@@ -12,15 +10,15 @@ interface ResponseInterface
 
     public function getCode(): int;
 
-    public function setBodySingleResource(Model $model): void;
+    public function setBodySingleResource(PropertyArrayInterface $resource): void;
 
     /**
-     * @param array<mixed, Model> $array
+     * @param array<mixed, PropertyArrayInterface> $array
      */
     public function setBodyCollectionResource(array $array): void;
 
     /**
-     * @return array<string, int|string>|array<array<string, int|string>>
+     * @return array<string, mixed>|array<array<string, mixed>>
      */
     public function getBody(): array;
 }

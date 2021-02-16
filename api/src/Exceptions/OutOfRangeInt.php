@@ -13,11 +13,11 @@ class OutOfRangeInt extends \Exception
         $maxClause = '';
 
         if ($min !== null){
-            $minClause = ' The minimum value is ' . strval($min) . '.';
+            $minClause = ' The minimum value is ' . $min . '.';
         }
 
         if ($max !== null){
-            $maxClause = ' The maximum value is ' . strval($max) . '.';
+            $maxClause = ' The maximum value is ' . $max . '.';
         }
 
         $message = 'Parameter \'' . $parameter . '\' is out of range.' . $minClause . $maxClause;

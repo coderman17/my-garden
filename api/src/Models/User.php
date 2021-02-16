@@ -9,11 +9,12 @@ use MyGarden\Exceptions\NotFound;
 use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
+use MyGarden\Interfaces\PropertyArrayInterface;
 use MyGarden\Repositories\Repository;
 use MyGarden\TypedArrays\IntToGardenArray;
 use MyGarden\TypedArrays\StringToPlantArray;
 
-class User extends Model
+class User extends Model implements PropertyArrayInterface
 {
     protected string $id;
 
@@ -41,7 +42,7 @@ class User extends Model
 
             $this->id = $id;
         } else {
-            $this->id = uniqid('MG');
+            $this->id = uniqid('MG', true);
         }
 
         $this->validateParamStringLength('username', $username, 1, 30);
@@ -81,7 +82,7 @@ class User extends Model
         return $this->password;
     }
 
-    public function mapJson(): array
+    public function getPropertyArray(): array
     {
         return [
             'username' => $this->getUsername()
