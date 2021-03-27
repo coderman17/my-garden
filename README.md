@@ -2,17 +2,12 @@
 A webapp to help visualise and plan your garden
 
 # Prerequisites
-  - //php 7.4
-  - //composer
-  - //npm
   - docker: `sudo apt install docker`
   - docker-compose: `sudo apt install docker-compose`
   - you might want to make sure you can run docker-compose without sudo
   
 # Installation
-  - clone the repo
-  - run `composer install` from /api
-  - run `npm install` from /ui/my-garden
+  - clone the repository
 
 # Running
   - run `docker-compose up -d` from the root my-garden directory
