@@ -18,6 +18,6 @@ before_script:
 
 script:
   - cd api
-  - bin/phpstan analyse features src
-  - bin/psalm
-  - bin/behat
+  - docker exec app /var/www/my-garden/api/bin/phpstan analyse /var/www/my-garden/api/features /var/www/my-garden/api/src -c /var/www/my-garden/api/phpstan.neon
+  - docker exec app /var/www/my-garden/api/bin/psalm -c /var/www/my-garden/api/psalm.xml
+  - docker exec app /var/www/my-garden/api/bin/behat
