@@ -181,12 +181,12 @@ class FeatureContext implements Context
     /**
      * @Then the response has a status of :status
      *
-     * @param string $status
+     * @param int $status
      */
-    public function theResponseHasAStatusOf(string $status): void
+    public function theResponseHasAStatusOf(int $status): void
     {
         Assert::assertSame(
-            (int) $status,
+            $status,
             $this->responseStatus,
         );
     }
