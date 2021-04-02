@@ -7,11 +7,11 @@ php:
 before_script:
   - docker-compose build
   - docker-compose up -d
-  - sleep 15
+  - docker exec app composer install
   - docker exec -u root mysql chmod 777 /etc/mysql/scripts/migrate.sh
   - docker exec -u root mysql /etc/mysql/scripts/migrate.sh
 
 script:
-  - docker exec app /var/www/my-garden/api/bin/phpstan analyse /var/www/my-garden/api/features /var/www/my-garden/api/src -c /var/www/my-garden/api/phpstan.neon
-  - docker exec app /var/www/my-garden/api/bin/psalm -c /var/www/my-garden/api/psalm.xml
-  - docker exec app /var/www/my-garden/api/bin/behat -c /var/www/my-garden/api/behat.yml
+  - docker exec app bin/phpstan analyse features src -c phpstan.neon
+  - docker exec app bin/psalm -c psalm.xml
+  - docker exec app bin/behat
