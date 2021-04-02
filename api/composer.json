@@ -37,7 +37,8 @@
 	"require": {
 		"coderman17/typed-arrays": "0.3.*",
 		"ext-json": "*",
-		"ext-pdo": "*"
+		"ext-pdo": "*",
+		"ext-curl": "*"
     },
 	"config": {
 		"bin-dir": "bin/"
