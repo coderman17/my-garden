@@ -186,7 +186,7 @@ class FeatureContext implements Context
     public function theResponseHasAStatusOf(string $status): void
     {
         Assert::assertSame(
-            intval($status),
+            (int) $status,
             $this->responseStatus,
         );
     }
