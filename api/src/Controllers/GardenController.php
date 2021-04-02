@@ -128,13 +128,10 @@ class GardenController extends Controller
         $plantLocations = [];
 
         foreach($request->params['plantLocations'] as $plantLocation) {
-            array_push(
-                $plantLocations,
-                new PlantLocation(
-                    $plantLocation['id'],
-                    $plantLocation['coordinateX'],
-                    $plantLocation['coordinateY']
-                )
+            $plantLocations[] = new PlantLocation(
+                $plantLocation['id'],
+                $plantLocation['coordinateX'],
+                $plantLocation['coordinateY']
             );
         }
 
@@ -151,6 +148,7 @@ class GardenController extends Controller
      * @throws \Exception
      * @throws ConstructionFailure
      * @throws NotFound
+     * @noinspection ForgottenDebugOutputInspection
      */
     public function update(Request $request): void
     {
@@ -171,6 +169,8 @@ class GardenController extends Controller
         try {
             $this->user->updateGarden($garden);
         } catch (NotFound $e) {
+            error_log("Garden not found in update, creating it instead\n" . $e);
+
             $this->user->saveGarden($garden);
 
             $this->response->setCode(201);

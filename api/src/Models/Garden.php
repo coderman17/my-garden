@@ -7,8 +7,9 @@ namespace MyGarden\Models;
 use MyGarden\Exceptions\OutOfRangeInt;
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
+use MyGarden\Interfaces\PropertyArrayInterface;
 
-class Garden extends Model
+class Garden extends Model implements PropertyArrayInterface
 {
     public const COLUMN_ALIASES = [
         'gardens.id'            =>  'gardensId',
@@ -50,7 +51,7 @@ class Garden extends Model
 
             $this->id = $id;
         } else {
-            $this->id = uniqid('MG');
+            $this->id = uniqid('MG', true);
         }
 
         $this->validateParamStringLength('userId', $userId, Model::UUID_LENGTH, Model::UUID_LENGTH);
@@ -128,12 +129,12 @@ class Garden extends Model
         $this->plantLocations[$coordinateX][$coordinateY] = $plantLocation;
     }
 
-    public function mapJson(): array
+    public function getPropertyArray(): array
     {
         $plantLocations = [];
 
         foreach($this->getPlantLocations() as $plantLocation){
-            array_push($plantLocations, $plantLocation->mapJson());
+            $plantLocations[] = $plantLocation->getPropertyArray();
         }
 
         return [
@@ -154,7 +155,7 @@ class Garden extends Model
 
         foreach ($this->plantLocations as $coordinateY){
             foreach ($coordinateY as $plantLocation){
-                array_push($plantLocations, $plantLocation);
+                $plantLocations[] = $plantLocation;
             }
         }
 

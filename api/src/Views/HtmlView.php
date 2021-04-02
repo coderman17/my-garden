@@ -4,7 +4,8 @@ declare(strict_types = 1);
 
 namespace MyGarden\Views;
 
-use MyGarden\Responses\ResponseInterface;
+use MyGarden\Interfaces\ResponseInterface;
+use MyGarden\Interfaces\ViewInterface;
 
 class HtmlView implements ViewInterface
 {
@@ -64,19 +65,19 @@ class HtmlView implements ViewInterface
                 $this->makeRow($array, $pushArray);
             }
         } else {
-            if ($this->headersSet == false){
-                array_push($pushArray, '<tr>');
+            if ($this->headersSet === false){
+                $pushArray[] = '<tr>';
                 foreach (array_keys($multilevelArray) as $key){
-                    array_push($pushArray, '<th>' . $key . '</th>');
+                    $pushArray[] = '<th>' . $key . '</th>';
                 }
-                array_push($pushArray, '</tr>');
+                $pushArray[] = '</tr>';
                 $this->headersSet = true;
             }
-            array_push($pushArray, '<tr>');
+            $pushArray[] = '<tr>';
             foreach ($multilevelArray as $cell){
-                array_push($pushArray, '<td>' . $cell . '</td>');
+                $pushArray[] = '<td>' . $cell . '</td>';
             }
-            array_push($pushArray, '</tr>');
+            $pushArray[] = '</tr>';
         }
     }
 }

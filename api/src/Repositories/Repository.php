@@ -59,7 +59,7 @@ class Repository
         $string = '';
 
         foreach ($columnAliases as $column => $alias){
-            $string = $string . $column . ' as ' . $alias . ', ';
+            $string .= $column . ' as ' . $alias . ', ';
         }
 
         return substr($string, 0, -2);

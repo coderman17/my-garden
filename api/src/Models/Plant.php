@@ -6,8 +6,9 @@ namespace MyGarden\Models;
 
 use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
+use MyGarden\Interfaces\PropertyArrayInterface;
 
-class Plant extends Model
+class Plant extends Model implements PropertyArrayInterface
 {
     public const COLUMN_ALIASES = [
         'plants.id'             =>  'plantsId',
@@ -43,7 +44,7 @@ class Plant extends Model
 
             $this->id = $id;
         } else {
-            $this->id = uniqid('MG');
+            $this->id = uniqid('MG', true);
         }
 
         $this->validateParamStringLength('userId', $userId, Model::UUID_LENGTH, Model::UUID_LENGTH);
@@ -83,7 +84,7 @@ class Plant extends Model
         return $this->imageLink;
     }
 
-    public function mapJson(): array
+    public function getPropertyArray(): array
     {
         return [
             'id' => $this->getId(),

@@ -2,11 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace MyGarden\Views;
-
-use MyGarden\Responses\ResponseInterface;
+namespace MyGarden\Interfaces;
 
 interface ViewInterface
 {
+    /**
+     * @param ResponseInterface $response
+     * @throws \Exception
+     */
     public function display(ResponseInterface $response): void;
 }
