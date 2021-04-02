@@ -50,12 +50,12 @@ Scenario Outline: Create a plant with strings of boundary correct/incorrect leng
 	Then the response has a status of '<status>'
 
 	Examples:
-		| key		| length	| status			|
-		| englishName	| 0		| 400	|
+		| key		| length	| status	|
+		| englishName	| 0		| 400		|
 		| englishName	| 1		| 201		|
 		| englishName	| 80		| 201		|
-		| englishName	| 81		| 400	|
+		| englishName	| 81		| 400		|
 		| latinName	| 255		| 201		|
-		| latinName	| 256		| 400	|
+		| latinName	| 256		| 400		|
 		| imageLink	| 500		| 201		|
-		| imageLink	| 501		| 400	|
+		| imageLink	| 501		| 400		|

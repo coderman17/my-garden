@@ -92,12 +92,12 @@ Scenario Outline: Update a plant with strings of boundary correct/incorrect leng
 	Then the response has a status of '<status>'
 
 	Examples:
-		| key		| length	| status			|
-		| englishName	| 0		| 400	|
+		| key		| length	| status	|
+		| englishName	| 0		| 400		|
 		| englishName	| 1		| 200		|
 		| englishName	| 80		| 200		|
-		| englishName	| 81		| 400	|
+		| englishName	| 81		| 400		|
 		| latinName	| 255		| 200		|
-		| latinName	| 256		| 400	|
+		| latinName	| 256		| 400		|
 		| imageLink	| 500		| 200		|
-		| imageLink	| 501		| 400	|
+		| imageLink	| 501		| 400		|

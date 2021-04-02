@@ -81,11 +81,11 @@ Scenario Outline: Update a garden with strings of boundary correct/incorrect len
 	Then the response has a status of '<status>'
 
 	Examples:
-		| key			| length	| status			|
-		| name			| 0		| 400	|
+		| key			| length	| status	|
+		| name			| 0		| 400		|
 		| name			| 1		| 200		|
 		| name			| 80		| 200		|
-		| name			| 81		| 400	|
+		| name			| 81		| 400		|
 
 Scenario Outline: Update a garden with integers of boundary correct/incorrect length
 	Given I upsert to the root of the request body, an int of key '<key>' and value '<value>'
@@ -93,15 +93,15 @@ Scenario Outline: Update a garden with integers of boundary correct/incorrect le
 	Then the response has a status of '<status>'
 
 	Examples:
-		| key		| value		| status			|
-		| dimensionX	| 0		| 400	|
+		| key		| value		| status	|
+		| dimensionX	| 0		| 400		|
 		| dimensionX	| 1		| 200		|
 		| dimensionX	| 10		| 200		|
-		| dimensionX	| 11		| 400	|
-		| dimensionY	| 0		| 400	|
+		| dimensionX	| 11		| 400		|
+		| dimensionY	| 0		| 400		|
 		| dimensionY	| 1		| 200		|
 		| dimensionY	| 10		| 200		|
-		| dimensionY	| 11		| 400	|
+		| dimensionY	| 11		| 400		|
 
 Scenario: Update a garden without an id
 	When I call 'PUT' '/api/garden'
