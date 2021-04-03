@@ -39,7 +39,7 @@ class FeatureContext implements Context
      * @Given I have a request body:
      *
      * @param PyStringNode $string
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function iHaveARequestBody(PyStringNode $string): void
     {
@@ -99,7 +99,7 @@ class FeatureContext implements Context
      * @When I upsert to the root of the request body:
      *
      * @param PyStringNode $string
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function iUpsertToTheRootOfTheRequestBody(PyStringNode $string): void
     {
