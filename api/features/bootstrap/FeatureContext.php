@@ -18,10 +18,7 @@ class FeatureContext implements Context
      */
     protected $actualResponseBody;
 
-    /**
-     * @var array<mixed, mixed>
-     */
-    protected array $responseHeaders;
+    protected int $responseStatus = 0;
 
     /**
      * @var array<string, mixed>
@@ -130,33 +127,27 @@ class FeatureContext implements Context
      * @param string $method
      * @param string $url
      * @noinspection ForgottenDebugOutputInspection
-     * @throws JsonException
      * @noinspection BadExceptionsProcessingInspection //todo make this more elegant
      */
     public function iCall(string $method, string $url): void
     {
-        $options = [
-            'http' => [
-                'header'  => ["Accept: application/json", "Content-type: application/json"],
-                'method'  => $method,
-                'content' => json_encode($this->requestBody, JSON_THROW_ON_ERROR)
-            ]
-        ];
+        $url = 'webserver' . $url;
 
-        $context  = stream_context_create($options);
+        $ch = curl_init($url);
 
-        try {
-            $body = file_get_contents($url, false, $context);
-            $this->actualResponseBody = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->requestBody));
 
-        } catch (Throwable $e){
-            error_log("\tCould not json decode the response contents, assuming it was empty\n");
-            $this->actualResponseBody = new \stdClass();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept: application/json", "Content-type: application/json"]);
 
-        }
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 
-        /** @phpstan-ignore-next-line too magical for stan I think*/
-        $this->responseHeaders = $http_response_header;
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $body = curl_exec($ch);
+
+        $this->actualResponseBody = json_decode($body);
+
+        $this->responseStatus = curl_getinfo($ch,  CURLINFO_RESPONSE_CODE);
     }
 
     /**
@@ -181,7 +172,6 @@ class FeatureContext implements Context
      * @param string $method
      * @param string $url
      * @param string $param
-     * @throws JsonException
      */
     public function iCallAppendingTheSaved(string $method, string $url, string $param): void
     {
@@ -191,13 +181,13 @@ class FeatureContext implements Context
     /**
      * @Then the response has a status of :status
      *
-     * @param string $status
+     * @param int $status
      */
-    public function theResponseHasAStatusOf(string $status): void
+    public function theResponseHasAStatusOf(int $status): void
     {
         Assert::assertSame(
             $status,
-            $this->responseHeaders[0],
+            $this->responseStatus,
         );
     }
 

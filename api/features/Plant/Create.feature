@@ -14,13 +14,13 @@ Background: A valid request body
 	"""
 
 Scenario: Create a plant with a valid request body
-	When I call 'POST' 'http://localhost/api/plant'
-	Then the response has a status of 'HTTP/1.1 201 Created'
+	When I call 'POST' '/api/plant'
+	Then the response has a status of '201'
 
 Scenario Outline: Create a plant without a parameter
 	Given I remove '<parameter>' from the root of the request body
-	When I call 'POST' 'http://localhost/api/plant'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' '/api/plant'
+	Then the response has a status of '400'
 
 	Examples:
 	| parameter	|
@@ -35,8 +35,8 @@ Scenario Outline: Create a plant with a value of incorrect type
 		"<parameter>": <value>
 	}
 	"""
-	When I call 'POST' 'http://localhost/api/plant'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'POST' '/api/plant'
+	Then the response has a status of '400'
 
 	Examples:
 	| parameter	| value	|
@@ -46,16 +46,16 @@ Scenario Outline: Create a plant with a value of incorrect type
 
 Scenario Outline: Create a plant with strings of boundary correct/incorrect length
 	Given I upsert to the root of the request body, a string of key '<key>' and length '<length>'
-	When I call 'POST' 'http://localhost/api/plant'
+	When I call 'POST' '/api/plant'
 	Then the response has a status of '<status>'
 
 	Examples:
-		| key		| length	| status			|
-		| englishName	| 0		| HTTP/1.1 400 Bad Request	|
-		| englishName	| 1		| HTTP/1.1 201 Created		|
-		| englishName	| 80		| HTTP/1.1 201 Created		|
-		| englishName	| 81		| HTTP/1.1 400 Bad Request	|
-		| latinName	| 255		| HTTP/1.1 201 Created		|
-		| latinName	| 256		| HTTP/1.1 400 Bad Request	|
-		| imageLink	| 500		| HTTP/1.1 201 Created		|
-		| imageLink	| 501		| HTTP/1.1 400 Bad Request	|
+		| key		| length	| status	|
+		| englishName	| 0		| 400		|
+		| englishName	| 1		| 201		|
+		| englishName	| 80		| 201		|
+		| englishName	| 81		| 400		|
+		| latinName	| 255		| 201		|
+		| latinName	| 256		| 400		|
+		| imageLink	| 500		| 201		|
+		| imageLink	| 501		| 400		|

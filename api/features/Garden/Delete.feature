@@ -15,21 +15,21 @@ Background: A valid request body
 	"""
 
 Scenario: Delete a garden which exists
-	Given I call 'POST' 'http://localhost/api/garden'
+	Given I call 'POST' '/api/garden'
 		And I save 'id' from the response
-	When I call 'DELETE' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 204 No Content'
-	When I call 'GET' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 404 Not Found'
+	When I call 'DELETE' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '204'
+	When I call 'GET' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '404'
 
 Scenario: Delete a garden which doesn't exist
 	Given I generate and save a random 'id'
-	When I call 'DELETE' 'http://localhost/api/garden?id=' appending the saved 'id'
-	Then the response has a status of 'HTTP/1.1 404 Not Found'
+	When I call 'DELETE' '/api/garden?id=' appending the saved 'id'
+	Then the response has a status of '404'
 
 Scenario: Delete a garden without an id
-	When I call 'DELETE' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'DELETE' '/api/garden'
+	Then the response has a status of '400'
 
 Scenario: Delete a garden with an id of incorrect type
 	Given I have a request body:
@@ -38,5 +38,5 @@ Scenario: Delete a garden with an id of incorrect type
 		"id": 5
 	}
 	"""
-	When I call 'DELETE' 'http://localhost/api/garden'
-	Then the response has a status of 'HTTP/1.1 400 Bad Request'
+	When I call 'DELETE' '/api/garden'
+	Then the response has a status of '400'
