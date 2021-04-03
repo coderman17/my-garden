@@ -23,33 +23,32 @@ class Router
 
     protected GardenController $gardenController;
 
-    public function __construct(ControllerCollection $controllerCollection)
+    public function __construct(ControllerCollection $controllerCollection, Request $request)
     {
         $this->plantController = $controllerCollection->plantController;
 
         $this->gardenController = $controllerCollection->gardenController;
-    }
 
-    /**
-     * @param  Request $request
-     * @throws NotFound
-     */
-    public function handle(Request $request): void
-    {
         $this->request = $request;
 
-        $this->populateRoutes();
+        $this->routes = $this->constructRoutes();
 
         //TODO this is deeply unsafe and needs to be done properly
         header('Access-Control-Allow-Origin: *');
+    }
 
+    /**
+     * @throws NotFound
+     */
+    public function handle(): void
+    {
         $matches = [];
 
         $response = null;
 
-        preg_match_all('/(?<=api\/)([^\/?]+)(\d+){0,25}/', $request->uri, $matches);
+        preg_match_all('/(?<=api\/)([^\/?]+)(\d+){0,25}/', $this->request->uri, $matches);
 
-        $this->routes = $this->routes[$request->method];
+        $this->routes = $this->routes[$this->request->method];
 
         $matches = $matches[0];
 
@@ -67,66 +66,73 @@ class Router
         throw new NotFound();
     }
 
-    protected function populateRoutes(): void
+    /**
+     * @return array<string, array>
+     */
+    private function constructRoutes(): array
     {
-        $this->routes['GET']['plant'] = [
+        $routes = [];
+
+        $routes['GET']['plant'] = [
             'method' => function (): void {
                 $this->plantController->get($this->request);
             }
         ];
 
-        $this->routes['GET']['plants'] = [
+        $routes['GET']['plants'] = [
             'method' => function (): void {
                 $this->plantController->getAll();
             }
         ];
 
-        $this->routes['DELETE']['plant'] = [
+        $routes['DELETE']['plant'] = [
             'method' => function (): void {
                 $this->plantController->delete($this->request);
             }
         ];
 
-        $this->routes['PUT']['plant'] = [
+        $routes['PUT']['plant'] = [
             'method' => function (): void {
                 $this->plantController->update($this->request);
             }
         ];
 
-        $this->routes['POST']['plant'] = [
+        $routes['POST']['plant'] = [
             'method' => function (): void {
                 $this->plantController->store($this->request);
             }
         ];
 
-        $this->routes['GET']['garden'] = [
+        $routes['GET']['garden'] = [
             'method' => function (): void {
                 $this->gardenController->get($this->request);
             }
         ];
 
-        $this->routes['GET']['gardens'] = [
+        $routes['GET']['gardens'] = [
             'method' => function (): void {
                 $this->gardenController->getAll();
             }
         ];
 
-        $this->routes['DELETE']['garden'] = [
+        $routes['DELETE']['garden'] = [
             'method' => function (): void {
                 $this->gardenController->delete($this->request);
             }
         ];
 
-        $this->routes['PUT']['garden'] = [
+        $routes['PUT']['garden'] = [
             'method' => function (): void {
                 $this->gardenController->update($this->request);
             }
         ];
 
-        $this->routes['POST']['garden'] = [
+        $routes['POST']['garden'] = [
             'method' => function (): void {
                 $this->gardenController->store($this->request);
             }
         ];
+
+        return $routes;
     }
 }

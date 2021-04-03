@@ -29,7 +29,7 @@ class App
 
         $this->controllerCollection = $this->controllerFactory->create($this->request);
 
-        $this->router = new Router($this->controllerCollection);
+        $this->router = new Router($this->controllerCollection, $this->request);
     }
 
     /**
@@ -39,7 +39,7 @@ class App
     {
         //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
 
-        $this->router->handle($this->request);
+        $this->router->handle();
 
         //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
     }

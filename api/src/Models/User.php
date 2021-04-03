@@ -248,7 +248,7 @@ class User extends Model implements PropertyArrayInterface
                 'id' => $gardenId
             ],
             $stmt1,
-            function ($rowCount) {
+            function (int $rowCount) {
                 return $rowCount > 1;
             }
         );
@@ -297,7 +297,7 @@ class User extends Model implements PropertyArrayInterface
                 'dimension_y' => $garden->getDimensionY(),
             ],
             $stmtGardens,
-            function ($rowCount) {
+            function (int $rowCount) {
                 return $rowCount !== 1;
             }
         );
@@ -311,7 +311,7 @@ class User extends Model implements PropertyArrayInterface
                     'coordinate_y' => $plantLocation->getCoordinateY(),
                 ],
                 $stmtGardenPlants,
-                function ($rowCount) {
+                function (int $rowCount) {
                     return $rowCount !== 1;
                 }
             );
@@ -343,7 +343,7 @@ class User extends Model implements PropertyArrayInterface
                 'dimension_y' => $garden->getDimensionY(),
             ],
             $stmt,
-            function ($rowCount) {
+            function (int $rowCount) {
                 return $rowCount > 1;
             }
         );
@@ -387,7 +387,7 @@ class User extends Model implements PropertyArrayInterface
                     'coordinate_y' => $plantLocation->getCoordinateY(),
                 ],
                 $stmtGardenPlants,
-                function ($rowCount) {
+                function (int $rowCount) {
                     return $rowCount !== 1;
                 }
             );
@@ -452,7 +452,7 @@ class User extends Model implements PropertyArrayInterface
                 'id' => $plantId
             ],
             $stmt,
-            function ($rowCount) {
+            function (int $rowCount) {
                 return $rowCount > 1;
             }
         );
@@ -513,7 +513,7 @@ class User extends Model implements PropertyArrayInterface
                 'id' => $plantId
             ],
             $stmt,
-            function ($rowCount) {
+            function (int $rowCount) {
                 return $rowCount > 1;
             }
         );
@@ -544,7 +544,7 @@ class User extends Model implements PropertyArrayInterface
                 'image_link' => $plant->getImageLink(),
             ],
             $stmt,
-            function ($rowCount) {
+            function (int $rowCount) {
                 return $rowCount !== 1;
             }
         );
@@ -575,7 +575,7 @@ class User extends Model implements PropertyArrayInterface
                 'image_link' => $plant->getImageLink(),
             ],
             $stmt,
-            function ($rowCount) {
+            function (int $rowCount) {
                 return $rowCount > 1;
             }
         );

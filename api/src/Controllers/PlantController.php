@@ -52,9 +52,11 @@ class PlantController extends Controller
 
         $plant = $this->user->getPlant($request->params['id']);
 
+        $mapper = new PlantJsonMapper($plant);
+
         $this->response->setCode(200);
 
-        $this->response->setBodySingleResource($plant);
+        $this->response->setBodySingleResource($mapper);
 
         $this->view->display($this->response);
     }
