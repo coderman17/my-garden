@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Responses;
 
@@ -44,7 +44,7 @@ class JsonMappedResponse implements ResponseInterface
      */
     public function setBodyCollectionResource(array $array): void
     {
-        foreach ($array as $model){
+        foreach ($array as $model) {
             $this->body[] = $model->getPropertyArray();
         }
     }

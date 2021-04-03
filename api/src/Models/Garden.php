@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Models;
 
@@ -35,11 +35,11 @@ class Garden extends Model implements PropertyArrayInterface
     protected array $plantLocations = [];
 
     /**
-     * @param string|null $id
-     * @param string $userId
-     * @param string $name
-     * @param int $dimensionX
-     * @param int $dimensionY
+     * @param  string|null $id
+     * @param  string      $userId
+     * @param  string      $name
+     * @param  int         $dimensionX
+     * @param  int         $dimensionY
      * @throws OutOfRangeInt
      * @throws OverMaxChars
      * @throws UnderMinChars
@@ -97,18 +97,20 @@ class Garden extends Model implements PropertyArrayInterface
     }
 
     /**
-     * @param Plant $plant
-     * @param PlantLocation $plantLocation
+     * @param  Plant         $plant
+     * @param  PlantLocation $plantLocation
      * @throws OutOfRangeInt
      */
     public function setPlantLocation(Plant $plant, PlantLocation $plantLocation): void
     {
-        if($plant->getUserId() !== $this->userId){
+        if ($plant->getUserId() !== $this->userId) {
             //logic exception?
-            throw new \InvalidArgumentException('The User associated with the plant does not match the User associated with the garden');
+            throw new \InvalidArgumentException(
+                'The User associated with the plant does not match the User associated with the garden'
+            );
         }
 
-        if($plant->getId() !== $plantLocation->getPlantId()){
+        if ($plant->getId() !== $plantLocation->getPlantId()) {
             //logic exception?
             throw new \InvalidArgumentException('The plant provided does not have the same id as the plant location');
         }
@@ -121,7 +123,7 @@ class Garden extends Model implements PropertyArrayInterface
 
         $this->validateParamIntRange('coordinateY for ' . $plant->getId(), $coordinateY, 1, $this->dimensionY);
 
-        if(isset($this->plantLocations[$coordinateX][$coordinateY])){
+        if (isset($this->plantLocations[$coordinateX][$coordinateY])) {
             //logic exception?
             throw new \LogicException('There is already a plant at that location in the garden', 400);
         }
@@ -133,7 +135,7 @@ class Garden extends Model implements PropertyArrayInterface
     {
         $plantLocations = [];
 
-        foreach($this->getPlantLocations() as $plantLocation){
+        foreach ($this->getPlantLocations() as $plantLocation) {
             $plantLocations[] = $plantLocation->getPropertyArray();
         }
 
@@ -153,8 +155,8 @@ class Garden extends Model implements PropertyArrayInterface
     {
         $plantLocations = [];
 
-        foreach ($this->plantLocations as $coordinateY){
-            foreach ($coordinateY as $plantLocation){
+        foreach ($this->plantLocations as $coordinateY) {
+            foreach ($coordinateY as $plantLocation) {
                 $plantLocations[] = $plantLocation;
             }
         }

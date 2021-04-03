@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Controllers;
 
@@ -41,7 +41,7 @@ class GardenController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request $request
      * @throws MissingParameter
      * @throws WrongTypeParameter
      * @throws NotFound
@@ -63,7 +63,7 @@ class GardenController extends Controller
 
 
     /**
-     * @param Request $request
+     * @param  Request $request
      * @throws MissingParameter
      * @throws NotFound
      * @throws WrongTypeParameter
@@ -81,7 +81,7 @@ class GardenController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request $request
      * @throws MissingParameter
      * @throws OutOfRangeInt
      * @throws OverMaxChars
@@ -115,8 +115,8 @@ class GardenController extends Controller
     }
 
     /**
-     * @param Garden $garden
-     * @param Request $request
+     * @param  Garden  $garden
+     * @param  Request $request
      * @throws ConstructionFailure
      * @throws NotFound
      * @throws OutOfRangeInt
@@ -127,7 +127,7 @@ class GardenController extends Controller
     {
         $plantLocations = [];
 
-        foreach($request->params['plantLocations'] as $plantLocation) {
+        foreach ($request->params['plantLocations'] as $plantLocation) {
             $plantLocations[] = new PlantLocation(
                 $plantLocation['id'],
                 $plantLocation['coordinateX'],
@@ -139,15 +139,15 @@ class GardenController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @throws MissingParameter
-     * @throws OutOfRangeInt
-     * @throws OverMaxChars
-     * @throws UnderMinChars
-     * @throws WrongTypeParameter
-     * @throws \Exception
-     * @throws ConstructionFailure
-     * @throws NotFound
+     * @param        Request $request
+     * @throws       MissingParameter
+     * @throws       OutOfRangeInt
+     * @throws       OverMaxChars
+     * @throws       UnderMinChars
+     * @throws       WrongTypeParameter
+     * @throws       \Exception
+     * @throws       ConstructionFailure
+     * @throws       NotFound
      * @noinspection ForgottenDebugOutputInspection
      */
     public function update(Request $request): void

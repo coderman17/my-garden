@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Repositories;
 
@@ -20,7 +20,7 @@ class Repository
     }
 
     /**
-     * @param string $query
+     * @param  string $query
      * @return \PDOStatement
      * @throws \Exception
      */
@@ -28,37 +28,41 @@ class Repository
     {
         $stmt = $this->databaseConnection->dbh->prepare($query);
 
-        if (!$stmt instanceOf \PDOStatement){
-            throw new \Exception('Could not prepare database statement. ' . $this->databaseConnection->dbh->errorInfo()[2]);
+        if (!$stmt instanceof \PDOStatement) {
+            throw new \Exception(
+                'Could not prepare database statement. ' . $this->databaseConnection->dbh->errorInfo()[2]
+            );
         }
 
         return $stmt;
     }
 
     /**
-     * @param array<string, string|int> $mapping
-     * @param \PDOStatement $stmt
-     * @param callable $unexpectedRowCount
+     * @param  array<string, string|int> $mapping
+     * @param  \PDOStatement             $stmt
+     * @param  callable                  $unexpectedRowCount
      * @throws \Exception
      */
     public function execute(array $mapping, \PDOStatement $stmt, callable $unexpectedRowCount): void
     {
         $stmt->execute($mapping);
 
-        if ($unexpectedRowCount($stmt->rowCount()) === true){
-            throw new \Exception('An unexpected number of database rows were affected. Number actually affected: ' . $stmt->rowCount());
+        if ($unexpectedRowCount($stmt->rowCount()) === true) {
+            throw new \Exception(
+                'An unexpected number of database rows were affected. Number actually affected: ' . $stmt->rowCount()
+            );
         }
     }
 
     /**
-     * @param array<string, string> $columnAliases
+     * @param  array<string, string> $columnAliases
      * @return string
      */
     public function constructQueryFromAliases(array $columnAliases): string
     {
         $string = '';
 
-        foreach ($columnAliases as $column => $alias){
+        foreach ($columnAliases as $column => $alias) {
             $string .= $column . ' as ' . $alias . ', ';
         }
 
@@ -66,11 +70,11 @@ class Repository
     }
 
     /**
-     * @param array $row
+     * @param  array $row
      * @return Garden
      * @throws ConstructionFailure
      *
-     * @phpstan-ignore-next-line    //haven't specified types of $row because they are various, and we catch Throwable from constructor anyway
+     * @phpstan-ignore-next-line //haven't specified types of $row, they are various. We catch Throwable anyway
      */
     public function gardenFromRow(array $row): Garden
     {
@@ -82,18 +86,17 @@ class Repository
                 $row[Garden::COLUMN_ALIASES['gardens.dimension_x']],
                 $row[Garden::COLUMN_ALIASES['gardens.dimension_y']]
             );
-
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
             throw new ConstructionFailure($e);
         }
     }
 
     /**
-     * @param array $row
+     * @param  array $row
      * @return Plant
      * @throws ConstructionFailure
      *
-     * @phpstan-ignore-next-line    //haven't specified types of $row because they are various, and we catch Throwable from constructor anyway
+     * @phpstan-ignore-next-line //haven't specified types of $row, they are various. We catch Throwable anyway
      */
     public function plantFromRow(array $row): Plant
     {
@@ -105,18 +108,17 @@ class Repository
                 $row[Plant::COLUMN_ALIASES['plants.latin_name']],
                 $row[Plant::COLUMN_ALIASES['plants.image_link']]
             );
-
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
             throw new ConstructionFailure($e);
         }
     }
 
     /**
-     * @param array $row
+     * @param  array $row
      * @return PlantLocation
      * @throws ConstructionFailure
      *
-     * @phpstan-ignore-next-line    //haven't specified types of $row because they are various, and we catch Throwable from constructor anyway
+     * @phpstan-ignore-next-line //haven't specified types of $row, they are various. We catch Throwable anyway
      */
     public function plantLocationFromRow(array $row): PlantLocation
     {
@@ -126,8 +128,7 @@ class Repository
                 $row[PlantLocation::COLUMN_ALIASES['gardens_plants.coordinate_x']],
                 $row[PlantLocation::COLUMN_ALIASES['gardens_plants.coordinate_y']]
             );
-
-        } catch (\Throwable $e){
+        } catch (\Throwable $e) {
             throw new ConstructionFailure($e);
         }
     }

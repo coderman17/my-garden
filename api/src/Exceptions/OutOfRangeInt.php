@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Exceptions;
 
@@ -12,11 +12,11 @@ class OutOfRangeInt extends \Exception
 
         $maxClause = '';
 
-        if ($min !== null){
+        if ($min !== null) {
             $minClause = ' The minimum value is ' . $min . '.';
         }
 
-        if ($max !== null){
+        if ($max !== null) {
             $maxClause = ' The maximum value is ' . $max . '.';
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Models;
 
@@ -27,10 +27,10 @@ class User extends Model implements PropertyArrayInterface
     protected Repository $repository;
 
     /**
-     * @param string|null $id
-     * @param string $username
-     * @param string $email
-     * @param string $password
+     * @param  string|null $id
+     * @param  string      $username
+     * @param  string      $email
+     * @param  string      $password
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws \Exception
@@ -123,7 +123,9 @@ class User extends Model implements PropertyArrayInterface
                 'user_id' => $this->id
             ],
             $stmt,
-            function (){ return false; }
+            function () {
+                return false;
+            }
         );
 
         $previousGardenId = null;
@@ -132,7 +134,7 @@ class User extends Model implements PropertyArrayInterface
 
         while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             if ($row[Garden::COLUMN_ALIASES['gardens.id']] !== $previousGardenId) {
-                if ($garden !== null){
+                if ($garden !== null) {
                     $intToGardenArray->pushItem($garden);
                 }
 
@@ -141,8 +143,8 @@ class User extends Model implements PropertyArrayInterface
                 $previousGardenId = $garden->getId();
             }
 
-            if ($row[PlantLocation::COLUMN_ALIASES['gardens_plants.plant_id']] !== null){
-                if ($garden === null){
+            if ($row[PlantLocation::COLUMN_ALIASES['gardens_plants.plant_id']] !== null) {
+                if ($garden === null) {
                     throw new \Exception('Found pivot table entry without garden table entry');
                 }
 
@@ -153,7 +155,7 @@ class User extends Model implements PropertyArrayInterface
             }
         }
 
-        if ($garden !== null){
+        if ($garden !== null) {
             $intToGardenArray->pushItem($garden);
         }
 
@@ -161,7 +163,7 @@ class User extends Model implements PropertyArrayInterface
     }
 
     /**
-     * @param string $gardenId
+     * @param  string $gardenId
      * @return Garden
      * @throws NotFound
      * @throws \Exception
@@ -193,19 +195,21 @@ class User extends Model implements PropertyArrayInterface
                 'id' => $gardenId
             ],
             $stmt,
-            function (){ return false; }
+            function () {
+                return false;
+            }
         );
 
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        if(!$row){
+        if (!$row) {
             throw new NotFound($gardenId);
         }
 
         $garden = $this->repository->gardenFromRow($row);
 
-        while($row) {
-            if ($row[PlantLocation::COLUMN_ALIASES['gardens_plants.plant_id']] !== null){
+        while ($row) {
+            if ($row[PlantLocation::COLUMN_ALIASES['gardens_plants.plant_id']] !== null) {
                     $garden->setPlantLocation(
                         $this->repository->plantFromRow($row),
                         $this->repository->plantLocationFromRow($row)
@@ -219,7 +223,7 @@ class User extends Model implements PropertyArrayInterface
     }
 
     /**
-     * @param string $gardenId
+     * @param  string $gardenId
      * @throws NotFound
      * @throws \Exception
      */
@@ -244,10 +248,12 @@ class User extends Model implements PropertyArrayInterface
                 'id' => $gardenId
             ],
             $stmt1,
-            function ($rowCount){ return $rowCount > 1; }
+            function ($rowCount) {
+                return $rowCount > 1;
+            }
         );
 
-        if($stmt1->rowCount() < 1){
+        if ($stmt1->rowCount() < 1) {
             throw new NotFound($gardenId);
         }
 
@@ -256,12 +262,14 @@ class User extends Model implements PropertyArrayInterface
                 'id' => $gardenId
             ],
             $stmt2,
-            function (){ return false; }
+            function () {
+                return false;
+            }
         );
     }
 
     /**
-     * @param Garden $garden
+     * @param  Garden $garden
      * @throws \Exception
      */
     public function saveGarden(Garden $garden): void
@@ -289,10 +297,12 @@ class User extends Model implements PropertyArrayInterface
                 'dimension_y' => $garden->getDimensionY(),
             ],
             $stmtGardens,
-            function ($rowCount){ return $rowCount !== 1; }
+            function ($rowCount) {
+                return $rowCount !== 1;
+            }
         );
 
-        foreach($plantLocations as $plantLocation) {
+        foreach ($plantLocations as $plantLocation) {
             $this->repository->execute(
                 [
                     'garden_id' => $garden->getId(),
@@ -301,13 +311,15 @@ class User extends Model implements PropertyArrayInterface
                     'coordinate_y' => $plantLocation->getCoordinateY(),
                 ],
                 $stmtGardenPlants,
-                function ($rowCount){ return $rowCount !== 1; }
+                function ($rowCount) {
+                    return $rowCount !== 1;
+                }
             );
         }
     }
 
     /**
-     * @param Garden $garden
+     * @param  Garden $garden
      * @throws \Exception
      * @throws NotFound
      */
@@ -331,12 +343,14 @@ class User extends Model implements PropertyArrayInterface
                 'dimension_y' => $garden->getDimensionY(),
             ],
             $stmt,
-            function ($rowCount){ return $rowCount > 1; }
+            function ($rowCount) {
+                return $rowCount > 1;
+            }
         );
 
-        if(
+        if (
             $stmt->rowCount() < 1
-        ){
+        ) {
             //throws NotFound
             $this->getGarden($garden->getId());
         }
@@ -351,7 +365,9 @@ class User extends Model implements PropertyArrayInterface
                 'garden_id' => $garden->getId(),
             ],
             $stmt,
-            function (){ return false; }
+            function () {
+                return false;
+            }
         );
 
         $stmtGardenPlants = $this->repository->prepare(
@@ -362,7 +378,7 @@ class User extends Model implements PropertyArrayInterface
 
         $plantLocations = $garden->getPlantLocations();
 
-        foreach($plantLocations as $plantLocation) {
+        foreach ($plantLocations as $plantLocation) {
             $this->repository->execute(
                 [
                     'garden_id' => $garden->getId(),
@@ -371,7 +387,9 @@ class User extends Model implements PropertyArrayInterface
                     'coordinate_y' => $plantLocation->getCoordinateY(),
                 ],
                 $stmtGardenPlants,
-                function ($rowCount){ return $rowCount !== 1; }
+                function ($rowCount) {
+                    return $rowCount !== 1;
+                }
             );
         }
     }
@@ -397,10 +415,12 @@ class User extends Model implements PropertyArrayInterface
                 'user_id' => $this->id
             ],
             $stmt,
-            function (){ return false; }
+            function () {
+                return false;
+            }
         );
 
-        while($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+        while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
             $plant = $this->repository->plantFromRow($row);
 
             $stringToPlantArray->setItem($plant->getId(), $plant);
@@ -410,7 +430,7 @@ class User extends Model implements PropertyArrayInterface
     }
 
     /**
-     * @param string $plantId
+     * @param  string $plantId
      * @return Plant
      * @throws NotFound
      * @throws \Exception
@@ -432,12 +452,14 @@ class User extends Model implements PropertyArrayInterface
                 'id' => $plantId
             ],
             $stmt,
-            function ($rowCount){ return $rowCount > 1; }
+            function ($rowCount) {
+                return $rowCount > 1;
+            }
         );
 
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        if(!$row){
+        if (!$row) {
             throw new NotFound($plantId);
         }
 
@@ -445,8 +467,8 @@ class User extends Model implements PropertyArrayInterface
     }
 
     /**
-     * @param Garden $garden
-     * @param array<PlantLocation> $plantLocations
+     * @param  Garden               $garden
+     * @param  array<PlantLocation> $plantLocations
      * @throws ConstructionFailure
      * @throws NotFound
      * @throws OutOfRangeInt
@@ -457,11 +479,10 @@ class User extends Model implements PropertyArrayInterface
     {
         $plants = $this->getPlants()->getItems();
 
-        foreach ($plantLocations as $plantLocation){
-
+        foreach ($plantLocations as $plantLocation) {
             $plantId = $plantLocation->getPlantId();
 
-            if(!isset($plants[$plantId])){
+            if (!isset($plants[$plantId])) {
                 throw new NotFound($plantId);
             }
 
@@ -473,7 +494,7 @@ class User extends Model implements PropertyArrayInterface
     }
 
     /**
-     * @param string $plantId
+     * @param  string $plantId
      * @throws NotFound
      * @throws \Exception
      */
@@ -492,16 +513,18 @@ class User extends Model implements PropertyArrayInterface
                 'id' => $plantId
             ],
             $stmt,
-            function ($rowCount){ return $rowCount > 1; }
+            function ($rowCount) {
+                return $rowCount > 1;
+            }
         );
 
-        if($stmt->rowCount() < 1){
+        if ($stmt->rowCount() < 1) {
             throw new NotFound($plantId);
         }
     }
 
     /**
-     * @param Plant $plant
+     * @param  Plant $plant
      * @throws \Exception
      */
     public function savePlant(Plant $plant): void
@@ -521,12 +544,14 @@ class User extends Model implements PropertyArrayInterface
                 'image_link' => $plant->getImageLink(),
             ],
             $stmt,
-            function ($rowCount){ return $rowCount !== 1; }
+            function ($rowCount) {
+                return $rowCount !== 1;
+            }
         );
     }
 
     /**
-     * @param Plant $plant
+     * @param  Plant $plant
      * @throws \Exception
      * @throws NotFound
      */
@@ -550,12 +575,14 @@ class User extends Model implements PropertyArrayInterface
                 'image_link' => $plant->getImageLink(),
             ],
             $stmt,
-            function ($rowCount){ return $rowCount > 1; }
+            function ($rowCount) {
+                return $rowCount > 1;
+            }
         );
 
-        if(
+        if (
             $stmt->rowCount() < 1
-        ){
+        ) {
             //throws Not Found
             $this->getPlant($plant->getId());
         }

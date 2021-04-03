@@ -13,6 +13,8 @@ before_script:
   - docker exec -u root mysql /etc/mysql/scripts/migrate.sh
 
 script:
+  - docker exec app bin/phpcs --standard=PSR12 src
+  - docker exec app bin/phpcs --standard=PSR12 features
   - docker exec app bin/phpstan analyse features src
   - docker exec app bin/psalm
   - docker exec app bin/behat

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Models;
 
@@ -23,8 +23,8 @@ class PlantLocation extends Model implements PropertyArrayInterface
 
     /**
      * @param string $plantId
-     * @param int $coordinateX
-     * @param int $coordinateY
+     * @param int    $coordinateX
+     * @param int    $coordinateY
      */
     public function __construct(string $plantId, int $coordinateX, int $coordinateY)
     {

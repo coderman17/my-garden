@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Request;
 
@@ -37,7 +37,7 @@ class Request
             }
         }
 
-        foreach ($_GET as $k => $v){
+        foreach ($_GET as $k => $v) {
             $v = $this->identifyInteger($v);
 
             $this->params[$k] = $v;
@@ -51,12 +51,12 @@ class Request
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return int|string
      */
     protected function identifyInteger(string $value)
     {
-        if (preg_match('/^[1-9]\d+$|^\d$/', $value)){
+        if (preg_match('/^[1-9]\d+$|^\d$/', $value)) {
             return (int)$value;
         }
 
