@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Controllers;
 
@@ -39,7 +39,7 @@ class PlantController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request $request
      * @throws NotFound
      * @throws ConstructionFailure
      * @throws \Exception
@@ -60,7 +60,7 @@ class PlantController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request $request
      * @throws NotFound
      * @throws \Exception
      * @throws MissingParameter
@@ -78,7 +78,7 @@ class PlantController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request $request
      * @throws MissingParameter
      * @throws OverMaxChars
      * @throws UnderMinChars
@@ -107,12 +107,12 @@ class PlantController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @throws \Exception
-     * @throws MissingParameter
-     * @throws WrongTypeParameter
-     * @throws OverMaxChars
-     * @throws UnderMinChars
+     * @param        Request $request
+     * @throws       \Exception
+     * @throws       MissingParameter
+     * @throws       WrongTypeParameter
+     * @throws       OverMaxChars
+     * @throws       UnderMinChars
      * @noinspection ForgottenDebugOutputInspection
      */
     public function update(Request $request): void

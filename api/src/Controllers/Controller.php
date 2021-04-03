@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Controllers;
 
@@ -22,7 +22,7 @@ abstract class Controller
 
     /**
      * @param ResponseInterface $response
-     * @param ViewInterface $view
+     * @param ViewInterface     $view
      */
     public function __construct(ResponseInterface $response, ViewInterface $view)
     {

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden;
 
@@ -37,10 +37,10 @@ class App
      */
     public function run(): void
     {
-//        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
+        //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
 
         $this->router->handle($this->request);
 
-//        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
+        //        error_log(date("Y-m-d\TH:i:s") . substr((string)microtime(), 1, 8));
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Database;
 
-Class DatabaseConnection
+class DatabaseConnection
 {
     public \PDO $dbh;
 
@@ -21,7 +21,7 @@ Class DatabaseConnection
 
         $dbPassword = getenv("DB_PASSWORD");
 
-        if (!$dbHost || !$dbName || !$dbUsername || !$dbPassword){
+        if (!$dbHost || !$dbName || !$dbUsername || !$dbPassword) {
             throw new \Exception('Some environment configuration was not found');
         }
 

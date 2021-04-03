@@ -1,8 +1,12 @@
-<?php /** @noinspection PhpUnused
+<?php
+
+/** @noinspection PhpUnused
  * @noinspection UnknownInspectionInspection
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
+
+namespace MyGardenTests\bootstrap;
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -35,7 +39,7 @@ class FeatureContext implements Context
      * @Given I have a request body:
      *
      * @param PyStringNode $string
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function iHaveARequestBody(PyStringNode $string): void
     {
@@ -67,14 +71,14 @@ class FeatureContext implements Context
      */
     protected function recursiveReplace(&$iterable): void
     {
-        foreach ($iterable as &$item){
-            if (is_object($item) || is_array($item)){
+        foreach ($iterable as &$item) {
+            if (is_object($item) || is_array($item)) {
                 $this->recursiveReplace($item);
             } else {
-                if(!is_string($item)){
+                if (!is_string($item)) {
                     continue;
                 }
-                if(preg_match('/(?<={{).+(?=}})/', $item, $matches) === 1){
+                if (preg_match('/(?<={{).+(?=}})/', $item, $matches) === 1) {
                     $item = $this->savedParams[$matches[0]];
                 }
             }
@@ -95,13 +99,13 @@ class FeatureContext implements Context
      * @When I upsert to the root of the request body:
      *
      * @param PyStringNode $string
-     * @throws JsonException
+     * @throws \JsonException
      */
     public function iUpsertToTheRootOfTheRequestBody(PyStringNode $string): void
     {
         $incomingArray = json_decode($string->getRaw(), true, 512, JSON_THROW_ON_ERROR);
 
-        foreach ($incomingArray as $k => $v){
+        foreach ($incomingArray as $k => $v) {
             $this->requestBody->$k = $v;
         }
     }
@@ -147,7 +151,7 @@ class FeatureContext implements Context
 
         $this->actualResponseBody = json_decode($body);
 
-        $this->responseStatus = curl_getinfo($ch,  CURLINFO_RESPONSE_CODE);
+        $this->responseStatus = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     }
 
     /**
@@ -159,7 +163,7 @@ class FeatureContext implements Context
      */
     public function iSaveFromTheResponse($param, string $name = null): void
     {
-        if ($name === null){
+        if ($name === null) {
             $name = $param;
         }
         $this->savedParams[$name] = $this->actualResponseBody->$param;

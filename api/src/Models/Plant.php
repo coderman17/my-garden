@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Models;
 
@@ -29,11 +29,11 @@ class Plant extends Model implements PropertyArrayInterface
     protected string $imageLink;
 
     /**
-     * @param string|null $id
-     * @param string $userId
-     * @param string $englishName
-     * @param string $latinName
-     * @param string $imageLink
+     * @param  string|null $id
+     * @param  string      $userId
+     * @param  string      $englishName
+     * @param  string      $latinName
+     * @param  string      $imageLink
      * @throws OverMaxChars
      * @throws UnderMinChars
      */

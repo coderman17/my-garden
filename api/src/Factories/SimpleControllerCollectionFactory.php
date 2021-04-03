@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace MyGarden\Factories;
 
@@ -30,7 +30,7 @@ class SimpleControllerCollectionFactory
     }
 
     /**
-     * @param Request $request
+     * @param  Request $request
      * @return ControllerCollection
      * @throws \Exception
      */
@@ -39,9 +39,9 @@ class SimpleControllerCollectionFactory
         $acceptHeader = $request->acceptHeader;
 
         if (
-            $acceptHeader === [] ||
-            !in_array('application/json', $acceptHeader, true)
-        ){
+            $acceptHeader === []
+            || !in_array('application/json', $acceptHeader, true)
+        ) {
             $this->view = new HtmlView();
         }
 
