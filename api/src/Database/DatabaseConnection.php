@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace MyGarden\Database;
 
-class DatabaseConnection
+use MyGarden\Singleton;
+
+class DatabaseConnection extends Singleton
 {
     public \PDO $dbh;
 
     /**
      * @throws \Exception
      */
-    public function __construct()
+    protected function init(): void
     {
         $dbHost = getenv('DB_HOST');
 

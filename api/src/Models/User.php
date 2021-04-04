@@ -56,7 +56,8 @@ class User extends Model implements PropertyArrayInterface
 
         $this->password = $password;
 
-        $this->repository = new Repository();
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->repository = Repository::getInstance();
     }
 
     /**

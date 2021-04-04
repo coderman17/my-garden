@@ -9,14 +9,16 @@ use MyGarden\Exceptions\ConstructionFailure;
 use MyGarden\Models\Garden;
 use MyGarden\Models\Plant;
 use MyGarden\Models\PlantLocation;
+use MyGarden\Singleton;
 
-class Repository
+class Repository extends Singleton
 {
     protected DatabaseConnection $databaseConnection;
 
-    public function __construct()
+    protected function init(): void
     {
-        $this->databaseConnection = new DatabaseConnection();
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->databaseConnection = DatabaseConnection::getInstance();
     }
 
     /**
