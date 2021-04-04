@@ -50,11 +50,7 @@ class Request
         }
     }
 
-    /**
-     * @param  string $value
-     * @return int|string
-     */
-    protected function identifyInteger(string $value)
+    protected function identifyInteger(string $value): string | int
     {
         if (preg_match('/^[1-9]\d+$|^\d$/', $value)) {
             return (int)$value;
