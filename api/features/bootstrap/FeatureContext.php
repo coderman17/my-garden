@@ -20,7 +20,7 @@ class FeatureContext implements Context
     /**
      * @var array<\stdClass>|\stdClass
      */
-    protected $actualResponseBody;
+    protected array | \stdClass $actualResponseBody;
 
     protected int $responseStatus = 0;
 
@@ -69,7 +69,7 @@ class FeatureContext implements Context
     /**
      * @param mixed $iterable
      */
-    protected function recursiveReplace(&$iterable): void
+    protected function recursiveReplace(iterable &$iterable): void
     {
         foreach ($iterable as &$item) {
             if (is_object($item) || is_array($item)) {
@@ -118,7 +118,7 @@ class FeatureContext implements Context
      *
      * @noinspection PhpMethodNamingConventionInspection it's only just over, and carefully written
      */
-    public function iUpsertToTheRootOfTheRequestBodyAStringOfKeyAndLength($key, int $length): void
+    public function iUpsertToTheRootOfTheRequestBodyAStringOfKeyAndLength(string | int $key, int $length): void
     {
         $string = str_repeat('a', $length);
 
@@ -158,10 +158,10 @@ class FeatureContext implements Context
      * @When I save :param from the response
      * @When I save :param from the response as :name
      *
-     * @param mixed $param
+     * @param string $param
      * @param string|null $name
      */
-    public function iSaveFromTheResponse($param, string $name = null): void
+    public function iSaveFromTheResponse(string $param, string $name = null): void
     {
         if ($name === null) {
             $name = $param;

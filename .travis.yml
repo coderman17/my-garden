@@ -1,8 +1,8 @@
 language: php
 os: linux
-dist: xenial
+dist: trusty
 php:
-  - 7.4.11
+  - 8.0
 
 before_script:
   - docker-compose build

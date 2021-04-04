@@ -43,6 +43,9 @@
 		"ext-curl": "*"
     },
 	"config": {
-		"bin-dir": "bin/"
+		"bin-dir": "bin/",
+		"platform": {
+			"php": "^8.0"
+		}
 	}
 }

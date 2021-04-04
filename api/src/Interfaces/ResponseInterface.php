@@ -18,7 +18,7 @@ interface ResponseInterface
     public function setBodyCollectionResource(array $array): void;
 
     /**
-     * @return array<string, mixed>|array<array<string, mixed>>
+     * @return array <string, mixed>|array<array<string, mixed>>
      */
     public function getBody(): array;
 }
