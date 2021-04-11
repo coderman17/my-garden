@@ -13,7 +13,6 @@ use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
 use MyGarden\Models\Garden;
 use MyGarden\Models\PlantLocation;
-use MyGarden\Request\Request;
 use MyGarden\Validators\GardenValidator;
 use MyGarden\Validators\Validator;
 
@@ -41,18 +40,17 @@ class GardenController extends Controller
     }
 
     /**
-     * @param  Request $request
      * @throws MissingParameter
      * @throws WrongTypeParameter
      * @throws NotFound
      * @throws \Exception
      * @throws ConstructionFailure
      */
-    public function get(Request $request): void
+    public function get(): void
     {
-        $this->validator->validateRequestId($request);
+        $this->validator->validateRequestId($this->request);
 
-        $garden = $this->user->getGarden($request->params['id']);
+        $garden = $this->user->getGarden($this->request->params['id']);
 
         $this->response->setCode(200);
 
@@ -63,17 +61,16 @@ class GardenController extends Controller
 
 
     /**
-     * @param  Request $request
      * @throws MissingParameter
      * @throws NotFound
      * @throws WrongTypeParameter
      * @throws \Exception
      */
-    public function delete(Request $request): void
+    public function delete(): void
     {
-        $this->validator->validateRequestId($request);
+        $this->validator->validateRequestId($this->request);
 
-        $this->user->deleteGarden($request->params['id']);
+        $this->user->deleteGarden($this->request->params['id']);
 
         $this->response->setCode(204);
 
@@ -81,7 +78,6 @@ class GardenController extends Controller
     }
 
     /**
-     * @param  Request $request
      * @throws MissingParameter
      * @throws OutOfRangeInt
      * @throws OverMaxChars
@@ -91,19 +87,19 @@ class GardenController extends Controller
      * @throws NotFound
      * @throws ConstructionFailure
      */
-    public function store(Request $request): void
+    public function store(): void
     {
-        $this->validator->validateRequestWithoutId($request);
+        $this->validator->validateRequestWithoutId($this->request);
 
         $garden = new Garden(
             null,
             $this->user->getId(),
-            $request->params['name'],
-            $request->params['dimensionX'],
-            $request->params['dimensionY']
+            $this->request->params['name'],
+            $this->request->params['dimensionX'],
+            $this->request->params['dimensionY']
         );
 
-        $this->populateGardenWithLocations($garden, $request);
+        $this->populateGardenWithLocations($garden);
 
         $this->user->saveGarden($garden);
 
@@ -116,18 +112,17 @@ class GardenController extends Controller
 
     /**
      * @param  Garden  $garden
-     * @param  Request $request
      * @throws ConstructionFailure
      * @throws NotFound
      * @throws OutOfRangeInt
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
-    protected function populateGardenWithLocations(Garden $garden, Request $request): void
+    protected function populateGardenWithLocations(Garden $garden): void
     {
         $plantLocations = [];
 
-        foreach ($request->params['plantLocations'] as $plantLocation) {
+        foreach ($this->request->params['plantLocations'] as $plantLocation) {
             $plantLocations[] = new PlantLocation(
                 $plantLocation['id'],
                 $plantLocation['coordinateX'],
@@ -139,7 +134,6 @@ class GardenController extends Controller
     }
 
     /**
-     * @param        Request $request
      * @throws       MissingParameter
      * @throws       OutOfRangeInt
      * @throws       OverMaxChars
@@ -150,19 +144,19 @@ class GardenController extends Controller
      * @throws       NotFound
      * @noinspection ForgottenDebugOutputInspection
      */
-    public function update(Request $request): void
+    public function update(): void
     {
-        $this->validator->validateRequestWithId($request);
+        $this->validator->validateRequestWithId($this->request);
 
         $garden = new Garden(
-            $request->params['id'],
+            $this->request->params['id'],
             $this->user->getId(),
-            $request->params['name'],
-            $request->params['dimensionX'],
-            $request->params['dimensionY']
+            $this->request->params['name'],
+            $this->request->params['dimensionX'],
+            $this->request->params['dimensionY']
         );
 
-        $this->populateGardenWithLocations($garden, $request);
+        $this->populateGardenWithLocations($garden);
 
         $this->response->setCode(200);
 

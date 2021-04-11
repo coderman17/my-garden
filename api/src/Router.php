@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace MyGarden;
 
-use MyGarden\Controllers\ControllerCollection;
 use MyGarden\Controllers\GardenController;
 use MyGarden\Controllers\PlantController;
 use MyGarden\Exceptions\NotFound;
+use MyGarden\Factories\SimpleControllerFactory;
 use MyGarden\Request\Request;
 
 class Router
@@ -17,27 +17,24 @@ class Router
      */
     protected array $routes;
 
-    protected Request $request;
-
     protected PlantController $plantController;
 
     protected GardenController $gardenController;
 
-    public function __construct(ControllerCollection $controllerCollection)
-    {
-        $this->plantController = $controllerCollection->plantController;
+    private SimpleControllerFactory $controllerFactory;
 
-        $this->gardenController = $controllerCollection->gardenController;
+    public function __construct(SimpleControllerFactory $controllerFactory)
+    {
+        $this->controllerFactory = $controllerFactory;
     }
 
     /**
-     * @param  Request $request
+     * @param Request $request
      * @throws NotFound
+     * @throws \Exception
      */
     public function handle(Request $request): void
     {
-        $this->request = $request;
-
         $this->populateRoutes();
 
         //TODO this is deeply unsafe and needs to be done properly
@@ -45,88 +42,93 @@ class Router
 
         $matches = [];
 
-        $response = null;
+        preg_match_all('/([^?\/]+)/', $request->uri, $matches);
 
-        preg_match_all('/(?<=api\/)([^\/?]+)(\d+){0,25}/', $request->uri, $matches);
-
-        $this->routes = $this->routes[$request->method];
+        $routes = $this->routes[$request->method];
 
         $matches = $matches[0];
 
         foreach ($matches as $match) {
-            if (isset($this->routes[$match])) {
-                $this->routes = $this->routes[$match];
+            if ($match == "api") {
+                continue;
             }
 
-            if (isset($this->routes['method'])) {
-                $this->routes['method']();
-                return;
+            if (!isset($routes[$match])) {
+                throw new NotFound();
             }
+
+            if (true !== ($routes[$match] instanceof Route)) {
+                $routes = $routes[$match];
+                continue;
+            }
+
+            $route = $routes[$match];
+
+            $controller = $this->controllerFactory->create($route->controllerName);
+
+            $method = $route->method;
+
+            $controller->$method();
+
+            return;
         }
 
         throw new NotFound();
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function populateRoutes(): void
     {
-        $this->routes['GET']['plant'] = [
-            'method' => function (): void {
-                $this->plantController->get($this->request);
-            }
-        ];
+        $this->routes['GET']['plants'] = new Route(
+            PlantController::class,
+            'getAll'
+        );
 
-        $this->routes['GET']['plants'] = [
-            'method' => function (): void {
-                $this->plantController->getAll();
-            }
-        ];
+        $this->routes['GET']['plant'] = new Route(
+            PlantController::class,
+            'get'
+        );
 
-        $this->routes['DELETE']['plant'] = [
-            'method' => function (): void {
-                $this->plantController->delete($this->request);
-            }
-        ];
+        $this->routes['DELETE']['plant'] = new Route(
+            PlantController::class,
+            'delete'
+        );
 
-        $this->routes['PUT']['plant'] = [
-            'method' => function (): void {
-                $this->plantController->update($this->request);
-            }
-        ];
+        $this->routes['POST']['plant'] = new Route(
+            PlantController::class,
+            'store'
+        );
 
-        $this->routes['POST']['plant'] = [
-            'method' => function (): void {
-                $this->plantController->store($this->request);
-            }
-        ];
+        $this->routes['PUT']['plant'] = new Route(
+            PlantController::class,
+            'update'
+        );
 
-        $this->routes['GET']['garden'] = [
-            'method' => function (): void {
-                $this->gardenController->get($this->request);
-            }
-        ];
+        $this->routes['GET']['gardens'] = new Route(
+            GardenController::class,
+            'getAll'
+        );
 
-        $this->routes['GET']['gardens'] = [
-            'method' => function (): void {
-                $this->gardenController->getAll();
-            }
-        ];
+        $this->routes['GET']['garden'] = new Route(
+            GardenController::class,
+            'get'
+        );
 
-        $this->routes['DELETE']['garden'] = [
-            'method' => function (): void {
-                $this->gardenController->delete($this->request);
-            }
-        ];
+        $this->routes['DELETE']['garden'] = new Route(
+            GardenController::class,
+            'delete'
+        );
 
-        $this->routes['PUT']['garden'] = [
-            'method' => function (): void {
-                $this->gardenController->update($this->request);
-            }
-        ];
+        $this->routes['POST']['garden'] = new Route(
+            GardenController::class,
+            'store'
+        );
 
-        $this->routes['POST']['garden'] = [
-            'method' => function (): void {
-                $this->gardenController->store($this->request);
-            }
-        ];
+        $this->routes['PUT']['garden'] = new Route(
+            GardenController::class,
+            'update'
+        );
     }
 }

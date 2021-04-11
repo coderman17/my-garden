@@ -11,7 +11,6 @@ use MyGarden\Exceptions\OverMaxChars;
 use MyGarden\Exceptions\UnderMinChars;
 use MyGarden\Exceptions\WrongTypeParameter;
 use MyGarden\Models\Plant;
-use MyGarden\Request\Request;
 use MyGarden\Validators\PlantValidator;
 use MyGarden\Validators\Validator;
 
@@ -39,18 +38,17 @@ class PlantController extends Controller
     }
 
     /**
-     * @param  Request $request
      * @throws NotFound
      * @throws ConstructionFailure
      * @throws \Exception
      * @throws MissingParameter
      * @throws WrongTypeParameter
      */
-    public function get(Request $request): void
+    public function get(): void
     {
-        $this->validator->validateRequestId($request);
+        $this->validator->validateRequestId($this->request);
 
-        $plant = $this->user->getPlant($request->params['id']);
+        $plant = $this->user->getPlant($this->request->params['id']);
 
         $this->response->setCode(200);
 
@@ -60,17 +58,16 @@ class PlantController extends Controller
     }
 
     /**
-     * @param  Request $request
      * @throws NotFound
      * @throws \Exception
      * @throws MissingParameter
      * @throws WrongTypeParameter
      */
-    public function delete(Request $request): void
+    public function delete(): void
     {
-        $this->validator->validateRequestId($request);
+        $this->validator->validateRequestId($this->request);
 
-        $this->user->deletePlant($request->params['id']);
+        $this->user->deletePlant($this->request->params['id']);
 
         $this->response->setCode(204);
 
@@ -78,23 +75,22 @@ class PlantController extends Controller
     }
 
     /**
-     * @param  Request $request
      * @throws MissingParameter
      * @throws OverMaxChars
      * @throws UnderMinChars
      * @throws WrongTypeParameter
      * @throws \Exception
      */
-    public function store(Request $request): void
+    public function store(): void
     {
-        $this->validator->validateRequestWithoutId($request);
+        $this->validator->validateRequestWithoutId($this->request);
 
         $plant = new Plant(
             null,
             $this->user->getId(),
-            $request->params['englishName'],
-            $request->params['latinName'],
-            $request->params['imageLink']
+            $this->request->params['englishName'],
+            $this->request->params['latinName'],
+            $this->request->params['imageLink']
         );
 
         $this->user->savePlant($plant);
@@ -107,7 +103,6 @@ class PlantController extends Controller
     }
 
     /**
-     * @param        Request $request
      * @throws       \Exception
      * @throws       MissingParameter
      * @throws       WrongTypeParameter
@@ -115,16 +110,16 @@ class PlantController extends Controller
      * @throws       UnderMinChars
      * @noinspection ForgottenDebugOutputInspection
      */
-    public function update(Request $request): void
+    public function update(): void
     {
-        $this->validator->validateRequestWithId($request);
+        $this->validator->validateRequestWithId($this->request);
 
         $plant = new Plant(
-            $request->params['id'],
+            $this->request->params['id'],
             $this->user->getId(),
-            $request->params['englishName'],
-            $request->params['latinName'],
-            $request->params['imageLink']
+            $this->request->params['englishName'],
+            $this->request->params['latinName'],
+            $this->request->params['imageLink']
         );
 
         $this->response->setCode(200);
