@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace MyGarden;
 
-use MyGarden\Controllers\ControllerCollection;
-use MyGarden\Factories\SimpleControllerCollectionFactory;
+use MyGarden\Factories\SimpleControllerFactory;
 use MyGarden\Request\Request;
 
 class App
@@ -14,9 +13,7 @@ class App
 
     protected Router $router;
 
-    protected SimpleControllerCollectionFactory $controllerFactory;
-
-    protected ControllerCollection $controllerCollection;
+    protected SimpleControllerFactory $controllerFactory;
 
     /**
      * @throws \Exception
@@ -25,11 +22,9 @@ class App
     {
         $this->request = new Request();
 
-        $this->controllerFactory = new SimpleControllerCollectionFactory();
+        $this->controllerFactory = new SimpleControllerFactory($this->request);
 
-        $this->controllerCollection = $this->controllerFactory->create($this->request);
-
-        $this->router = new Router($this->controllerCollection);
+        $this->router = new Router($this->controllerFactory);
     }
 
     /**

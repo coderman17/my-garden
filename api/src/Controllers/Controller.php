@@ -7,6 +7,7 @@ namespace MyGarden\Controllers;
 use MyGarden\Auth\Auth;
 use MyGarden\Models\User;
 use MyGarden\Interfaces\ResponseInterface;
+use MyGarden\Request\Request;
 use MyGarden\Validators\Validator;
 use MyGarden\Interfaces\ViewInterface;
 
@@ -20,12 +21,17 @@ abstract class Controller
 
     protected Validator $validator;
 
+    protected Request $request;
+
     /**
+     * @param Request $request
      * @param ResponseInterface $response
-     * @param ViewInterface     $view
+     * @param ViewInterface $view
      */
-    public function __construct(ResponseInterface $response, ViewInterface $view)
+    public function __construct(Request $request, ResponseInterface $response, ViewInterface $view)
     {
+        $this->request = $request;
+
         $this->response = $response;
 
         $this->view = $view;

@@ -19,8 +19,6 @@ try {
     $previous = $throwable->getPrevious();
 
     while($previous !== null) {
-        error_log("Previous:\n");
-
         log_throwable($previous);
 
         $previous = $previous->getPrevious();
