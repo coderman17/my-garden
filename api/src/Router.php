@@ -64,9 +64,9 @@ class Router
 
             $route = $routes[$match];
 
-            $controller = $this->controllerFactory->create($route->controllerName);
+            $controller = $this->controllerFactory->create($route->getControllerName());
 
-            $method = $route->method;
+            $method = $route->getMethodName();
 
             $controller->$method();
 

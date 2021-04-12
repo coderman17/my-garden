@@ -6,34 +6,48 @@ namespace MyGarden;
 
 class Route
 {
-    public string $controllerName;
+    private string $controllerName;
 
-    public string $method;
+    private string $methodName;
 
     /**
      * @throws \Exception
      */
-    public function __construct(string $controller, string $method)
+    public function __construct(string $controllerName, string $methodName)
     {
-        $this->validate($controller, $method);
+        $this->validate($controllerName, $methodName);
 
-        $this->controllerName = $controller;
+        $this->controllerName = $controllerName;
 
-        $this->method = $method;
+        $this->methodName = $methodName;
     }
 
     /**
-     * @param string $controller
-     * @param string $method
+     * @param string $controllerName
+     * @param string $methodName
      * @throws \Exception
      */
-    private function validate(string $controller, string $method): void
+    private function validate(string $controllerName, string $methodName): void
     {
         try {
             //TODO check performance of reflection
-            new \ReflectionMethod($controller, $method);
+            new \ReflectionMethod($controllerName, $methodName);
         } catch (\Throwable $e) {
-            throw new \Exception('A Route was invalid', 500, $e);
+            throw new \Exception(
+                'Invalid Route: Could not find controller ' . $controllerName . ' and method ' . $methodName,
+                500,
+                $e
+            );
         }
+    }
+
+    public function getControllerName(): string
+    {
+        return $this->controllerName;
+    }
+
+    public function getMethodName(): string
+    {
+        return $this->methodName;
     }
 }
